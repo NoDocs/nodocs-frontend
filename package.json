@@ -9,13 +9,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "draft-js": "^0.11.7",
-    "draft-js-plugins-editor": "^3.0.0",
+    "apisauce": "^2.0.0",
+    "history": "^4.10.1",
     "immutable": "^4.0.0-rc.12",
+    "prop-types": "^15.7.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-redux": "^7.2.1",
-    "redux": "^4.0.5"
+    "react-router-dom": "^5.2.0",
+    "redux": "^4.0.5",
+    "styled-components": "^5.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.1",

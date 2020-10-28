@@ -3,7 +3,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin')
 const dotenv = require('dotenv')
 const { DefinePlugin } = require('webpack')
 
-const config = dotenv.config({ path: path.resolve(__dirname, `.env.${process.env.APP_ENV}`) })
+const config = dotenv.config({ path: path.resolve(__dirname, `${process.env.APP_ENV}.env`) })
 
 const isLocal = process.env.APP_ENV === 'local'
 
@@ -88,6 +88,13 @@ module.exports = {
   ],
   resolve: {
     extensions: ['.js', '.jsx'],
-    alias: {}
+    alias: {
+      utils: path.resolve(__dirname, 'src/utils'),
+      components: path.resolve(__dirname, 'src/components'),
+      services: path.resolve(__dirname, 'src/services'),
+    }
   },
+  devServer: {
+    historyApiFallback: true,
+  }
 }
