@@ -1,7 +1,7 @@
 import apisauce from 'apisauce'
 
 const checkStatus = (response) => {
-  const { data, status } = response
+  const { data, error, status } = response
 
   if (status >= 200 && status < 300) {
     return Promise.resolve({
@@ -10,7 +10,7 @@ const checkStatus = (response) => {
     })
   }
 
-  return Promise.reject(result)
+  return Promise.reject(error)
 }
 
 const serialize = (obj, prefix) => {
