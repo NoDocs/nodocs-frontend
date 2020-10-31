@@ -9,7 +9,7 @@ const withSelectRectangle = (editor) => {
     .on("beforestart", ({ oe }) => oe.target.getAttribute("data-start") === "selection")
     .on("move", ({ changed: { added, removed } }) => {
       for (const el of added) {
-        el.classList.add("selected");
+        el.classList.add("selectedss");
       }
 
       for (const el of removed) {
@@ -17,8 +17,10 @@ const withSelectRectangle = (editor) => {
       }
     })
     .on("stop", ({ selected }) => {
-      console.log(editor.selection)
-      editor.insertText(' -> Something about us')
+      const nodeIds = Array.from(selected)
+        .map(node => node.getAttribute('data-node-id'))
+
+      editor.selectedNodeIds = nodeIds
     });
 
   return editor;
