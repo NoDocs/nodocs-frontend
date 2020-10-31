@@ -9,7 +9,7 @@ const withSelectRectangle = (editor) => {
     .on("beforestart", ({ oe }) => oe.target.getAttribute("data-start") === "selection")
     .on("move", ({ changed: { added, removed } }) => {
       for (const el of added) {
-        el.classList.add("selectedss");
+        el.classList.add("selected");
       }
 
       for (const el of removed) {

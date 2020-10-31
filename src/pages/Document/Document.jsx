@@ -6,6 +6,7 @@ import styled, { createGlobalStyle } from 'styled-components'
 
 import withRectangleSelect from './plugins/withRectangleSelect'
 import withNodeId from './plugins/withNodeId'
+import CustomComponent from './CustomComponent'
 
 const GlobalStyles = createGlobalStyle`
   .selection-area {
@@ -57,9 +58,6 @@ const Document = () => {
       .children
       .findIndex(curr => curr.id === endingNodeId)
 
-    console.log(startIndex)
-    console.log(endIndex)
-
     editor.apply({
       type: 'set_selection',
       properties: {
@@ -87,7 +85,7 @@ const Document = () => {
           <Editable
             renderElement={({ attributes, children, element }) => {
               if (element.type === 'component') {
-                return <div>Component !!</div>
+                return <CustomComponent id={element.id} content={children} />
               }
 
               return (
