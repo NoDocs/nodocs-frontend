@@ -9,15 +9,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@simonwep/selection-js": "^1.7.1",
     "apisauce": "^2.0.0",
     "history": "^4.10.1",
     "immutable": "^4.0.0-rc.12",
+    "lodash": "^4.17.20",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.5",
+    "shortid": "^2.2.16",
     "slate": "^0.59.0",
     "slate-react": "^0.59.0",
     "styled-components": "^5.2.0"
