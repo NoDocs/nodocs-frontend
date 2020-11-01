@@ -39,6 +39,22 @@ const Document = () => {
   )
 
   const onEditorChange = (newEditorState) => {
+    const { operations, children } = editor
+
+    if (!Boolean(operations.find(curr => curr.type === 'set_selection'))) {
+      operations
+        .forEach(({ path }) => {
+          console.log(operations)
+          const [blockIndex] = path
+
+          if (!children[blockIndex]) return
+          if (children[blockIndex].type !== 'component') return
+
+          console.log('change inside a component')
+          console.log('sync to server !!')
+        })
+    }
+
     updateEditorState(newEditorState)
   }
 
@@ -70,8 +86,6 @@ const Document = () => {
     })
     Transforms.wrapNodes(editor, { type: 'component', id: shortid.generate() })
   }
-
-  console.log(editor.children)
 
   return (
     <React.Fragment>
