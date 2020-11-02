@@ -2,7 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Route, Redirect } from 'react-router-dom'
 
-const ProtectedRoute = ({ children, ...rest }) => (
+import MainLayout from '../layouts/MainLayout'
+
+const ProtectedRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={({ location }) => {
@@ -10,13 +12,17 @@ const ProtectedRoute = ({ children, ...rest }) => (
         return <Redirect to={{ pathname: '/login', state: { from: location } }} />
       }
 
-      return children
+      return (
+        <MainLayout>
+          <Component />
+        </MainLayout>
+      )
     }}
   />
 )
 
 ProtectedRoute.propTypes = {
-  children: PropTypes.any,
+  component: PropTypes.any,
 }
 
 export default ProtectedRoute
