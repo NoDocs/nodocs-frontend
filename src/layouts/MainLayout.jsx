@@ -2,7 +2,9 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import * as authServices from 'services/auth'
+import * as documentServices from 'services/document'
 import { authActions } from 'logic/auth'
+import { documentActions } from 'logic/document'
 import history from 'utils/history'
 
 const MainLayout = ({ children }) => {
@@ -29,6 +31,10 @@ const MainLayout = ({ children }) => {
         .me()
         .then(handleThen)
         .catch(handleCatch)
+
+      documentServices
+        .getDocuments()
+        .then(response => dispatch(documentActions.putDocuments(response.data)))
     },
     []
   )
