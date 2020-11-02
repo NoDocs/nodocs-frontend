@@ -10,6 +10,10 @@ const checkStatus = (response) => {
     })
   }
 
+  if (status === 401) {
+    return Promise.reject({ message: 'NotAuthorized' })
+  }
+
   return Promise.reject(error)
 }
 
@@ -44,7 +48,7 @@ const getHeaders = () => {
     'Content-type': 'application/json',
   }
 
-  if (token) headers['x-access-token'] = token
+  if (token) headers['Authorization'] = token
   if (socketId) headers['x-socket-client-id'] = socketId
 
   return headers

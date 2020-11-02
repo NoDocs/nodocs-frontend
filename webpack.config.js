@@ -92,6 +92,7 @@ module.exports = {
       utils: path.resolve(__dirname, 'src/utils'),
       components: path.resolve(__dirname, 'src/components'),
       services: path.resolve(__dirname, 'src/services'),
+      logic: path.resolve(__dirname, 'src/redux'),
     }
   },
   devServer: {

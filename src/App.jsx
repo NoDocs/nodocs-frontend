@@ -12,7 +12,7 @@ const App = () => {
       <ProtectedRoute
         path="/"
         exact
-        Component={Home}
+        component={Home}
       />
 
       <Route path="/login" component={Login} />

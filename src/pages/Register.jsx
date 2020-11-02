@@ -17,7 +17,7 @@ const Register = () => {
     event.preventDefault()
     toggleSubmitting(true)
 
-    const { email, password, repeatPassword } = document.registrationForm.elements
+    const { email, password, fullName, repeatPassword } = document.registrationForm.elements
 
     if (password.value !== repeatPassword.value) {
       alert('Passwords does not match')
