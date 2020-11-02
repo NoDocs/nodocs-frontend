@@ -3,7 +3,10 @@ import shortid from 'shortid'
 import { Slate, Editable, withReact } from 'slate-react'
 import { createEditor, Transforms } from 'slate'
 import styled, { createGlobalStyle } from 'styled-components'
+import { useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
+import * as documentServices from 'services/document'
 import withRectangleSelect from './plugins/withRectangleSelect'
 import withNodeId from './plugins/withNodeId'
 import CustomComponent from './CustomComponent'
@@ -24,14 +27,29 @@ const StyledEditorContainer = styled.div`
   }
 `
 
-const initialEditorState = [{
-  type: 'paragraph',
-  id: shortid.generate(),
-  children: [{ text: '' }],
-}]
-
 const Document = () => {
-  const [editorState, updateEditorState] = React.useState(initialEditorState)
+  const params = useParams()
+  const content = useSelector(state => state.getIn([
+    'documents',
+    parseInt(params.documentId),
+    'content'
+  ]))
+
+  const [editorState, updateEditorState] = React.useState(content
+    ? JSON.parse(content)
+    : null
+  )
+
+  React.useEffect(
+    () => {
+      if (!content) {
+        documentServices
+          .getDocument(params.documentId)
+          .then(({ data }) => updateEditorState(JSON.parse(data.content)))
+      }
+    },
+    []
+  )
 
   const editor = React.useMemo(
     () => withRectangleSelect(withNodeId(withReact(createEditor()))),
@@ -86,6 +104,8 @@ const Document = () => {
     })
     Transforms.wrapNodes(editor, { type: 'component', id: shortid.generate() })
   }
+
+  if (!editorState) return <div>Getting a document...</div>
 
   return (
     <React.Fragment>
