@@ -41,7 +41,7 @@ const Home = () => {
       <ul>
         {documents
           .map(documentId => (
-            <li key={documentId} onClick={() => history.push(`/d/${documentI}`)}>
+            <li key={documentId} onClick={() => history.push(`/d/${documentId}`)}>
               <span>Document N{documentId}</span>
             </li>
           ))

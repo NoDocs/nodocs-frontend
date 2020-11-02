@@ -74,6 +74,8 @@ const Document = () => {
     }
 
     updateEditorState(newEditorState)
+    documentServices
+      .updateDocument(params.documentId, { content: JSON.stringify(newEditorState) })
   }
 
   const handleCreateComponent = () => {
