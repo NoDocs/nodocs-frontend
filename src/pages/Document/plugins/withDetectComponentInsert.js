@@ -7,10 +7,8 @@ const withDetectComponent = (editor) => {
   editor.apply = (operation) => {
     const regex = /\[\[component\=.*\]\]$/
 
-    if (operation.type === 'insert_node') {
-      const text = operation
-        .node
-        .text
+    if (operation.type === 'insert_node' || operation.type === 'insert_text') {
+      const text = operation.text || operation.node.text
 
       const isComponentExpression = regex.test(text)
 
