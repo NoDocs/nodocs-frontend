@@ -49,7 +49,12 @@ const CreateComponentButton = () => {
     const shouldInsertNewLine = endIndex === editor.children.length - 1
 
     Transforms.delete(editor, { at: editor.selection })
-    dispatch(componentActions.createComponent({ id: componentId, content: JSON.stringify(content) }))
+
+    dispatch(componentActions.createComponent({
+      componentId,
+      content: JSON.stringify(content)
+    }))
+
     componentServices.createComponent({
       componentId,
       documentId: params.documentId,

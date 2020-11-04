@@ -1,3 +1,4 @@
+import shortid from 'shortid'
 import { Transforms } from 'slate'
 
 const withDetectComponent = (editor) => {
@@ -18,6 +19,7 @@ const withDetectComponent = (editor) => {
         const id = splitted.replace(']]', '')
 
         Transforms.insertNodes(editor, { type: 'component', id, children: [{ text: '' }] })
+        Transforms.insertNodes(editor, { type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] })
         return
       }
     }

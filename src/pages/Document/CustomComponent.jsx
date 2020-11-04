@@ -2,17 +2,24 @@ import React from 'react'
 import styled from 'styled-components'
 import { Editable, withReact, Slate } from 'slate-react'
 import { createEditor } from 'slate'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
 import * as componentServices from 'services/component'
+import { componentActions } from 'logic/component'
 
 const StyledComponentContainer = styled.div`
-  border: 1px solid black;
+  border: ${({ isImported }) => isImported
+    ? '2px dashed green'
+    : '2px solid black'};
   padding: 10px;
 `
 
 const CustomComponent = ({ id }) => {
+  const params = useParams()
+  const dispatch = useDispatch()
   const content = useSelector(state => state.getIn(['components', id, 'content']))
+  const rootDocumentId = useSelector(state => state.getIn(['components', id, 'rootDocument', 'id']))
   const [editorState, updateEditorState] = React.useState(content
     ? JSON.parse(content)
     : null)
@@ -22,7 +29,10 @@ const CustomComponent = ({ id }) => {
       if (!content) {
         componentServices
           .getComponent(id)
-          .then(({ data }) => updateEditorState(JSON.parse(data.content)))
+          .then(({ data }) => {
+            dispatch(componentActions.putComponent(data))
+            updateEditorState(JSON.parse(data.content))
+          })
       }
     },
     []
@@ -43,8 +53,14 @@ const CustomComponent = ({ id }) => {
 
   if (!editorState) return <div>Getting a component...</div>
 
+  console.log(params.documentId, rootDocumentId)
+
   return (
-    <StyledComponentContainer contentEditable={false} data-component-id={id}>
+    <StyledComponentContainer
+      isImported={rootDocumentId !== parseInt(params.documentId, 10)}
+      contentEditable={false}
+      data-component-id={id}
+    >
       <Slate editor={editor} value={editorState} onChange={onEditorStateChange}>
         <Editable autoFocus />
       </Slate>

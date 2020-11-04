@@ -1,16 +1,14 @@
 import * as componentActionTypes from './componentActionTypes'
 
-export const putComponents = (components) => ({
-  type: componentActionTypes.PUT_COMPONENTS,
-  payload: {
-    components,
-  }
+export const putComponent = (component) => ({
+  type: componentActionTypes.PUT_COMPONENT,
+  payload: component
 })
 
-export const createComponent = ({ id, content }) => ({
+export const createComponent = ({ componentId, content }) => ({
   type: componentActionTypes.CREATE_COMPONENT,
   payload: {
-    id,
+    componentId,
     content,
   },
 })
