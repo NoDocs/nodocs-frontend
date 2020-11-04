@@ -5,6 +5,7 @@ import { Transforms } from 'slate'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
+import copyToClipboard from 'utils/copyToClipboard'
 import * as componentServices from 'services/component'
 import { componentActions } from 'logic/component'
 
@@ -50,6 +51,7 @@ const CreateComponentButton = () => {
     dispatch(componentActions.createComponent({ id: componentId, content: JSON.stringify(content) }))
     componentServices.createComponent({ componentId, documentId: params.documentId, content: JSON.stringify(content) })
     Transforms.insertNodes(editor, { type: 'component', id: componentId, children: [{ text: '' }] })
+    copyToClipboard(`[[component=${componentId}]]`)
   }
 
   return (
