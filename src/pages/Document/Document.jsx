@@ -1,7 +1,6 @@
 import React from 'react'
-import shortid from 'shortid'
 import { Slate, Editable, withReact } from 'slate-react'
-import { createEditor, Transforms } from 'slate'
+import { createEditor } from 'slate'
 import styled, { createGlobalStyle } from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
@@ -9,7 +8,9 @@ import { useSelector } from 'react-redux'
 import * as documentServices from 'services/document'
 import withRectangleSelect from './plugins/withRectangleSelect'
 import withNodeId from './plugins/withNodeId'
+import withEditableVoid from './plugins/withEditableVoid'
 import CustomComponent from './CustomComponent'
+import CreateComponentButton from './CreateComponentButton'
 
 const GlobalStyles = createGlobalStyle`
   .selection-area {
@@ -52,7 +53,7 @@ const Document = () => {
   )
 
   const editor = React.useMemo(
-    () => withRectangleSelect(withNodeId(withReact(createEditor()))),
+    () => withRectangleSelect(withEditableVoid(withNodeId(withReact(createEditor())))),
     []
   )
 
@@ -74,38 +75,24 @@ const Document = () => {
     }
 
     updateEditorState(newEditorState)
-    documentServices
-      .updateDocument(params.documentId, { content: JSON.stringify(newEditorState) })
+    // documentServices
+    //   .updateDocument(params.documentId, { content: JSON.stringify(newEditorState) })
   }
 
-  const handleCreateComponent = () => {
-    const blocks = editor
-      .children
-      .filter(curr => editor.selectedNodeIds.indexOf(curr.id) !== -1)
+  const renderElement = React.useCallback(
+    ({ attributes, children, element }) => {
+      if (element.type === 'component') {
+        return <CustomComponent id={element.id} content={children} />
+      }
 
-    const startingNodeId = blocks[0].id
-    const endingNodeId = blocks[blocks.length - 1].id
-
-    const startIndex = editor
-      .children
-      .findIndex(curr => curr.id === startingNodeId)
-
-    const endIndex = editor
-      .children
-      .findIndex(curr => curr.id === endingNodeId)
-
-    editor.apply({
-      type: 'set_selection',
-      properties: {
-        anchor: { path: [startIndex, 0], offset: 0 },
-      },
-      newProperties: {
-        anchor: { path: [startIndex, 0], offset: 0 },
-        focus: { path: [endIndex, 0], offset: 3 },
-      },
-    })
-    Transforms.wrapNodes(editor, { type: 'component', id: shortid.generate() })
-  }
+      return (
+        <p data-node-id={element.id} {...attributes}>
+          {children}
+        </p>
+      )
+    },
+    []
+  )
 
   if (!editorState) return <div>Getting a document...</div>
 
@@ -119,21 +106,12 @@ const Document = () => {
           onChange={onEditorChange}
         >
           <Editable
-            renderElement={({ attributes, children, element }) => {
-              if (element.type === 'component') {
-                return <CustomComponent id={element.id} content={children} />
-              }
-
-              return (
-                <p data-node-id={element.id} {...attributes}>
-                  {children}
-                </p>
-              )
-            }}
+            renderElement={renderElement}
+            placeholder="Document..."
           />
-        </Slate>
 
-        <button onClick={handleCreateComponent}>create component</button>
+          <CreateComponentButton />
+        </Slate>
       </StyledEditorContainer>
     </React.Fragment>
   )
