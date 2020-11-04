@@ -3,12 +3,15 @@ import shortid from 'shortid'
 import { useEditor } from 'slate-react'
 import { Transforms } from 'slate'
 import { useDispatch } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
+import * as componentServices from 'services/component'
 import { componentActions } from 'logic/component'
 
 const CreateComponentButton = () => {
   const editor = useEditor()
   const dispatch = useDispatch()
+  const params = useParams()
 
   const handleCreateComponent = () => {
     const blocks = editor
@@ -44,7 +47,8 @@ const CreateComponentButton = () => {
     const componentId = shortid.generate()
 
     Transforms.delete(editor, { at: editor.selection })
-    dispatch(componentActions.createComponent({ id: componentId, content }))
+    dispatch(componentActions.createComponent({ id: componentId, content: JSON.stringify(content) }))
+    componentServices.createComponent({ componentId, documentId: params.documentId, content: JSON.stringify(content) })
     Transforms.insertNodes(editor, { type: 'component', id: componentId, children: [{ text: '' }] })
   }
 

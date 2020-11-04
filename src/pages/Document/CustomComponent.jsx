@@ -4,6 +4,8 @@ import { Editable, withReact, Slate } from 'slate-react'
 import { createEditor } from 'slate'
 import { useSelector } from 'react-redux'
 
+import * as componentServices from 'services/component'
+
 const StyledComponentContainer = styled.div`
   border: 1px solid black;
   padding: 10px;
@@ -11,9 +13,24 @@ const StyledComponentContainer = styled.div`
 
 const CustomComponent = ({ id }) => {
   const content = useSelector(state => state.getIn(['components', id, 'content']))
-  const [editorState, updateEditorState] = React.useState(content)
+  const [editorState, updateEditorState] = React.useState(content
+    ? JSON.parse(content)
+    : null)
+
+  React.useEffect(
+    () => {
+      if (!content) {
+        componentServices
+          .getComponent(id)
+          .then(({ data }) => updateEditorState(JSON.parse(data.content)))
+      }
+    },
+    []
+  )
 
   const editor = React.useMemo(() => withReact(createEditor()), [])
+
+  if (!editorState) return <div>Getting a component...</div>
 
   return (
     <StyledComponentContainer contentEditable={false} data-component-id={id}>
