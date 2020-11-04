@@ -46,11 +46,30 @@ const CreateComponentButton = () => {
       .slice(startIndex, endIndex + 1)
 
     const componentId = shortid.generate()
+    const shouldInsertNewLine = endIndex === editor.children.length - 1
 
     Transforms.delete(editor, { at: editor.selection })
     dispatch(componentActions.createComponent({ id: componentId, content: JSON.stringify(content) }))
-    componentServices.createComponent({ componentId, documentId: params.documentId, content: JSON.stringify(content) })
-    Transforms.insertNodes(editor, { type: 'component', id: componentId, children: [{ text: '' }] })
+    componentServices.createComponent({
+      componentId,
+      documentId: params.documentId,
+      content: JSON.stringify(content)
+    })
+
+    Transforms.insertNodes(
+      editor,
+      {
+        type: 'component',
+        id: componentId,
+        rootComponentId: params.documentId,
+        children: [{ text: '' }],
+      }
+    )
+
+    if (shouldInsertNewLine) {
+      Transforms.insertNodes(editor, { type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] })
+    }
+
     copyToClipboard(`[[component=${componentId}]]`)
   }
 

@@ -8,6 +8,6 @@ const copyToClipboard = (text) => {
 
   document.execCommand('copy')
   document.body.removeChild(input)
-
-  alert('copied to clipboard')
 }
+
+export default copyToClipboard

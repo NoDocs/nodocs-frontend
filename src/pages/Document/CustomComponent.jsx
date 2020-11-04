@@ -32,7 +32,13 @@ const CustomComponent = ({ id }) => {
 
   const onEditorStateChange = (newEditorState) => {
     updateEditorState(newEditorState)
-    componentServices.updateComponent(id, { content: JSON.stringify(newEditorState) })
+
+    editor
+      .operations
+      .filter(curr => curr.type !== 'set_selection')
+      .forEach(() => {
+        componentServices.updateComponent(id, { content: JSON.stringify(newEditorState) })
+      })
   }
 
   if (!editorState) return <div>Getting a component...</div>
