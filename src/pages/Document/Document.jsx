@@ -9,6 +9,7 @@ import * as documentServices from 'services/document'
 import withRectangleSelect from './plugins/withRectangleSelect'
 import withNodeId from './plugins/withNodeId'
 import withEditableVoid from './plugins/withEditableVoid'
+import withDetectComponentInsert from './plugins/withDetectComponentInsert'
 import CustomComponent from './CustomComponent'
 import CreateComponentButton from './CreateComponentButton'
 
@@ -53,7 +54,7 @@ const Document = () => {
   )
 
   const editor = React.useMemo(
-    () => withRectangleSelect(withEditableVoid(withNodeId(withReact(createEditor())))),
+    () => withRectangleSelect(withDetectComponentInsert(withEditableVoid(withNodeId(withReact(createEditor()))))),
     []
   )
 
