@@ -30,11 +30,16 @@ const CustomComponent = ({ id }) => {
 
   const editor = React.useMemo(() => withReact(createEditor()), [])
 
+  const onEditorStateChange = (newEditorState) => {
+    updateEditorState(newEditorState)
+    componentServices.updateComponent(id, { content: JSON.stringify(newEditorState) })
+  }
+
   if (!editorState) return <div>Getting a component...</div>
 
   return (
     <StyledComponentContainer contentEditable={false} data-component-id={id}>
-      <Slate editor={editor} value={editorState} onChange={updateEditorState}>
+      <Slate editor={editor} value={editorState} onChange={onEditorStateChange}>
         <Editable autoFocus />
       </Slate>
     </StyledComponentContainer>
