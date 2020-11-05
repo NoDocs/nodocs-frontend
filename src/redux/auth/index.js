@@ -1,3 +1,3 @@
 export * as authActionTypes from './authActionTypes'
 export * as authActions from './authActions'
-export { authReducer } from './authReducer'
+export { default as authReducer } from './authReducer'
