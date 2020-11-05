@@ -9,13 +9,38 @@ import * as componentServices from 'services/component'
 import { componentActions } from 'logic/component'
 
 const StyledComponentContainer = styled.div`
-  border: ${({ isImported }) => isImported
-    ? '2px dashed green'
-    : '2px solid black'};
-  padding: 10px;
+  background: ${({ isImported }) => isImported
+    ? 'none' : '#F2F3F4'};
+  padding: 2px;
+  display: flex;
+  border-radius: 0 5px 5px 0;
+
+  & div:first-child {
+    width: 100%;
+  }
+
+  &:hover{
+    background: ${({ isImported }) => isImported
+      ? 'none' : 'rgb(250 235 215 / 0.6)'};
+    border: ${({ isImported }) => isImported
+      ? '2px solid rgb(123 97 255 / 50%)'
+      : 'none'};
+  }
+`
+
+const StyledIcon = styled.div`
+    display: inline-flex;
+    width: 14px;
+    height: 14px;
+    margin: 0 0 0 10px;
+    opacity: 0.2;
+    background: url('https://res.cloudinary.com/nodocs/image/upload/v1604540189/icons/component.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
 `
 
 const CustomComponent = ({ id }) => {
+  const isImported = true;
   const params = useParams()
   const dispatch = useDispatch()
   const content = useSelector(state => state.getIn(['components', id, 'content']))
@@ -39,6 +64,7 @@ const CustomComponent = ({ id }) => {
   )
 
   const editor = React.useMemo(() => withReact(createEditor()), [])
+
 
   const onEditorStateChange = (newEditorState) => {
     updateEditorState(newEditorState)
@@ -64,6 +90,9 @@ const CustomComponent = ({ id }) => {
       <Slate editor={editor} value={editorState} onChange={onEditorStateChange}>
         <Editable autoFocus />
       </Slate>
+      {isImported && (
+        <StyledIcon/>
+      )}
     </StyledComponentContainer>
   )
 }
