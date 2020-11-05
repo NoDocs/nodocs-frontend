@@ -14,7 +14,7 @@ const useSocket = (event, action) => {
     Socket.socket.on(event, action)
 
     return () => Socket.socket.off(event, action)
-  }, [action, event])
+  }, [event, action])
 
   return {
     send

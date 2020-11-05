@@ -15,7 +15,7 @@ class Socket {
 
       const socket = io(process.env.BASE_API_URL, { reconnectionDelayMax: 10000 })
 
-      socket.on('connect', (connected) => {
+      socket.on('connect', () => {
         Socket.socket = socket
         resolve()
       })

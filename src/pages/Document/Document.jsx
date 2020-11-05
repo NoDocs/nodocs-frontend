@@ -135,7 +135,7 @@ const Document = () => {
   return (
     <React.Fragment>
       <GlobalStyles />
-      <Logo/>
+      <Logo />
       <StyledEditorContainer data-start="selection">
         <Slate
           editor={editor}
