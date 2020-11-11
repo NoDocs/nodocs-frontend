@@ -5,6 +5,7 @@ import { createEditor } from 'slate'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
+import history from 'utils/history'
 import * as componentServices from 'services/component'
 import { componentActions } from 'logic/component'
 import { useSocket } from 'socket'
@@ -93,8 +94,6 @@ const CustomComponent = ({ id: componentId }) => {
 
   if (!editorState) return <div>Getting a component...</div>
 
-  console.log(params.documentId, rootDocumentId)
-
   return (
     <StyledComponentContainer
       isImported={rootDocumentId !== parseInt(params.documentId, 10)}
@@ -104,8 +103,9 @@ const CustomComponent = ({ id: componentId }) => {
       <Slate editor={editor} value={editorState} onChange={onEditorStateChange}>
         <Editable autoFocus />
       </Slate>
+
       {isImported && (
-        <StyledIcon />
+        <StyledIcon onClick={() => history.push(`/d/${rootDocumentId}`)} />
       )}
     </StyledComponentContainer>
   )
