@@ -48,7 +48,6 @@ const CustomComponent = ({ id: componentId }) => {
   const dispatch = useDispatch()
   const content = useSelector(state => state.getIn(['components', componentId, 'content']))
   const rootDocumentId = useSelector(state => state.getIn(['components', componentId, 'rootDocument', 'id']))
-  const id = useSelector(state => state.getIn(['components', componentId, 'id']))
   const [editorState, updateEditorState] = React.useState(content
     ? JSON.parse(content)
     : null)
@@ -72,14 +71,14 @@ const CustomComponent = ({ id: componentId }) => {
   const { send: listenComponent } = useSocket(socketEvents.ListenComponent)
   const { send: updateComponent } = useSocket(socketEvents.UpdateComponent)
 
-  useSocket(`${socketEvents.ComponentUpdated}-${id}`, (payload) => {
+  useSocket(`${socketEvents.ComponentUpdated}-${componentId}`, (payload) => {
     dispatch(componentActions.putComponent(payload))
     updateEditorState(JSON.parse(payload.content))
   })
 
   useEffect(() => {
-    if (id) listenComponent({ id })
-  }, [id])
+    if (componentId) listenComponent({ componentId })
+  }, [componentId])
 
   const onEditorStateChange = (newEditorState) => {
     updateEditorState(newEditorState)
@@ -88,7 +87,7 @@ const CustomComponent = ({ id: componentId }) => {
       .operations
       .filter(curr => curr.type !== 'set_selection')
       .forEach(() => {
-        updateComponent({ componentId, id, content: JSON.stringify(newEditorState) })
+        updateComponent({ componentId, content: JSON.stringify(newEditorState) })
       })
   }
 
