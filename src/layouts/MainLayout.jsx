@@ -1,4 +1,5 @@
 import React from 'react'
+import styled, { createGlobalStyle } from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 
 import * as authServices from 'services/auth'
@@ -6,6 +7,20 @@ import * as documentServices from 'services/document'
 import { authActions } from 'logic/auth'
 import { documentActions } from 'logic/document'
 import history from 'utils/history'
+
+import LeftMenu from './LeftMenu'
+
+const StyledContainer = styled.div`
+  display: flex;
+  height: 100vh;
+`
+
+const GlobalStyles = createGlobalStyle`
+  * {
+    margin: 0px;
+    padding: 0px;
+  }
+`
 
 const MainLayout = ({ children }) => {
   const userId = useSelector(state => state.getIn(['auth', 'id']))
@@ -39,9 +54,17 @@ const MainLayout = ({ children }) => {
     []
   )
 
-  return userId
-    ? children
-    : <div>Loading user...</div>
+  if (!userId) return <div>Loading...</div>
+
+  return (
+    <React.Fragment>
+      <StyledContainer>
+        <LeftMenu />
+      </StyledContainer>
+
+      <GlobalStyles />
+    </React.Fragment>
+  )
 }
 
 export default MainLayout

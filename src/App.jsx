@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 
 import Socket from './socket'
 
-import ProtectedRoute from './components/ProtectedRoute'
+import ProtectedRoute from './atoms/ProtectedRoute'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Home from './pages/Home'

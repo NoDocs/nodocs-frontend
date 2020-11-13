@@ -8,7 +8,10 @@ const getColor = (color) => {
 
 const Label = styled.p`
   font-family: quicksand;
+  font-weight: ${({ weight = 300 }) => weight};
   color: ${({ color }) => getColor(color)};
+  line-height: 17px;
+  font-size: 14px;
 `
 
 export default Label
