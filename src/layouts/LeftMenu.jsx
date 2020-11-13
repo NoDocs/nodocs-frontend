@@ -7,11 +7,13 @@ import Avatar from 'atoms/Avatar'
 import UserCard from 'molecules/UserCard'
 
 const StyledContainer = styled.div`
+  grid-area: left;
   width: 300px;
   background-color: black;
   padding-left: 28px;
   padding-top: 13px;
   padding-right: 17px;
+  box-sizing: border-box;
 `
 
 const StyledLeftMenuHeader = styled.div`

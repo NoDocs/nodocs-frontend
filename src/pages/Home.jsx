@@ -15,11 +15,6 @@ const GlobalStyles = createGlobalStyle`
     font-family: 'sans-serif', 'arial';
   }
 
-  body {
-    margin: 0% 15%;
-    padding: 50px;
-  }
-
   button {
     border-radius: 4px;
     box-shadow: none;

@@ -8,15 +8,22 @@ import { authActions } from 'logic/auth'
 import { documentActions } from 'logic/document'
 import history from 'utils/history'
 
+import Navigation from './Navigation'
 import LeftMenu from './LeftMenu'
 
 const StyledContainer = styled.div`
-  display: flex;
+  display: grid;
+  width: 100%;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 56px auto;
+  grid-template-areas:
+    "left nav"
+    "left content";
   height: 100vh;
 `
 
 const GlobalStyles = createGlobalStyle`
-  * {
+  *, body {
     margin: 0px;
     padding: 0px;
   }
@@ -60,6 +67,8 @@ const MainLayout = ({ children }) => {
     <React.Fragment>
       <StyledContainer>
         <LeftMenu />
+        <Navigation />
+        <div>{children}</div>
       </StyledContainer>
 
       <GlobalStyles />
