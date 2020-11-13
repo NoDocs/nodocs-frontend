@@ -2,9 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 
 import arrowLeftIcon from 'assets/arrow-left.svg'
-import Label from 'atoms/Label'
-import Avatar from 'atoms/Avatar'
+import homeIcon from 'assets/home.svg'
+import teamsIcon from 'assets/teams.svg'
 import UserCard from 'molecules/UserCard'
+import ListItem from 'molecules/ListItem'
 
 const StyledContainer = styled.div`
   grid-area: left;
@@ -19,6 +20,12 @@ const StyledContainer = styled.div`
 const StyledLeftMenuHeader = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-bottom: 25px;
+`
+
+const StyledGridContainer = styled.div`
+  display: grid;
+  grid-row-gap: 2px;
 `
 
 const LeftMenu = () => (
@@ -27,6 +34,14 @@ const LeftMenu = () => (
       <UserCard />
       <img src={arrowLeftIcon} alt="collapse" />
     </StyledLeftMenuHeader>
+
+    <StyledGridContainer>
+      <ListItem active icon={homeIcon} label="Home" />
+      <ListItem icon={homeIcon} label="Explore" />
+      <ListItem icon={homeIcon} label="Community" />
+      <ListItem icon={homeIcon} label="Private" />
+      <ListItem icon={teamsIcon} label="Teams" />
+    </StyledGridContainer>
   </StyledContainer>
 )
 
