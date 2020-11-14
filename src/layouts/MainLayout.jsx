@@ -8,7 +8,7 @@ import { authActions } from 'logic/auth'
 import { documentActions } from 'logic/document'
 import history from 'utils/history'
 
-import Navigation from './Navigation'
+import Navigation from './NavBar'
 import LeftMenu from './LeftMenu'
 
 const StyledContainer = styled.div`

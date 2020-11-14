@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import logoIcon from 'assets/logo.svg'
+import OpenedDocuments from './OpenedDocuments'
 
 const StyledContainer = styled.div`
   height: 56px;
@@ -12,10 +13,12 @@ const StyledContainer = styled.div`
   padding-left: 30px;
 `
 
-const Navigation = () => (
+const NavBar = () => (
   <StyledContainer>
     <img src={logoIcon} alt="NoDocs" />
+
+    <OpenedDocuments />
   </StyledContainer>
 )
 
-export default Navigation
+export default NavBar
