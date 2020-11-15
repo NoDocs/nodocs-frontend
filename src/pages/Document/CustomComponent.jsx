@@ -1,22 +1,15 @@
-import React, { useEffect } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Editable, withReact, Slate } from 'slate-react'
 import { createEditor } from 'slate'
-import { withHistory } from 'slate-history'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { withIOCollaboration } from '@slate-collaborative/client'
 
 import history from 'utils/history'
 import * as componentServices from 'services/component'
 import { componentActions } from 'logic/component'
-import { useSocket } from 'socket'
-import socketEvents from 'socket/socketEvents'
-
-import { withIOCollaboration } from '@slate-collaborative/client'
-
-import withEditableVoid from './plugins/withEditableVoid'
-import withNodeId from './plugins/withNodeId'
-
 
 const StyledComponentContainer = styled.div`
   background: ${({ isImported }) => isImported
@@ -50,7 +43,6 @@ const StyledIcon = styled.div`
 `
 
 const CustomComponent = ({ id: componentId }) => {
-  const isImported = true;
   const params = useParams()
   const dispatch = useDispatch()
   const content = useSelector(state => state.getIn(['components', componentId, 'content']))
@@ -82,7 +74,6 @@ const CustomComponent = ({ id: componentId }) => {
       ? window.location.origin
       : 'http://localhost:8000'
 
-
     const options = {
       docId: '/' + componentId,
       url: `${origin}/${componentId}`,
@@ -95,10 +86,11 @@ const CustomComponent = ({ id: componentId }) => {
         }
       },
     }
+
     return withIOCollaboration(slateEditor, options)
   }, [])
 
-  useEffect(() => {
+  React.useEffect(() => {
     editor.connect()
 
     return editor.destroy
@@ -120,11 +112,15 @@ const CustomComponent = ({ id: componentId }) => {
         <Editable autoFocus />
       </Slate>
 
-      {isImported && (
+      {rootDocumentId !== parseInt(params.documentId, 10) && (
         <StyledIcon onClick={() => history.push(`/d/${rootDocumentId}`)} />
       )}
     </StyledComponentContainer>
   )
+}
+
+CustomComponent.propTypes = {
+  id: PropTypes.string,
 }
 
 export default CustomComponent
