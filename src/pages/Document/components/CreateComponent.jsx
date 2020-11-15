@@ -5,9 +5,12 @@ import { Transforms } from 'slate'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
+import componentIcon from 'assets/component.svg'
 import copyToClipboard from 'utils/copyToClipboard'
+import { getSelectedRange, selectRange } from 'utils/editor'
 import * as componentServices from 'services/component'
 import { componentActions } from 'logic/component'
+import IconButton from 'atoms/IconButton'
 
 const CreateComponentButton = () => {
   const editor = useEditor()
@@ -15,40 +18,16 @@ const CreateComponentButton = () => {
   const params = useParams()
 
   const handleCreateComponent = () => {
-    const blocks = editor
-      .children
-      .filter(curr => editor.selectedNodeIds.indexOf(curr.id) !== -1)
+    if (!editor.selectedNodeIds) {
+      alert('You have not selected shit man')
+      return
+    }
 
-    const startingNodeId = blocks[0].id
-    const endingNodeId = blocks[blocks.length - 1].id
-
-    const startIndex = editor
-      .children
-      .findIndex(curr => curr.id === startingNodeId)
-
-    const endIndex = editor
-      .children
-      .findIndex(curr => curr.id === endingNodeId)
-
-    editor.apply({
-      type: 'set_selection',
-      properties: {
-        anchor: { path: [startIndex, 0], offset: 0 },
-      },
-      newProperties: {
-        anchor: { path: [startIndex, 0], offset: 0 },
-        focus: { path: [endIndex, 0], offset: editor.children[endIndex].children[0].text.length },
-      },
-    })
-
-    const content = editor
-      .children
-      .slice(startIndex, endIndex + 1)
+    const { content, start, end } = getSelectedRange({ editor })
+    selectRange({ editor, start, end })
 
     const componentId = shortid.generate()
-    const shouldInsertNewLine = endIndex === editor.children.length - 1
-
-    Transforms.delete(editor, { at: editor.selection })
+    const shouldInsertNewLine = end === editor.children.length - 1
 
     dispatch(componentActions.createComponent({
       componentId,
@@ -61,6 +40,7 @@ const CreateComponentButton = () => {
       content: JSON.stringify(content)
     })
 
+    Transforms.delete(editor, { at: editor.selection })
     Transforms.insertNodes(
       editor,
       {
@@ -72,14 +52,17 @@ const CreateComponentButton = () => {
     )
 
     if (shouldInsertNewLine) {
-      Transforms.insertNodes(editor, { type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] })
+      Transforms.insertNodes(
+        editor,
+        { type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] }
+      )
     }
 
     copyToClipboard(`[[component=${componentId}]]`)
   }
 
   return (
-    <button onClick={handleCreateComponent}>create component</button>
+    <IconButton onClick={handleCreateComponent} icon={componentIcon} />
   )
 }
 

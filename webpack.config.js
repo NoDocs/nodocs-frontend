@@ -62,7 +62,7 @@ module.exports = {
           {
             loader: 'svg-url-loader',
             options: {
-              limit: 10000,
+              limit: false,
             },
           },
         ],
@@ -89,8 +89,10 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
+      assets: path.resolve(__dirname, 'src/assets'),
       utils: path.resolve(__dirname, 'src/utils'),
-      components: path.resolve(__dirname, 'src/components'),
+      atoms: path.resolve(__dirname, 'src/atoms'),
+      molecules: path.resolve(__dirname, 'src/molecules'),
       services: path.resolve(__dirname, 'src/services'),
       logic: path.resolve(__dirname, 'src/redux'),
       socket: path.resolve(__dirname, 'src/socket'),
