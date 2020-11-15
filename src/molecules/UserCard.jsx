@@ -16,12 +16,12 @@ const StyledUserName = styled(Label)`
   margin-bottom: 5px;
 `
 
-const UserCard = () => (
+const UserCard = ({ user }) => (
   <StyledContainer>
     <Avatar />
 
     <div>
-      <StyledUserName color="active" weight={500}>Guram Gunia</StyledUserName>
+      <StyledUserName color="active" weight={500}>{user.get('fullName')}</StyledUserName>
       <Label color="active">Apple Inc.</Label>
     </div>
   </StyledContainer>

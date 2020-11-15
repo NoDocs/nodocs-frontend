@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useSelector } from 'react-redux'
 
 import arrowLeftIcon from 'assets/arrow-left.svg'
 import homeIcon from 'assets/home.svg'
@@ -28,21 +29,25 @@ const StyledGridContainer = styled.div`
   grid-row-gap: 2px;
 `
 
-const LeftMenu = () => (
-  <StyledContainer>
-    <StyledLeftMenuHeader>
-      <UserCard />
-      <img src={arrowLeftIcon} alt="collapse" />
-    </StyledLeftMenuHeader>
+const LeftMenu = () => {
+  const activeUser = useSelector(state => state.get('auth'))
 
-    <StyledGridContainer>
-      <ListItem active icon={homeIcon} label="Home" />
-      <ListItem icon={homeIcon} label="Explore" />
-      <ListItem icon={homeIcon} label="Community" />
-      <ListItem icon={homeIcon} label="Private" />
-      <ListItem icon={teamsIcon} label="Teams" />
-    </StyledGridContainer>
-  </StyledContainer>
-)
+  return (
+    <StyledContainer>
+      <StyledLeftMenuHeader>
+        <UserCard user={activeUser} />
+        <img src={arrowLeftIcon} alt="collapse" />
+      </StyledLeftMenuHeader>
+
+      <StyledGridContainer>
+        <ListItem active icon={homeIcon} label="Home" />
+        <ListItem icon={homeIcon} label="Explore" />
+        <ListItem icon={homeIcon} label="Community" />
+        <ListItem icon={homeIcon} label="Private" />
+        <ListItem icon={teamsIcon} label="Teams" />
+      </StyledGridContainer>
+    </StyledContainer>
+  )
+}
 
 export default LeftMenu

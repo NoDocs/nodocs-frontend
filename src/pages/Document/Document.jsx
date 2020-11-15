@@ -1,7 +1,7 @@
 import React from 'react'
 import { Slate, Editable, withReact } from 'slate-react'
 import { createEditor } from 'slate'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
@@ -11,73 +11,15 @@ import withNodeId from './plugins/withNodeId'
 import withEditableVoid from './plugins/withEditableVoid'
 import withDetectComponentInsert from './plugins/withDetectComponentInsert'
 import CustomComponent from './CustomComponent'
-import CreateComponentButton from './CreateComponentButton'
-
-const GlobalStyles = createGlobalStyle`
-  .selection-area {
-    background-color: rgba(0, 0, 0, 0.2);
-  }
-  html {
-    background: #F2F3F4;
-    height: 100%;
-    width: 100%;
-    font-family: 'sans-serif', 'arial';
-  }
-
-  p {
-    margin: 0;
-  }
-
-  button {
-    border-radius: 4px;
-    box-shadow: none;
-    box-sizing: border-box;
-    font-family: "Google Sans", Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
-    font-weight: 500;
-    font-size: 14px;
-    height: 36px;
-    letter-spacing: 0.25px;
-    cursor: pointer;
-    line-height: 16px;
-    background: rgb(26, 115, 232);
-    color: rgb(255, 255, 255);
-    padding: 9px 16px 10px 12px;
-    text-transform: capitalize;
-    border: 1px solid transparent !important;
-  }
-`
-
-const Logo = styled.div`
-  display: flex;
-  width: 200px;
-  height: 50px;
-  margin: 2% auto;
-  background: url('https://res.cloudinary.com/nodocs/image/upload/v1604555084/logos/logolettersblack_qfyiie.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-`
+import DocumentPanel from './DocumentPanel'
 
 const StyledEditorContainer = styled.div`
-  margin: 0% 15%;
-  padding: 50px;
   background: #FFFFFF;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
   border-radius: 10px;
-
-  p:first-child {
-    border-radius: 4px 4px 0px 0px;
-  }
-
-  p:last-child {
-    border-radius: 0 0 4px 4px;
-  }
-
-  & .selected {
-    background: rgba(211,218,225,0.5);
-    padding: 0 5px;
-    border-left: 2px solid black;
-  }
-
+  margin-top: 25px;
+  margin-left: 20px;
+  margin-right: 20px;
 `
 
 const Document = () => {
@@ -133,24 +75,21 @@ const Document = () => {
   if (!editorState) return <div>Getting a document...</div>
 
   return (
-    <React.Fragment>
-      <GlobalStyles />
-      <Logo />
-      <StyledEditorContainer data-start="selection">
-        <Slate
-          editor={editor}
-          value={editorState}
-          onChange={onEditorChange}
-        >
+    <div data-start="selection">
+      <Slate
+        editor={editor}
+        value={editorState}
+        onChange={onEditorChange}
+      >
+        <DocumentPanel />
+
+        <StyledEditorContainer>
           <Editable
             renderElement={renderElement}
-            placeholder="Document..."
           />
-
-          <CreateComponentButton />
-        </Slate>
-      </StyledEditorContainer>
-    </React.Fragment>
+        </StyledEditorContainer>
+      </Slate>
+    </div>
   )
 }
 
