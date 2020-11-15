@@ -8,7 +8,7 @@ const config = dotenv.config({ path: path.resolve(__dirname, `${process.env.APP_
 const isLocal = process.env.APP_ENV === 'local'
 
 module.exports = {
-  entry: './index.js',
+  entry: ['babel-polyfill', './index.js'],
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
