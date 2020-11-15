@@ -1,22 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Slate, Editable, withReact } from 'slate-react'
-import { createEditor } from 'slate'
-import { withHistory } from 'slate-history'
-import { useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { Slate, Editable } from 'slate-react'
 
-import randomColor from 'randomcolor'
-import { withIOCollaboration, useCursor } from '@slate-collaborative/client'
-
-import * as documentServices from 'services/document'
-import withRectangleSelect from './plugins/withRectangleSelect'
-import withNodeId from './plugins/withNodeId'
-import withEditableVoid from './plugins/withEditableVoid'
-import withDetectComponentInsert from './plugins/withDetectComponentInsert'
 import CustomComponent from './CustomComponent'
 import DocumentPanel from './DocumentPanel'
 import Leaf from './components/Leaf'
+import useDocument from './hooks/useDocument'
 
 const StyledEditorContainer = styled.div`
   background: #FFFFFF;
@@ -25,83 +14,12 @@ const StyledEditorContainer = styled.div`
   margin-top: 25px;
   margin-left: 20px;
   margin-right: 20px;
+  min-height: calc(100vh - 190px);
+  padding: 20px;
 `
 
 const Document = () => {
-  const params = useParams()
-  const content = useSelector(state => state.getIn([
-    'documents',
-    parseInt(params.documentId),
-    'content'
-  ]))
-  const userName = useSelector(state => state.getIn(['auth', 'fullName']))
-
-  const [editorState, updateEditorState] = React.useState(content
-    ? JSON.parse(content)
-    : null
-  )
-
-  React.useEffect(
-    () => {
-      if (!content) {
-        documentServices
-          .getDocument(params.documentId)
-          .then(({ data }) => updateEditorState(JSON.parse(data.content)))
-      }
-    },
-    []
-  )
-
-  const color = React.useMemo(
-    () =>
-      randomColor({
-        luminosity: 'dark',
-        format: 'rgba',
-        alpha: 1
-      }),
-    []
-  )
-
-  const editor = React.useMemo(() => {
-    const slateEditor = withRectangleSelect(withDetectComponentInsert(withEditableVoid(withNodeId(withReact(withHistory(createEditor()))))))
-
-    const origin =
-      process.env.NODE_ENV === 'production'
-        ? window.location.origin
-        : 'http://localhost:8000'
-
-    const options = {
-      docId: '/' + params.documentId,
-      cursorData: {
-        name: userName,
-        color,
-        alphaColor: color.slice(0, -2) + '0.2)'
-      },
-      url: `${origin}/${params.documentId}`,
-      connectOpts: {
-        query: {
-          name: userName,
-          token: 'id',
-          type: 'document',
-          slug: params.documentId
-        }
-      },
-    }
-
-    return withIOCollaboration(slateEditor, options)
-  }, [])
-
-  React.useEffect(() => {
-    editor.connect()
-
-    return editor.destroy
-  }, [])
-
-  const { decorate } = useCursor(editor)
-
-  const onEditorChange = (newEditorState) => {
-    updateEditorState(newEditorState)
-  }
+  const { editorState, onEditorChange, decorate, editor } = useDocument()
 
   const renderElement = React.useCallback(
     ({ attributes, children, element }) => {

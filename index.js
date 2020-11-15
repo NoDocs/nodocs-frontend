@@ -9,11 +9,11 @@ import store from './src/store'
 
 const Index = () => {
   return (
-      <Router history={history}>
-        <Provider store={store}>
-            <App />
-        </Provider>
-      </Router>
+    <Router history={history}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </Router>
   )
 }
 

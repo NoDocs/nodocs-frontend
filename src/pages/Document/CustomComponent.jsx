@@ -1,15 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Editable, withReact, Slate } from 'slate-react'
-import { createEditor } from 'slate'
-import { useSelector, useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom'
-import { withIOCollaboration } from '@slate-collaborative/client'
+import { Editable, Slate } from 'slate-react'
 
 import history from 'utils/history'
-import * as componentServices from 'services/component'
-import { componentActions } from 'logic/component'
+import useComponent from './hooks/useComponent'
 
 const StyledComponentContainer = styled.div`
   background: ${({ isImported }) => isImported
@@ -32,79 +27,30 @@ const StyledComponentContainer = styled.div`
 `
 
 const StyledIcon = styled.div`
-    display: inline-flex;
-    width: 14px;
-    height: 14px;
-    margin: 0 0 0 10px;
-    opacity: 0.2;
-    background: url('https://res.cloudinary.com/nodocs/image/upload/v1604540189/icons/component.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
+  display: inline-flex;
+  width: 14px;
+  height: 14px;
+  margin: 0 0 0 10px;
+  opacity: 0.2;
+  background: url('https://res.cloudinary.com/nodocs/image/upload/v1604540189/icons/component.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
 `
 
 const CustomComponent = ({ id: componentId }) => {
-  const params = useParams()
-  const dispatch = useDispatch()
-  const content = useSelector(state => state.getIn(['components', componentId, 'content']))
-  const rootDocumentId = useSelector(state => state.getIn(['components', componentId, 'rootDocument', 'id']))
-  const userName = useSelector(state => state.getIn(['auth', 'fullName']))
-  const [editorState, updateEditorState] = React.useState(content
-    ? JSON.parse(content)
-    : null)
-
-  React.useEffect(
-    () => {
-      if (!content) {
-        componentServices
-          .getComponent(componentId)
-          .then(({ data }) => {
-            dispatch(componentActions.putComponent(data))
-            updateEditorState(JSON.parse(data.content))
-          })
-      }
-    },
-    []
-  )
-
-  const editor = React.useMemo(() => {
-    const slateEditor = withReact(createEditor())
-
-    const origin =
-    process.env.NODE_ENV === 'production'
-      ? window.location.origin
-      : 'http://localhost:8000'
-
-    const options = {
-      docId: '/' + componentId,
-      url: `${origin}/${componentId}`,
-      connectOpts: {
-        query: {
-          name: userName,
-          token: 'id',
-          type: 'component',
-          slug: componentId
-        }
-      },
-    }
-
-    return withIOCollaboration(slateEditor, options)
-  }, [])
-
-  React.useEffect(() => {
-    editor.connect()
-
-    return editor.destroy
-  }, [])
-
-  const onEditorStateChange = (newEditorState) => {
-    updateEditorState(newEditorState)
-  }
+  const {
+    editorState,
+    onEditorStateChange,
+    isImported,
+    editor,
+    rootDocumentId
+  } = useComponent({ componentId })
 
   if (!editorState) return <div>Getting a component...</div>
 
   return (
     <StyledComponentContainer
-      isImported={rootDocumentId !== parseInt(params.documentId, 10)}
+      isImported={isImported}
       contentEditable={false}
       data-component-id={componentId}
     >
@@ -112,7 +58,7 @@ const CustomComponent = ({ id: componentId }) => {
         <Editable autoFocus />
       </Slate>
 
-      {rootDocumentId !== parseInt(params.documentId, 10) && (
+      {isImported && (
         <StyledIcon onClick={() => history.push(`/d/${rootDocumentId}`)} />
       )}
     </StyledComponentContainer>

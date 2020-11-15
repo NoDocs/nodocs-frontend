@@ -28,6 +28,10 @@ const GlobalStyles = createGlobalStyle`
     padding: 0px;
   }
 
+  body {
+    background-color: #F9F9F9;
+  }
+
   .selection-area {
     background-color: rgba(0, 0, 0, 0.2);
   }
