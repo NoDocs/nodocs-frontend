@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Editable, withReact, Slate } from 'slate-react'
 import { createEditor } from 'slate'
+import { withHistory } from 'slate-history'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
@@ -10,6 +11,12 @@ import * as componentServices from 'services/component'
 import { componentActions } from 'logic/component'
 import { useSocket } from 'socket'
 import socketEvents from 'socket/socketEvents'
+
+import { withIOCollaboration } from '@slate-collaborative/client'
+
+import withEditableVoid from './plugins/withEditableVoid'
+import withNodeId from './plugins/withNodeId'
+
 
 const StyledComponentContainer = styled.div`
   background: ${({ isImported }) => isImported
@@ -48,6 +55,7 @@ const CustomComponent = ({ id: componentId }) => {
   const dispatch = useDispatch()
   const content = useSelector(state => state.getIn(['components', componentId, 'content']))
   const rootDocumentId = useSelector(state => state.getIn(['components', componentId, 'rootDocument', 'id']))
+  const userName = useSelector(state => state.getIn(['auth', 'fullName']))
   const [editorState, updateEditorState] = React.useState(content
     ? JSON.parse(content)
     : null)
@@ -66,29 +74,38 @@ const CustomComponent = ({ id: componentId }) => {
     []
   )
 
-  const editor = React.useMemo(() => withReact(createEditor()), [])
+  const editor = React.useMemo(() => {
+    const slateEditor = withReact(createEditor())
 
-  const { send: listenComponent } = useSocket(socketEvents.ListenComponent)
-  const { send: updateComponent } = useSocket(socketEvents.UpdateComponent)
+    const origin =
+    process.env.NODE_ENV === 'production'
+      ? window.location.origin
+      : 'http://localhost:8000'
 
-  useSocket(`${socketEvents.ComponentUpdated}-${componentId}`, (payload) => {
-    dispatch(componentActions.putComponent(payload))
-    updateEditorState(JSON.parse(payload.content))
-  })
+
+    const options = {
+      docId: '/' + componentId,
+      url: `${origin}/${componentId}`,
+      connectOpts: {
+        query: {
+          name: userName,
+          token: 'id',
+          type: 'component',
+          slug: componentId
+        }
+      },
+    }
+    return withIOCollaboration(slateEditor, options)
+  }, [])
 
   useEffect(() => {
-    if (componentId) listenComponent({ componentId })
-  }, [componentId])
+    editor.connect()
+
+    return editor.destroy
+  }, [])
 
   const onEditorStateChange = (newEditorState) => {
     updateEditorState(newEditorState)
-
-    editor
-      .operations
-      .filter(curr => curr.type !== 'set_selection')
-      .forEach(() => {
-        updateComponent({ componentId, content: JSON.stringify(newEditorState) })
-      })
   }
 
   if (!editorState) return <div>Getting a component...</div>
