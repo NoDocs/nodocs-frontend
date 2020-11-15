@@ -1,9 +1,16 @@
 import React from 'react'
-import { Slate, Editable, withReact } from 'slate-react'
-import { createEditor } from 'slate'
 import styled, { createGlobalStyle } from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+
+import { Slate, Editable, withReact } from 'slate-react'
+import { createEditor } from 'slate'
+import { withHistory } from 'slate-history'
+
+import randomColor from 'randomcolor'
+import { withIOCollaboration, useCursor } from '@slate-collaborative/client'
+
+import Leaf from '../../components/Leaf'
 
 import * as documentServices from 'services/document'
 import withRectangleSelect from './plugins/withRectangleSelect'
@@ -87,6 +94,7 @@ const Document = () => {
     parseInt(params.documentId),
     'content'
   ]))
+  const userName = useSelector(state => state.getIn(['auth', 'fullName']))
 
   const [editorState, updateEditorState] = React.useState(content
     ? JSON.parse(content)
@@ -104,15 +112,59 @@ const Document = () => {
     []
   )
 
-  const editor = React.useMemo(
-    () => withRectangleSelect(withDetectComponentInsert(withEditableVoid(withNodeId(withReact(createEditor()))))),
+  // const [isOnline, setOnlineState] = useState(false)
+
+  const color = React.useMemo(
+    () =>
+      randomColor({
+        luminosity: 'dark',
+        format: 'rgba',
+        alpha: 1
+      }),
     []
   )
 
+  const editor = React.useMemo(() => {
+    const slateEditor = withRectangleSelect(withDetectComponentInsert(withEditableVoid(withNodeId(withReact(withHistory(createEditor()))))))
+
+    const origin =
+      process.env.NODE_ENV === 'production'
+        ? window.location.origin
+        : 'http://localhost:8000'
+
+    const options = {
+      docId: '/' + params.documentId,
+      cursorData: {
+        name: userName,
+        color,
+        alphaColor: color.slice(0, -2) + '0.2)'
+      },
+      url: `${origin}/${params.documentId}`,
+      connectOpts: {
+        query: {
+          name: userName,
+          token: 'id',
+          type: 'document',
+          slug: params.documentId
+        }
+      },
+      // onConnect: () => setOnlineState(true),
+      // onDisconnect: () => setOnlineState(false)
+    }
+
+    return withIOCollaboration(slateEditor, options)
+  }, [])
+
+  React.useEffect(() => {
+    editor.connect()
+
+    return editor.destroy
+  }, [])
+
+  const { decorate } = useCursor(editor)
+
   const onEditorChange = (newEditorState) => {
     updateEditorState(newEditorState)
-    documentServices
-      .updateDocument(params.documentId, { content: JSON.stringify(newEditorState) })
   }
 
   const renderElement = React.useCallback(
@@ -130,26 +182,35 @@ const Document = () => {
     []
   )
 
+  // const toggleOnline = () => {
+  //   const { connect, disconnect } = editor
+  //   isOnline ? disconnect() : connect()
+  // }
+
+  const renderLeaf = React.useCallback((props) => <Leaf {...props} />, [decorate])
+
   if (!editorState) return <div>Getting a document...</div>
 
   return (
     <React.Fragment>
-      <GlobalStyles />
-      <Logo />
-      <StyledEditorContainer data-start="selection">
-        <Slate
-          editor={editor}
-          value={editorState}
-          onChange={onEditorChange}
-        >
-          <Editable
-            renderElement={renderElement}
-            placeholder="Document..."
-          />
+    <GlobalStyles />
+    <Logo />
+    <StyledEditorContainer data-start="selection">
+      <Slate
+        editor={editor}
+        value={editorState}
+        onChange={onEditorChange}
+      >
+        <Editable
+          renderElement={renderElement}
+          decorate={decorate}
+          renderLeaf={renderLeaf}
+          placeholder="Document..."
+        />
 
-          <CreateComponentButton />
-        </Slate>
-      </StyledEditorContainer>
+        <CreateComponentButton />
+      </Slate>
+    </StyledEditorContainer>
     </React.Fragment>
   )
 }
