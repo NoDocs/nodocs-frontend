@@ -1,38 +1,13 @@
 import React from 'react'
 import shortid from 'shortid'
 import { useSelector, useDispatch } from 'react-redux'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
 
 import * as documentServices from 'services/document'
 import { documentActions } from 'logic/document'
 import history from 'utils/history'
 
-const GlobalStyles = createGlobalStyle`
-  html {
-    background: #F2F3F4;
-    height: 100%;
-    width: 100%;
-    font-family: 'sans-serif', 'arial';
-  }
-
-  button {
-    border-radius: 4px;
-    box-shadow: none;
-    box-sizing: border-box;
-    font-family: "Google Sans", Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
-    font-weight: 500;
-    font-size: 14px;
-    height: 36px;
-    letter-spacing: 0.25px;
-    cursor: pointer;
-    line-height: 16px;
-    background: rgb(26, 115, 232);
-    color: rgb(255, 255, 255);
-    padding: 9px 16px 10px 12px;
-    text-transform: capitalize;
-    border: 1px solid transparent !important;
-  }
-`
+import TeamHeader from './TeamHeader'
 
 const NoDocsList = styled.ul`
     background: white;
@@ -65,21 +40,10 @@ const StyledIcon = styled.div`
     background-repeat: no-repeat;
 `
 
-const Logo = styled.div`
-  display: flex;
-  width: 200px;
-  height: 50px;
-  margin: 2% auto;
-  background: url('https://res.cloudinary.com/nodocs/image/upload/v1604555084/logos/logolettersblack_qfyiie.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-`
-
 const Home = () => {
   const [creating, toggleCreating] = React.useState()
 
   const documents = useSelector(state => state.get('documents').map(curr => curr.get('id')))
-  const userName = useSelector(state => state.getIn(['auth', 'fullName']))
   const dispatch = useDispatch()
 
   const createDocument = () => {
@@ -105,9 +69,7 @@ const Home = () => {
 
   return (
     <React.Fragment>
-      <GlobalStyles />
-      <Logo/>
-      <div>Welcome <b>{userName}</b> !!</div>
+      <TeamHeader />
 
       <NoDocsList>
         {documents

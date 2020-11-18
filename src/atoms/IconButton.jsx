@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 const StyledButtonContainer = styled.button`
@@ -9,14 +10,22 @@ const StyledButtonContainer = styled.button`
   cursor: pointer;
 
   &:hover {
-    background-color: #F3F3F3;
+    background-color: ${({ variant }) => variant === 'black'
+    ? 'rgba(255, 255, 255, 0.15)'
+    : '#F3F3F3'};
   }
 `
 
-const IconButton = ({ icon, onClick }) => (
-  <StyledButtonContainer onClick={onClick}>
+const IconButton = ({ variant = 'black', icon, onClick }) => (
+  <StyledButtonContainer variant={variant} onClick={onClick}>
     <img src={icon} />
   </StyledButtonContainer>
 )
+
+IconButton.propTypes = {
+  variant: PropTypes.string,
+  icon: PropTypes.string,
+  onClick: PropTypes.func,
+}
 
 export default IconButton

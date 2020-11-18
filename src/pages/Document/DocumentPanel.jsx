@@ -31,18 +31,18 @@ const StyledSeparator = styled.div`
 const DocumentPanel = () => {
   return (
     <StyledDocumentPanelContainer>
-      <IconButton icon={imageIcon} />
-      <IconButton icon={embedIcon} />
-      <IconButton icon={tableIcon} />
-      <IconButton icon={linkIcon} />
-      <IconButton icon={graphIcon} />
-      <IconButton icon={moreIcon} />
+      <IconButton variant="white" icon={imageIcon} />
+      <IconButton variant="white" icon={embedIcon} />
+      <IconButton variant="white" icon={tableIcon} />
+      <IconButton variant="white" icon={linkIcon} />
+      <IconButton variant="white" icon={graphIcon} />
+      <IconButton variant="white" icon={moreIcon} />
 
       <StyledSeparator />
 
       <CreateComponent />
-      <IconButton icon={chatIcon} />
-      <IconButton icon={subscribersIcon} />
+      <IconButton variant="white" icon={chatIcon} />
+      <IconButton variant="white" icon={subscribersIcon} />
     </StyledDocumentPanelContainer>
   )
 }

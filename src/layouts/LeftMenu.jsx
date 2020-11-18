@@ -1,10 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 
 import arrowLeftIcon from 'assets/arrow-left.svg'
 import homeIcon from 'assets/home.svg'
 import teamsIcon from 'assets/teams.svg'
+import IconButton from 'atoms/IconButton'
 import UserCard from 'molecules/UserCard'
 import ListItem from 'molecules/ListItem'
 
@@ -29,14 +31,18 @@ const StyledGridContainer = styled.div`
   grid-row-gap: 2px;
 `
 
-const LeftMenu = () => {
+const LeftMenu = ({ toggleNavbar }) => {
   const activeUser = useSelector(state => state.get('auth'))
 
   return (
     <StyledContainer>
       <StyledLeftMenuHeader>
         <UserCard user={activeUser} />
-        <img src={arrowLeftIcon} alt="collapse" />
+
+        <IconButton
+          icon={arrowLeftIcon}
+          onClick={() => toggleNavbar(false)}
+        />
       </StyledLeftMenuHeader>
 
       <StyledGridContainer>
@@ -48,6 +54,10 @@ const LeftMenu = () => {
       </StyledGridContainer>
     </StyledContainer>
   )
+}
+
+LeftMenu.propTypes = {
+  toggleNavbar: PropTypes.func,
 }
 
 export default LeftMenu

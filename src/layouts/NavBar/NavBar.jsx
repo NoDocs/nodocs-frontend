@@ -1,7 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import logoIcon from 'assets/logo.svg'
+import menuIcon from 'assets/menu.svg'
+import IconButton from 'atoms/IconButton'
+import history from 'utils/history'
 import OpenedDocuments from './OpenedDocuments'
 
 const StyledContainer = styled.div`
@@ -13,12 +17,18 @@ const StyledContainer = styled.div`
   padding-left: 30px;
 `
 
-const NavBar = () => (
+const NavBar = ({ navbarToggled, toggleNavbar }) => (
   <StyledContainer>
-    <img src={logoIcon} alt="NoDocs" />
+    {!navbarToggled && <IconButton icon={menuIcon} onClick={() => toggleNavbar(true)} />}
+    <img onClick={() => history.push('/')} src={logoIcon} alt="NoDocs" />
 
     <OpenedDocuments />
   </StyledContainer>
 )
+
+NavBar.propTypes = {
+  navbarToggled: PropTypes.bool,
+  toggleNavbar: PropTypes.func,
+}
 
 export default NavBar
