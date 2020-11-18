@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 
 import history from 'utils/history'
+import Table from 'molecules/Table'
 
 import TeamHeader from './TeamHeader'
 
@@ -43,6 +44,11 @@ const Home = () => {
   return (
     <React.Fragment>
       <TeamHeader />
+
+      <Table
+        proportions="auto 90px 80px 80px 100px"
+        headerTabs={['Name', 'Subscribers', 'Linked to', 'Mentions', 'Assignees']}
+      />
 
       <NoDocsList>
         {documents
