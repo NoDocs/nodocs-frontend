@@ -90,6 +90,7 @@ module.exports = {
     extensions: ['.js', '.jsx'],
     alias: {
       assets: path.resolve(__dirname, 'src/assets'),
+      hooks: path.resolve(__dirname, 'src/hooks'),
       utils: path.resolve(__dirname, 'src/utils'),
       atoms: path.resolve(__dirname, 'src/atoms'),
       molecules: path.resolve(__dirname, 'src/molecules'),
