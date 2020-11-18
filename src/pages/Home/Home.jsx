@@ -1,10 +1,7 @@
 import React from 'react'
-import shortid from 'shortid'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 
-import * as documentServices from 'services/document'
-import { documentActions } from 'logic/document'
 import history from 'utils/history'
 
 import TeamHeader from './TeamHeader'
@@ -41,31 +38,7 @@ const StyledIcon = styled.div`
 `
 
 const Home = () => {
-  const [creating, toggleCreating] = React.useState()
-
   const documents = useSelector(state => state.get('documents').map(curr => curr.get('id')))
-  const dispatch = useDispatch()
-
-  const createDocument = () => {
-    toggleCreating()
-
-    const params = {
-      content: JSON.stringify([{
-        type: 'paragraph',
-        id: shortid.generate(),
-        children: [{ text: '' }]
-      }])
-    }
-
-    documentServices
-      .createDocument(params)
-      .then(response => {
-        const { data } = response
-
-        dispatch(documentActions.createDocument(data))
-        history.push(`/d/${data.id}`)
-      })
-  }
 
   return (
     <React.Fragment>
@@ -81,8 +54,6 @@ const Home = () => {
           ))
           .toList()}
       </NoDocsList>
-
-      <button disabled={creating} onClick={createDocument}>create document</button>
     </React.Fragment>
   )
 }
