@@ -9,7 +9,7 @@ import * as documentServices from 'services/document'
 
 import withRectangleSelect from '../plugins/withRectangleSelect'
 import withNodeId from '../plugins/withNodeId'
-import withEditableVoid from '../plugins/withEditableVoid'
+import withEditablePageVoid from '../plugins/withEditablePageVoid'
 import withDetectComponentInsert from '../plugins/withDetectComponentInsert'
 import { withIOCollaboration, useCursor } from '@slate-collaborative/client'
 
@@ -21,7 +21,20 @@ const useDocument = () => {
     'content'
   ]))
   const userName = useSelector(state => state.getIn(['auth', 'fullName']))
-  const color = useSelector(state => state.getIn(['auth', 'color'])) || ''
+  const color = useSelector(state => state.getIn(['auth', 'color'])) || 'green'
+
+  /**
+   * Document
+   *    id
+   *    section
+   *      id
+   *      content: [
+   *         { type: 'Page', id: pageId, children: [{ type: paragraph, children: [{ text: "asdasdasdad" }] }] },
+   *         { type: 'Page', id: pageId, children: [{ type: paragraph, children: [{ text: "asdasdasdad" }] }] },
+   *         { type: 'Page', id: pageId, children: [{ type: paragraph, children: [{ text: "asdasdasdad" }] }] },
+   *      ]
+   *
+   */
 
   const [editorState, updateEditorState] = React.useState(content
     ? JSON.parse(content)
@@ -51,7 +64,7 @@ const useDocument = () => {
   const editor = React.useMemo(() => {
     const slateEditor = withRectangleSelect(
       withDetectComponentInsert(
-        withEditableVoid(
+        withEditablePageVoid(
           withNodeId(
             withReact(
               withHistory(

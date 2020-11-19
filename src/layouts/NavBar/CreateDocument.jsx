@@ -13,11 +13,10 @@ const CreateDocument = () => {
 
   const addDocument = () => {
     const params = {
-      content: JSON.stringify([{
-        type: 'paragraph',
-        id: shortid.generate(),
-        children: [{ text: '' }]
-      }])
+      content: JSON.stringify([
+        { type: 'page', id: shortid.generate(), children: [{ text: '' }] },
+        { type: 'page', id: shortid.generate(), children: [{ text: '' }] },
+      ])
     }
 
     documentServices
