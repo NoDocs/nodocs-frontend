@@ -39,7 +39,7 @@ const useComponent = ({ componentId }) => {
       const origin =
       process.env.NODE_ENV === 'production'
         ? window.location.origin
-        : 'http://localhost:8000'
+        : 'http://104.199.99.89'
 
       const options = {
         docId: '/' + componentId,

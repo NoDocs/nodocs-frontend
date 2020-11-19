@@ -66,7 +66,7 @@ const useDocument = () => {
     const origin =
       process.env.NODE_ENV === 'production'
         ? window.location.origin
-        : 'http://localhost:8000'
+        : 'http://104.199.99.89'
 
     const options = {
       docId: '/' + params.documentId,
@@ -82,7 +82,8 @@ const useDocument = () => {
           token: 'id',
           type: 'document',
           slug: params.documentId
-        }
+        },
+        'transports': ['websocket']
       },
     }
 
