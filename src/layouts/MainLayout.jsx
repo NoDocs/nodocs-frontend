@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled, { createGlobalStyle } from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -8,17 +9,23 @@ import { authActions } from 'logic/auth'
 import { documentActions } from 'logic/document'
 import history from 'utils/history'
 
-import Navigation from './NavBar'
+import NavBar from './NavBar'
 import LeftMenu from './LeftMenu'
 
 const StyledContainer = styled.div`
   display: grid;
   width: 100%;
-  grid-template-columns: 300px 1fr;
+  ${({ navbarToggled }) => navbarToggled && 'grid-template-columns: 300px 1fr;'}
   grid-template-rows: 56px auto;
-  grid-template-areas:
-    "left nav"
-    "left content";
+  grid-template-areas: ${({ navbarToggled }) => navbarToggled
+    ? `
+      "left nav"
+      "left content"
+    `
+    : `
+      "nav"
+      "content"
+    `};
   height: 100vh;
 `
 
@@ -44,6 +51,8 @@ const GlobalStyles = createGlobalStyle`
 `
 
 const MainLayout = ({ children }) => {
+  const [navbarToggled, toggleNavbar] = React.useState(false)
+
   const userId = useSelector(state => state.getIn(['auth', 'id']))
   const dispatch = useDispatch()
 
@@ -79,15 +88,24 @@ const MainLayout = ({ children }) => {
 
   return (
     <React.Fragment>
-      <StyledContainer>
-        <LeftMenu />
-        <Navigation />
+      <StyledContainer navbarToggled={navbarToggled}>
+        {navbarToggled && <LeftMenu toggleNavbar={toggleNavbar} />}
+
+        <NavBar
+          toggleNavbar={toggleNavbar}
+          navbarToggled={navbarToggled}
+        />
+
         <div>{children}</div>
       </StyledContainer>
 
       <GlobalStyles />
     </React.Fragment>
   )
+}
+
+MainLayout.propTypes = {
+  children: PropTypes.any,
 }
 
 export default MainLayout
