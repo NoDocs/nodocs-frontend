@@ -5,6 +5,7 @@ import { Slate, Editable } from 'slate-react'
 
 import Component from './Component'
 import usePage from './hooks/usePage'
+import Leaf from './components/Leaf'
 
 const StyledEditorContainer = styled.div`
   background: #FFFFFF;
@@ -19,7 +20,13 @@ const StyledEditorContainer = styled.div`
 `
 
 const Page = ({ id }) => {
-  const { editor, editorState, onEditorStateChange } = usePage()
+  const {
+    editor,
+    decorate,
+    editorState,
+    onEditorStateChange,
+    onPageClick,
+  } = usePage()
 
   const renderElement = React.useCallback(
     ({ attributes, children, element }) => {
@@ -36,13 +43,22 @@ const Page = ({ id }) => {
     []
   )
 
+  const renderLeaf = React.useCallback(
+    (props) => <Leaf {...props} />,
+    [decorate]
+  )
+
   return (
     <StyledEditorContainer
       contentEditable={false}
+      onClick={onPageClick}
       data-page-id={id}
     >
       <Slate editor={editor} value={editorState} onChange={onEditorStateChange}>
-        <Editable renderElement={renderElement} />
+        <Editable
+          renderElement={renderElement}
+          renderLeaf={renderLeaf}
+        />
       </Slate>
     </StyledEditorContainer>
   )

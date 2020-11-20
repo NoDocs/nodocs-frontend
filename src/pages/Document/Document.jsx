@@ -2,7 +2,6 @@ import React from 'react'
 import { Slate, Editable } from 'slate-react'
 
 import DocumentPanel from './DocumentPanel'
-import Leaf from './components/Leaf'
 import useDocument from './hooks/useDocument'
 import Page from './Page'
 
@@ -18,11 +17,6 @@ const Document = () => {
     []
   )
 
-  const renderLeaf = React.useCallback(
-    (props) => <Leaf {...props} />,
-    [decorate]
-  )
-
   if (!editorState) return <div>Getting a document...</div>
 
   return (
@@ -36,7 +30,6 @@ const Document = () => {
 
         <Editable
           decorate={decorate}
-          renderLeaf={renderLeaf}
           renderElement={renderElement}
         />
       </Slate>
