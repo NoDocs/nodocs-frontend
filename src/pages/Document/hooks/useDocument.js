@@ -18,6 +18,8 @@ const useDocument = () => {
   const content = useSelector(state => state.getIn([
     'documents',
     parseInt(params.documentId),
+    'sections',
+    0,
     'content'
   ]))
   const userName = useSelector(state => state.getIn(['auth', 'fullName']))
@@ -33,7 +35,7 @@ const useDocument = () => {
       if (!content) {
         documentServices
           .getDocument(params.documentId)
-          .then(({ data }) => updateEditorState(JSON.parse(data.content)))
+          .then(({ data }) => updateEditorState(JSON.parse(data.sections[0].content)))
       }
     },
     []
@@ -69,19 +71,19 @@ const useDocument = () => {
         : 'http://35.222.140.21'
 
     const options = {
-      docId: '/' + params.documentId,
+      docId: '/' + 6,
       cursorData: {
         name: userName,
         color,
         alphaColor: color.slice(0, -2) + '0.2)'
       },
-      url: `${origin}/${params.documentId}`,
+      url: `${origin}/6`,
       connectOpts: {
         query: {
           name: userName,
           token: 'id',
           type: 'document',
-          slug: params.documentId
+          slug: 6
         },
         'transports': ['websocket']
       },
