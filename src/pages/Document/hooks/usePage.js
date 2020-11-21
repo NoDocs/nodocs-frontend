@@ -8,6 +8,8 @@ import { withIOCollaboration, useCursor } from '@slate-collaborative/client'
 import withEditableComponentVoid from '../plugins/withEditableComponentVoid'
 import withDetectComponentInsert from '../plugins/withDetectComponentInsert'
 import withRectangleSelect from '../plugins/withRectangleSelect'
+import withPage from '../plugins/withPage'
+import withNodeId from '../plugins/withNodeId'
 
 const usePage = () => {
   const userName = useSelector(state => state.getIn(['auth', 'fullName']))
@@ -21,9 +23,13 @@ const usePage = () => {
     () => {
       const withPlugins = withEditableComponentVoid(
         withRectangleSelect(
-          withDetectComponentInsert(
-            withReact(
-              createEditor()
+          withPage(
+            withDetectComponentInsert(
+              withNodeId(
+                withReact(
+                  createEditor()
+                )
+              )
             )
           )
         )
@@ -64,7 +70,6 @@ const usePage = () => {
 
   const onPageClick = () => {
     if (editor.selection) {
-      console.log('editor is selected')
       return
     }
 

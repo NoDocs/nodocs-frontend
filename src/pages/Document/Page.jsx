@@ -9,7 +9,7 @@ import Leaf from './components/Leaf'
 
 const StyledEditorContainer = styled.div`
   background: #FFFFFF;
-  height: 960px;
+  height: 60px;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
   border-radius: 10px;
   margin-top: 25px;
@@ -17,6 +17,7 @@ const StyledEditorContainer = styled.div`
   margin-right: 20px;
   margin-bottom: 30px;
   padding: 20px;
+  overflow: hidden;
 `
 
 const Page = ({ id }) => {
