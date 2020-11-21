@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import history from 'utils/history'
 import Table from 'molecules/Table'
 
+import TeamDescription from './TeamDescription'
 import TeamHeader from './TeamHeader'
 
 const NoDocsList = styled.ul`
@@ -43,23 +44,25 @@ const Home = () => {
 
   return (
     <React.Fragment>
-      <TeamHeader />
+      <TeamDescription />
+      <div style={{ margin: '0 130px' }}>
+        <TeamHeader />
+        <Table
+          proportions="auto 90px 80px 80px 100px"
+          headerTabs={['Name', 'Subscribers', 'Linked to', 'Mentions', 'Assignees']}
+        />
 
-      <Table
-        proportions="auto 90px 80px 80px 100px"
-        headerTabs={['Name', 'Subscribers', 'Linked to', 'Mentions', 'Assignees']}
-      />
-
-      <NoDocsList>
-        {documents
-          .map(documentId => (
-            <ItemList key={documentId} onClick={() => history.push(`/d/${documentId}`)}>
-              <StyledIcon/>
-              <span>Document N{documentId}</span>
-            </ItemList>
-          ))
-          .toList()}
-      </NoDocsList>
+        <NoDocsList>
+          {documents
+            .map(documentId => (
+              <ItemList key={documentId} onClick={() => history.push(`/d/${documentId}`)}>
+                <StyledIcon/>
+                <span>Document N{documentId}</span>
+              </ItemList>
+            ))
+            .toList()}
+        </NoDocsList>
+      </div>
     </React.Fragment>
   )
 }
