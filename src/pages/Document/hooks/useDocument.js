@@ -68,24 +68,25 @@ const useDocument = () => {
     const origin =
       process.env.NODE_ENV === 'production'
         ? window.location.origin
-        : 'http://35.222.140.21'
+        : 'https://api.nodocs.app'
 
     const options = {
-      docId: '/' + 6,
+      docId: '/' + 1,
       cursorData: {
         name: userName,
         color,
         alphaColor: color.slice(0, -2) + '0.2)'
       },
-      url: `${origin}/6`,
+      url: `${origin}/1`,
       connectOpts: {
         query: {
           name: userName,
           token: 'id',
           type: 'document',
-          slug: 6
+          slug: 1
         },
-        'transports': ['websocket']
+        'transports': ['websocket'],
+        secure: true
       },
     }
 

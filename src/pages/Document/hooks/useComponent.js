@@ -39,7 +39,7 @@ const useComponent = ({ componentId }) => {
       const origin =
       process.env.NODE_ENV === 'production'
         ? window.location.origin
-        : 'http://35.222.140.21'
+        : 'https://api.nodocs.app'
 
       const options = {
         docId: '/' + componentId,
@@ -50,7 +50,9 @@ const useComponent = ({ componentId }) => {
             token: 'id',
             type: 'component',
             slug: componentId
-          }
+          },
+          'transports': ['websocket'],
+          secure: true
         },
       }
 
