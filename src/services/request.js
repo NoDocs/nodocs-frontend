@@ -56,7 +56,7 @@ const getHeaders = () => {
 
 export default (parentUrl = '') => {
   const api = apisauce.create({
-    baseURL: `${process.env.BASE_API_URL}/${parentUrl}/`,
+    baseURL: `${process.env.BASE_API_URL}/${parentUrl}`,
     headers: {
       'Content-type': 'application/json',
     },

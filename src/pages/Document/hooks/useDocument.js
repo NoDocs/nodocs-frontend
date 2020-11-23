@@ -14,6 +14,8 @@ const useDocument = () => {
   const content = useSelector(state => state.getIn([
     'documents',
     parseInt(params.documentId),
+    'sections',
+    0,
     'content'
   ]))
 
@@ -40,7 +42,7 @@ const useDocument = () => {
       if (!content) {
         documentServices
           .getDocument(params.documentId)
-          .then(({ data }) => updateEditorState(JSON.parse(data.content)))
+          .then(({ data }) => updateEditorState(JSON.parse(data.sections[0].content)))
       }
     },
     []

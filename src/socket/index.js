@@ -13,7 +13,11 @@ class Socket {
     return new Promise((resolve, reject) => {
       if (Socket.socket) return
 
-      const socket = io(process.env.BASE_API_URL, { reconnectionDelayMax: 10000 })
+      const socket = io(process.env.BASE_API_URL, {
+        reconnectionDelayMax: 10000,
+        transports: ['websocket'],
+        secure: true
+      })
 
       socket.on('connect', () => {
         Socket.socket = socket
