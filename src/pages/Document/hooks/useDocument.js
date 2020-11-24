@@ -1,67 +1,27 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { createEditor } from 'slate'
-import { withReact } from 'slate-react'
+import { useDispatch } from 'react-redux'
 
 import * as documentServices from 'services/document'
-
-import withNodeId from '../plugins/withNodeId'
-import withEditablePageVoid from '../plugins/withEditablePageVoid'
+import { documentActions } from 'logic/document'
 
 const useDocument = () => {
   const params = useParams()
-  const content = useSelector(state => state.getIn([
-    'documents',
-    parseInt(params.documentId),
-    'sections',
-    0,
-    'content'
-  ]))
-
-  /**
-   * Document
-   *    id
-   *    section
-   *      id
-   *      content: [
-   *         { type: 'Page', id: pageId, children: [{ type: paragraph, children: [{ text: "asdasdasdad" }] }] },
-   *         { type: 'Page', id: pageId, children: [{ type: paragraph, children: [{ text: "asdasdasdad" }] }] },
-   *         { type: 'Page', id: pageId, children: [{ type: paragraph, children: [{ text: "asdasdasdad" }] }] },
-   *      ]
-   *
-   */
-
-  const [editorState, updateEditorState] = React.useState(content
-    ? JSON.parse(content)
-    : null
-  )
+  const dispatch = useDispatch()
 
   React.useEffect(
     () => {
-      if (!content) {
-        documentServices
-          .getDocument(params.documentId)
-          .then(({ data }) => updateEditorState(JSON.parse(data.sections[0].content)))
+      const fetchDocument = async () => {
+        const docId = params.documentId
+        const { data: doc } = await documentServices.getDocument(docId)
+
+        dispatch(documentActions.initializeDocument(doc))
       }
+
+      fetchDocument()
     },
     []
   )
-
-  const editor = React.useMemo(
-    () => withEditablePageVoid(withNodeId(withReact(createEditor()))),
-    []
-  )
-
-  const onEditorChange = (newEditorState) => {
-    updateEditorState(newEditorState)
-  }
-
-  return {
-    editorState,
-    editor,
-    onEditorChange,
-  }
 }
 
 export default useDocument

@@ -15,3 +15,10 @@ export const putDocuments = (documents) => ({
     documents,
   },
 })
+
+export const initializeDocument = (document) => ({
+  type: documentActionTypes.INITIALIZE_DOCUMENT,
+  payload: {
+    document,
+  },
+})
