@@ -10,10 +10,12 @@ import DocumentLeftPanel from './DocumentLeftPanel'
 
 const StyledDocumentContainer = styled.div`
   display: grid;
-  grid-template-area:
+  grid-template-areas:
     "document-panel document-panel"
-    "document-left-panel document-content";
+    "document-left-panel document-content"
+  ;
   grid-template-rows: 45px;
+  grid-template-columns: 200px auto;
 `
 
 const Document = () => {

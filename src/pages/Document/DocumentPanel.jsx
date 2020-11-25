@@ -19,6 +19,7 @@ const StyledDocumentPanelContainer = styled.div`
   justify-content: center;
   align-items: center;
   border: 1px solid #CFD8DC;
+  grid-area: document-panel;
 `
 
 const StyledSeparator = styled.div`
