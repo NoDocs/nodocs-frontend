@@ -30,7 +30,9 @@ const CreateDocument = () => {
   }
 
   return (
-    <IconButton icon={addIcon} onClick={addDocument} />
+    <IconButton onClick={addDocument}>
+      <img src={addIcon} />
+    </IconButton>
   )
 }
 

@@ -15,7 +15,7 @@ const StyledDocumentContainer = styled.div`
     "document-left-panel document-content"
   ;
   grid-template-rows: 45px;
-  grid-template-columns: 200px auto;
+  grid-template-columns: 250px auto;
 `
 
 const Document = () => {

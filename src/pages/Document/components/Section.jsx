@@ -23,7 +23,10 @@ const Section = ({ id }) => {
 
   return (
     <StyledSectionContainer variant="inverted" active={activeSectionId === id}>
-      <IconButton icon={arrowRightIcon} />
+      <IconButton>
+        <img src={arrowRightIcon} />
+      </IconButton>
+
       <Label color="black">{title || 'Untitled'}</Label>
     </StyledSectionContainer>
   )
