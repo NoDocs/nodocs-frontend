@@ -16,6 +16,16 @@ const sectionsReducer = (state = initialState, action) => {
         )
     }
 
+    case documentActionTypes.CREATE_DOCUMENT: {
+      return action
+        .payload
+        .sections
+        .reduce(
+          (res, curr) => res.set(curr.id, new Map(curr)),
+          new Map()
+        )
+    }
+
     default:
       return state
   }

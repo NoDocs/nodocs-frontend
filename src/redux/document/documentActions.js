@@ -1,10 +1,10 @@
 import * as documentActionTypes from './documentActionTypes'
 
-export const createDocument = ({ id, content, creator }) => ({
+export const createDocument = ({ id, sections, creator }) => ({
   type: documentActionTypes.CREATE_DOCUMENT,
   payload: {
     id,
-    content,
+    sections,
     creator,
   }
 })
