@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import Avatar from 'atoms/Avatar'
@@ -18,7 +19,7 @@ const StyledUserName = styled(Label)`
 
 const UserCard = ({ user }) => (
   <StyledContainer>
-    <Avatar />
+    <Avatar src={'../../src/assets/photo.png'} />
 
     <div>
       <StyledUserName color="active" weight={500}>{user.get('fullName')}</StyledUserName>
@@ -27,4 +28,7 @@ const UserCard = ({ user }) => (
   </StyledContainer>
 )
 
+UserCard.propTypes = {
+  user: PropTypes.object
+}
 export default UserCard
