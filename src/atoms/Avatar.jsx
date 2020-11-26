@@ -1,16 +1,21 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-const StyledAvatar = styled.div`
-  width: 35px;
+const StyledAvatar = styled.img`
   height: 35px;
-  background-color: white;
-  border-radius: 18px;
-  border: 1.5px solid #EB5C68;
+  width: 35px;
+  border-radius: 50%;
+  border: ${({ color = '#EB5C68' }) => `2px solid ${color}`};
 `
 
-const Avatar = () => (
-  <StyledAvatar />
+const Avatar = ({ src, color, className }) => (
+  <StyledAvatar src={src} color={color} className={className} alt="img" />
 )
 
+Avatar.propTypes = {
+  src: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  color: PropTypes.string,
+  className: PropTypes.string
+}
 export default Avatar

@@ -10,6 +10,7 @@ const Label = styled.p`
   font-family: quicksand;
   font-weight: ${({ weight = 300 }) => weight};
   color: ${({ color = 'transparent' }) => getColor(color)};
+  text-align: ${({ textAlign = 'left' }) => textAlign};
   line-height: 17px;
   font-size: 14px;
 `
