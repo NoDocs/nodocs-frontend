@@ -3,10 +3,6 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 export const StyledInput = styled.input`
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  -o-appearance: none;
   appearance: none;
   position: relative;
   height: 100%;
