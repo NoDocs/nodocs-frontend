@@ -41,7 +41,7 @@ const StyledIcon = styled.div`
 `
 
 const Home = () => {
-  const documents = useSelector(state => state.get('documents').map(curr => curr.get('id')))
+  const documents = useSelector(state => state.getIn(['entities', 'documents']))
 
   return (
     <React.Fragment>
@@ -63,10 +63,10 @@ const Home = () => {
 
         <NoDocsList>
           {documents
-            .map(documentId => (
-              <ItemList key={documentId} onClick={() => history.push(`/d/${documentId}`)}>
+            .map(document => (
+              <ItemList key={document.get('id')} onClick={() => history.push(`/d/${document.get('id')}`)}>
                 <StyledIcon/>
-                <span>Document N{documentId}</span>
+                <span>Document - {document.get('title')}</span>
               </ItemList>
             ))
             .toList()}

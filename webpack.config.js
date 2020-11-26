@@ -3,7 +3,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin')
 const dotenv = require('dotenv')
 const { DefinePlugin } = require('webpack')
 
-const config = dotenv.config({ path: path.resolve(__dirname, `${process.env.APP_ENV}.env`) })
+const config = dotenv.config({ path: path.resolve(__dirname, `env/${process.env.APP_ENV}.env`) })
 
 const isLocal = process.env.APP_ENV === 'local'
 

@@ -37,7 +37,7 @@ const StyledIcon = styled.div`
   background-repeat: no-repeat;
 `
 
-const CustomComponent = ({ id: componentId }) => {
+const Component = ({ id: componentId }) => {
   const {
     editorState,
     onEditorStateChange,
@@ -65,8 +65,8 @@ const CustomComponent = ({ id: componentId }) => {
   )
 }
 
-CustomComponent.propTypes = {
+Component.propTypes = {
   id: PropTypes.string,
 }
 
-export default CustomComponent
+export default Component

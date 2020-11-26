@@ -27,7 +27,12 @@ const StyledUnderline = styled.span`
   border-bottom-left-radius: 15px;
 `
 
-const ListItem = ({ active, icon, showUnderline, label }) => (
+const ListItem = ({
+  active,
+  icon,
+  showUnderline,
+  label,
+}) => (
   <StyledHoverableContainer active={active}>
     <img src={icon} height={24} alt={label} />
     <Label color="active">{label}</Label>

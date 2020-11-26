@@ -19,6 +19,7 @@ const StyledDocumentPanelContainer = styled.div`
   justify-content: center;
   align-items: center;
   border: 1px solid #CFD8DC;
+  grid-area: document-panel;
 `
 
 const StyledSeparator = styled.div`
@@ -31,18 +32,41 @@ const StyledSeparator = styled.div`
 const DocumentPanel = () => {
   return (
     <StyledDocumentPanelContainer>
-      <IconButton variant="white" icon={imageIcon} />
-      <IconButton variant="white" icon={embedIcon} />
-      <IconButton variant="white" icon={tableIcon} />
-      <IconButton variant="white" icon={linkIcon} />
-      <IconButton variant="white" icon={graphIcon} />
-      <IconButton variant="white" icon={moreIcon} />
+      <IconButton variant="white">
+        <img src={imageIcon} />
+      </IconButton>
+
+      <IconButton variant="white">
+        <img src={embedIcon} />
+      </IconButton>
+
+      <IconButton variant="white">
+        <img src={tableIcon} />
+      </IconButton>
+
+      <IconButton variant="white">
+        <img src={linkIcon} />
+      </IconButton>
+
+      <IconButton variant="white">
+        <img src={graphIcon} />
+      </IconButton>
+
+      <IconButton variant="white">
+        <img src={moreIcon} />
+      </IconButton>
 
       <StyledSeparator />
 
       <CreateComponent />
-      <IconButton variant="white" icon={chatIcon} />
-      <IconButton variant="white" icon={subscribersIcon} />
+
+      <IconButton variant="white">
+        <img src={chatIcon} />
+      </IconButton>
+
+      <IconButton variant="white">
+        <img src={subscribersIcon} />
+      </IconButton>
     </StyledDocumentPanelContainer>
   )
 }

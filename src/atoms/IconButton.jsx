@@ -16,15 +16,15 @@ const StyledButtonContainer = styled.button`
   }
 `
 
-const IconButton = ({ variant = 'black', icon, onClick }) => (
+const IconButton = ({ variant = 'black', children, onClick }) => (
   <StyledButtonContainer variant={variant} onClick={onClick}>
-    <img src={icon} />
+    {children}
   </StyledButtonContainer>
 )
 
 IconButton.propTypes = {
   variant: PropTypes.string,
-  icon: PropTypes.string,
+  children: PropTypes.element,
   onClick: PropTypes.func,
 }
 
