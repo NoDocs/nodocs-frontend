@@ -10,6 +10,7 @@ import Checkbox from 'atoms/Checkbox'
 import AddIcon from 'assets/components/AddIcon'
 import DragIcon from 'assets/components/DragIcon'
 import MoreIcon from 'assets/components/MoreIcon'
+import SubMenuIcon from 'assets/components/SubMenuIcon'
 
 const StyledTable = styled.div`
   padding: 18px 0;
@@ -98,30 +99,30 @@ const Table = ({ headerTabs, proportions, data }) => {
   return (
     <StyledTable>
       <StyledTableHeader proportions={proportions}>
-        {headerTabs.map((curr) => typeof curr.content === 'string'
-          ? <Label weight={500} textAlign={curr.position} color="black">{curr.content}</Label>
-          : <StyledHeaderCell>{curr.content}</StyledHeaderCell>)}
+        {headerTabs.map((curr, index) => typeof curr.content === 'string'
+          ? <Label key={index} weight={500} textAlign={curr.position} color="black">{curr.content}</Label>
+          : <StyledHeaderCell key={index}>{curr.content}</StyledHeaderCell>)}
       </StyledTableHeader>
-      {data.map(documentId => (
+      {data.map((documentId, index) => (
         <StyledTableRow key={documentId} proportions={proportions} onClick={() => history.push(`/d/${documentId}`)}>
           <StyledCell jc="start">
-            <SelectedNeon selected={false} />
+            <SelectedNeon selected={true} />
             <StyledHiddenSection>
               <DragIcon height={12} width={12} fill={'rgba(0,0,0,0.25)'} />
               <div style={{ width: 12, height: 12 }}>
-                <Checkbox checked={false} />
+                <Checkbox checked onChange={() => console.log('checking')} />
               </div>
             </StyledHiddenSection>
           </StyledCell>
           <StyledCell jc="start">
-            Document N{documentId}
+            Document N{index}
           </StyledCell>
           <StyledCell>14</StyledCell>
           <StyledCell>19</StyledCell>
           <StyledCell>31</StyledCell>
           <StyledCell jc="space-evenly">
             <NewAvatar src={'../../src/assets/photo.png'} />
-            <MoreIcon />
+            <SubMenuIcon />
             <MoreIcon />
           </StyledCell>
         </StyledTableRow>
@@ -137,7 +138,7 @@ const Table = ({ headerTabs, proportions, data }) => {
 Table.propTypes = {
   headerTabs: PropTypes.array,
   proportions: PropTypes.string,
-  data: PropTypes.arrayOf(PropTypes.object).isRequired
+  data: PropTypes.object.isRequired
 }
 
 export default Table
