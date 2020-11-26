@@ -13,6 +13,13 @@ const activeDocumentReducer = (state = initialState, action) => {
         .set('activeSectionId', document.sections[0].id)
     }
 
+    case documentActionTypes.SWITCH_SECTION: {
+      return state.set(
+        'activeSectionId',
+        action.payload.sectionId
+      )
+    }
+
     default:
       return state
   }
