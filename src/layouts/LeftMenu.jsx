@@ -39,10 +39,9 @@ const LeftMenu = ({ toggleNavbar }) => {
       <StyledLeftMenuHeader>
         <UserCard user={activeUser} />
 
-        <IconButton
-          icon={arrowLeftIcon}
-          onClick={() => toggleNavbar(false)}
-        />
+        <IconButton onClick={() => toggleNavbar(false)}>
+          <img src={arrowLeftIcon} />
+        </IconButton>
       </StyledLeftMenuHeader>
 
       <StyledGridContainer>

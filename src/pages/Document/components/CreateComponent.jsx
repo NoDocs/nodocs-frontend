@@ -62,7 +62,9 @@ const CreateComponentButton = () => {
   }
 
   return (
-    <IconButton onClick={handleCreateComponent} icon={componentIcon} />
+    <IconButton onClick={handleCreateComponent}>
+      <img src={componentIcon} />
+    </IconButton>
   )
 }
 

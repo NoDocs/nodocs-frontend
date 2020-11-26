@@ -79,7 +79,7 @@ const MainLayout = ({ children }) => {
 
       documentServices
         .getDocuments()
-        .then(response => dispatch(documentActions.putDocuments(response.data)))
+        .then(response => { dispatch(documentActions.putDocuments(response.data)) })
     },
     []
   )

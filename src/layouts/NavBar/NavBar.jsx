@@ -21,7 +21,12 @@ const StyledContainer = styled.div`
 
 const NavBar = ({ navbarToggled, toggleNavbar }) => (
   <StyledContainer>
-    {!navbarToggled && <IconButton icon={menuIcon} onClick={() => toggleNavbar(true)} />}
+    {!navbarToggled && (
+      <IconButton onClick={() => toggleNavbar(true)}>
+        <img src={menuIcon} />
+      </IconButton>
+    )}
+
     <img onClick={() => history.push('/')} src={logoIcon} alt="NoDocs" />
 
     <OpenedDocuments />

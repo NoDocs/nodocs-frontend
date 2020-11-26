@@ -1,0 +1,6 @@
+steps:
+  # Install NPM modules
+  - id: "install"
+    name: node:12.19.0
+    entrypoint: yarn
+    args: ["install"]
