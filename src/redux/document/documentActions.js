@@ -22,3 +22,10 @@ export const initializeDocument = (document) => ({
     document,
   },
 })
+
+export const createSection = section => ({
+  type: documentActionTypes.CREATE_SECTION,
+  payload: {
+    section,
+  },
+})

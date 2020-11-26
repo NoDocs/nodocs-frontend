@@ -15,7 +15,6 @@ const CreateDocument = () => {
     const params = {
       content: JSON.stringify([
         { type: 'page', id: shortid.generate(), children: [{ text: '' }] },
-        { type: 'page', id: shortid.generate(), children: [{ text: '' }] },
       ])
     }
 
