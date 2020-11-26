@@ -8,6 +8,7 @@ import IconButton from 'atoms/IconButton'
 import Label from 'atoms/Label'
 import Section from './components/Section'
 import CreateSection from './components/CreateSection'
+import SectionElements from './components/SectionElements'
 
 const StyledLeftPanelContainer = styled.div`
   padding-top: 25px;
@@ -25,6 +26,18 @@ const StyledSectionsContainer = styled.div`
   align-items: start;
   grid-row-gap: 5px;
   margin-top: 15px;
+`
+
+const StyledSeparator = styled.div`
+  height: 1px;
+  background-color: #DDE3E8;
+  margin-top: 30px;
+  margin-bottom: 30px;
+`
+
+const StyledElementsLabel = styled(Label)`
+  color: #67697C;
+  margin-bottom: 15px;
 `
 
 const DocumentLeftPanel = () => {
@@ -46,6 +59,11 @@ const DocumentLeftPanel = () => {
 
         {newSection && <CreateSection onDone={() => toggleNewSection(false)} />}
       </StyledSectionsContainer>
+
+      <StyledSeparator />
+
+      <StyledElementsLabel weight={500}>Elements</StyledElementsLabel>
+      <SectionElements />
     </StyledLeftPanelContainer>
   )
 }
