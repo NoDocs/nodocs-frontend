@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import Avatar from 'atoms/Avatar'
+
 import addCollectionIcon from 'assets/add-collection.svg'
 
 const StyledContainer = styled.div`
@@ -32,11 +34,9 @@ const StyledMembersTitle = styled.span`
   font-weight: 700;
   grid-column-gap: 22px;
 `
-const StyledMemberImage = styled.img`
+const StyledMemberImage = styled(Avatar)`
   width: 22.67px;
   height: 22.67px;
-  border-radius: 50%;
-  border: 2px solid ${p => p.borderColor};
   :not(:last-child) {
     margin-left: -10px;
   }
@@ -69,10 +69,10 @@ const StyledText = styled.span`
 `
 
 const teamMembers = [
-  { img: "../../../src/assets/photo.png", color: "#E585EA" },
-  { img: "../../../src/assets/photo.png", color: "#72D374" },
-  { img: "../../../src/assets/photo.png", color: "#65D9F6" },
-  { img: "../../../src/assets/photo.png", color: "#FBB374" },
+  { img: '../../../src/assets/photo.png', color: '#E585EA' },
+  { img: '../../../src/assets/photo.png', color: '#72D374' },
+  { img: '../../../src/assets/photo.png', color: '#65D9F6' },
+  { img: '../../../src/assets/photo.png', color: '#FBB374' },
 ]
 
 const TeamHeader = () => {
@@ -82,7 +82,7 @@ const TeamHeader = () => {
         <StyledSection>
           <StyledMembersTitle>Members:</StyledMembersTitle>
           <StyledMemberImages>
-            {teamMembers.map(member => <StyledMemberImage src={member.img} alt="icon" borderColor={member.color} />)}
+            {teamMembers.map((member, index) => <StyledMemberImage key={index} src={member.img} alt="icon" color={member.color} />)}
           </StyledMemberImages>
         </StyledSection>
         <StyledSection>
