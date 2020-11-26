@@ -14,7 +14,7 @@ const Avatar = ({ src, color, className }) => (
 )
 
 Avatar.propTypes = {
-  src: PropTypes.oneOfType(PropTypes.string, PropTypes.object),
+  src: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   color: PropTypes.string,
   className: PropTypes.string
 }
