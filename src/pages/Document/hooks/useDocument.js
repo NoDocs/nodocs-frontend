@@ -20,8 +20,9 @@ const useDocument = () => {
   )
 
   const name = useSelector(authSelectors.selectCurrUserProperty('name'))
-  const sectionId = useSelector(documentSelectors.selectActiveSectionId)
   const color = useSelector(authSelectors.selectCurrUserProperty('color')) || '#ffffff'
+  const activeSectionId = useSelector(documentSelectors.selectActiveSectionId)
+  const content = useSelector(documentSelectors.selectSectionProperty('content'))
 
   const editor = React.useMemo(
     () => {
@@ -42,33 +43,30 @@ const useDocument = () => {
         : 'http://localhost:8000'
 
       const options = {
-        docId: `/${sectionId}`,
+        docId: `/${activeSectionId}`,
         cursorData: {
           name,
           color,
           alphaColor: color.slice(0, -2) + '0.2)'
         },
-        url: `${origin}/${sectionId}`,
+        url: `${origin}/${activeSectionId}`,
         connectOpts: {
           query: {
             name,
             token: 'id',
             type: 'document',
-            slug: sectionId,
+            slug: activeSectionId,
           }
         },
       }
 
       return withIOCollaboration(withPlugins, options)
     },
-    []
+    [activeSectionId]
   )
 
   const params = useParams()
   const dispatch = useDispatch()
-
-  const activeSectionId = useSelector(documentSelectors.selectActiveSectionId)
-  const content = useSelector(documentSelectors.selectSectionProperty('content'))
 
   React.useEffect(
     () => {
