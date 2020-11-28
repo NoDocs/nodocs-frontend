@@ -63,6 +63,9 @@ const MainLayout = ({ children }) => {
 
       const handleThen = (response) => {
         dispatch(authActions.signIn(response.data))
+        if (!response.data.currentCompany) {
+          history.push('/create-company')
+        }
       }
 
       const handleCatch = (error) => {

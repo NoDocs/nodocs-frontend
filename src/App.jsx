@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Home from './pages/Home'
 import Document from './pages/Document'
+import CreateCompany from './pages/CreateCompany'
 
 const App = () => {
   React.useEffect(() => { Socket.connect() }, [])
@@ -16,6 +17,7 @@ const App = () => {
     <Switch>
       <ProtectedRoute path="/" exact component={Home} />
       <ProtectedRoute path="/d/:documentId" exact component={Document} />
+      <ProtectedRoute path="/create-company" exact component={CreateCompany} />
 
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
