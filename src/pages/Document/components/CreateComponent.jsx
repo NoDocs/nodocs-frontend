@@ -12,7 +12,7 @@ import * as componentServices from 'services/component'
 import { componentActions } from 'logic/component'
 import IconButton from 'atoms/IconButton'
 
-const CreateComponentButton = () => {
+const CreateComponent = () => {
   const editor = useEditor()
   const dispatch = useDispatch()
   const params = useParams()
@@ -68,4 +68,4 @@ const CreateComponentButton = () => {
   )
 }
 
-export default CreateComponentButton
+export default CreateComponent

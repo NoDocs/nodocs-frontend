@@ -1,11 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Slate, Editable } from 'slate-react'
+import { useCursor } from '@slate-collaborative/client'
 
-import useSection from './hooks/useSection'
 import useDocument from './hooks/useDocument'
 import DocumentPanel from './DocumentPanel'
+import Leaf from './components/Leaf'
 import Page from './Page'
+import Component from './Component'
 import DocumentLeftPanel from './DocumentLeftPanel'
 
 const StyledDocumentContainer = styled.div`
@@ -19,19 +21,36 @@ const StyledDocumentContainer = styled.div`
 `
 
 const Document = () => {
-  const { editorState, onEditorChange, decorate, editor } = useSection()
-  useDocument()
+  const { editor, editorState, onEditorChange } = useDocument()
+  const { decorate } = useCursor(editor)
 
   const renderElement = React.useCallback(
-    ({ element }) => {
-      return element.type === 'page'
-        ? <Page id={element.id} />
-        : null
+    ({ element, attributes, children }) => {
+      if (element.type === 'component') {
+        return <Component id={element.id} />
+      }
+
+      if (element.type === 'page') {
+        return <Page id={element.id}>{children}</Page>
+      }
+
+      return (
+        <p data-node-id={element.id} {...attributes}>
+          {children}
+        </p>
+      )
     },
     []
   )
 
-  if (!editorState) return <div>Getting a document...</div>
+  const renderLeaf = React.useCallback(
+    (props) => <Leaf {...props} />,
+    [decorate]
+  )
+
+  if (!editorState) {
+    return <div>Getting a document...</div>
+  }
 
   return (
     <StyledDocumentContainer data-start="selection">
@@ -41,11 +60,12 @@ const Document = () => {
         onChange={onEditorChange}
       >
         <DocumentPanel />
-
         <DocumentLeftPanel />
+
         <Editable
           decorate={decorate}
           renderElement={renderElement}
+          renderLeaf={renderLeaf}
         />
       </Slate>
     </StyledDocumentContainer>
