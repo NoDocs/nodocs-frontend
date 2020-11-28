@@ -3,12 +3,13 @@ import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { createEditor } from 'slate'
 import { withReact } from 'slate-react'
+import { withIOCollaboration } from '@slate-collaborative/client'
 
 import * as documentServices from 'services/document'
 import { documentActions, documentSelectors } from 'logic/document'
+import { authSelectors } from 'logic/auth'
 import withNodeId from '../plugins/withNodeId'
 import withRectangleSelect from '../plugins/withRectangleSelect'
-import withPage from '../plugins/withPage'
 import withDetectComponentInsert from '../plugins/withDetectComponentInsert'
 import withEditableComponentVoid from '../plugins/withEditableComponentVoid'
 
@@ -18,23 +19,47 @@ const useDocument = () => {
     : null
   )
 
+  const name = useSelector(authSelectors.selectCurrUserProperty('name'))
+  const sectionId = useSelector(documentSelectors.selectActiveSectionId)
+  const color = useSelector(authSelectors.selectCurrUserProperty('color')) || '#ffffff'
+
   const editor = React.useMemo(
     () => {
       const withPlugins = withEditableComponentVoid(
         withRectangleSelect(
-          withPage(
-            withDetectComponentInsert(
-              withNodeId(
-                withReact(
-                  createEditor()
-                )
+          withDetectComponentInsert(
+            withNodeId(
+              withReact(
+                createEditor()
               )
             )
           )
         )
       )
 
-      return withPlugins
+      const origin = process.env.NODE_ENV === 'production'
+        ? window.location.origin
+        : 'http://localhost:8000'
+
+      const options = {
+        docId: `/${sectionId}`,
+        cursorData: {
+          name,
+          color,
+          alphaColor: color.slice(0, -2) + '0.2)'
+        },
+        url: `${origin}/${sectionId}`,
+        connectOpts: {
+          query: {
+            name,
+            token: 'id',
+            type: 'document',
+            slug: sectionId,
+          }
+        },
+      }
+
+      return withIOCollaboration(withPlugins, options)
     },
     []
   )
@@ -71,8 +96,6 @@ const useDocument = () => {
 
   const onEditorChange = (newEditorState) => {
     updateEditorState(newEditorState)
-
-    // documentServices
   }
 
   return {
