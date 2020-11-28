@@ -19,7 +19,7 @@ const StyledUserName = styled(Label)`
 
 const UserCard = ({ user }) => (
   <StyledContainer>
-    <Avatar src={'../../src/assets/photo.png'} />
+    <Avatar src={'../../src/assets/photo.png'} color={user.get('color')} />
 
     <div>
       <StyledUserName color="active" weight={500}>{user.get('fullName')}</StyledUserName>

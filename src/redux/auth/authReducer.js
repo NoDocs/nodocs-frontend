@@ -11,6 +11,7 @@ const authReducer = (state = initialState, action) => {
         .set('fullName', action.payload.fullName)
         .set('email', action.payload.email)
         .set('token', action.payload.token)
+        .set('color', action.payload.color)
 
     default:
       return state
