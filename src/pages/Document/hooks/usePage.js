@@ -1,95 +1,94 @@
-// import React from 'react'
-// import { createEditor } from 'slate'
-// import { withReact, ReactEditor } from 'slate-react'
-// import shortid from 'shortid'
-// import { useSelector } from 'react-redux'
-// import { withIOCollaboration } from '@slate-collaborative/client'
+import React from 'react'
+import { createEditor } from 'slate'
+import { withReact } from 'slate-react'
+import { useSelector } from 'react-redux'
+import { withIOCollaboration } from '@slate-collaborative/client'
 
-// import withEditableComponentVoid from '../plugins/withEditableComponentVoid'
-// import withDetectComponentInsert from '../plugins/withDetectComponentInsert'
-// import withRectangleSelect from '../plugins/withRectangleSelect'
-// import withPage from '../plugins/withPage'
-// import withNodeId from '../plugins/withNodeId'
+import { authSelectors } from 'logic/auth'
+import { documentSelectors } from 'logic/document'
 
-// const usePage = () => {
-//   const userName = useSelector(state => state.getIn(['auth', 'fullName']))
-//   const color = useSelector(state => state.getIn(['auth', 'color'])) || 'green'
+import withEditableComponentVoid from '../plugins/withEditableComponentVoid'
+import withDetectComponentInsert from '../plugins/withDetectComponentInsert'
+import withRectangleSelect from '../plugins/withRectangleSelect'
+import withPage from '../plugins/withPage'
+import withNodeId from '../plugins/withNodeId'
 
-//   const [editorState, updateEditorState] = React.useState([
-//     { type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] },
-//   ])
+const usePage = () => {
+  const [editorState, updateEditorState] = React.useState(content
+    ? JSON.parse(content)
+    : null
+  )
 
-//   const editor = React.useMemo(
-//     () => {
-//       const withPlugins = withEditableComponentVoid(
-//         withRectangleSelect(
-//           withPage(
-//             withDetectComponentInsert(
-//               withNodeId(
-//                 withReact(
-//                   createEditor()
-//                 )
-//               )
-//             )
-//           )
-//         )
-//       )
+  const name = useSelector(authSelectors.selectCurrUserProperty('name'))
+  const color = useSelector(authSelectors.selectCurrUserProperty('color')) || '#ffffff'
+  const activeSectionId = useSelector(documentSelectors.selectActiveSectionId)
+  const content = useSelector(documentSelectors.selectPageProperty('content'))
 
-//       return withPlugins
-//       const origin = process.env.NODE_ENV === 'production'
-//         ? window.location.origin
-//         : 'http://localhost:8000'
+  const editor = React.useMemo(
+    () => {
+      const withPlugins = withEditableComponentVoid(
+        withRectangleSelect(
+          withDetectComponentInsert(
+            withPage(
+              withNodeId(
+                withReact(
+                  createEditor()
+                )
+              )
+            )
+          )
+        )
+      )
 
-//       const options = {
-//         docId: '/' + 'sectionID',
-//         cursorData: {
-//           name: userName,
-//           color,
-//           alphaColor: color.slice(0, -2) + '0.2)'
-//         },
-//         url: `${origin}/sectionID`,
-//         connectOpts: {
-//           query: {
-//             name: userName,
-//             token: 'id',
-//             type: 'document',
-//             slug: 'sectionId',
-//           }
-//         },
-//       }
+      if (!activeSectionId) return withPlugins
 
-//       return withIOCollaboration(withPlugins, options)
-//     },
-//     []
-//   )
+      const origin = process.env.NODE_ENV === 'production'
+        ? window.location.origin
+        : 'http://localhost:8000'
 
-//   const onEditorStateChange = (newEditorState) => {
-//     updateEditorState(newEditorState)
-//   }
+      const options = {
+        docId: `/${activeSectionId}`,
+        cursorData: {
+          name,
+          color,
+          alphaColor: color.slice(0, -2) + '0.2)'
+        },
+        url: `${origin}/${activeSectionId}`,
+        connectOpts: {
+          query: {
+            name,
+            token: 'id',
+            type: 'document',
+            slug: activeSectionId,
+          }
+        },
+      }
 
-//   const onPageClick = () => {
-//     if (editor.selection) {
-//       return
-//     }
+      return withIOCollaboration(withPlugins, options)
+    },
+    [activeSectionId]
+  )
 
-//     ReactEditor.focus(editor)
-//   }
+  React.useEffect(
+    () => {
+      if (activeSectionId) {
+        const parsed = JSON.parse(content)
+        updateEditorState(parsed)
+      }
+    },
+    [activeSectionId]
+  )
 
-//   // React.useEffect(
-//   //   () => {
-//   //     editor.connect()
-//   //     return editor.destroy
-//   //   },
-//   //   []
-//   // )
+  const onEditorChange = (newEditorState) => {
+    updateEditorState(newEditorState)
+  }
 
-//   return {
-//     editorState,
-//     onEditorStateChange,
-//     decorate,
-//     onPageClick,
-//     editor,
-//   }
-// }
+  return {
+    editor,
+    editorState,
+    onEditorChange,
+  }
+}
 
-// export default usePage
+export default usePage
+

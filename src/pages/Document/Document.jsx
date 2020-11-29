@@ -1,13 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Slate, Editable } from 'slate-react'
-import { useCursor } from '@slate-collaborative/client'
+import { Slate } from 'slate-react'
 
 import useDocument from './hooks/useDocument'
+import usePage from './hooks/usePage'
 import DocumentPanel from './DocumentPanel'
-import Leaf from './components/Leaf'
 import Page from './Page'
-import Component from './Component'
 import DocumentLeftPanel from './DocumentLeftPanel'
 
 const StyledDocumentContainer = styled.div`
@@ -21,32 +19,8 @@ const StyledDocumentContainer = styled.div`
 `
 
 const Document = () => {
-  const { editor, editorState, onEditorChange } = useDocument()
-  const { decorate } = useCursor(editor)
-
-  const renderElement = React.useCallback(
-    ({ element, attributes, children }) => {
-      if (element.type === 'component') {
-        return <Component id={element.id} />
-      }
-
-      if (element.type === 'page') {
-        return <Page id={element.id}>{children}</Page>
-      }
-
-      return (
-        <p data-node-id={element.id} {...attributes}>
-          {children}
-        </p>
-      )
-    },
-    []
-  )
-
-  const renderLeaf = React.useCallback(
-    (props) => <Leaf {...props} />,
-    [decorate]
-  )
+  const { pages } = useDocument()
+  const { editor, editorState, onEditorChange } = usePage()
 
   if (!editorState) {
     return <div>Getting a document...</div>
@@ -62,11 +36,7 @@ const Document = () => {
         <DocumentPanel />
         <DocumentLeftPanel />
 
-        <Editable
-          decorate={decorate}
-          renderElement={renderElement}
-          renderLeaf={renderLeaf}
-        />
+        {pages.map(pageId => <Page key={pageId} id={pageId} />)}
       </Slate>
     </StyledDocumentContainer>
   )

@@ -7,10 +7,13 @@ const activeDocumentReducer = (state = initialState, action) => {
   switch (action.type) {
     case documentActionTypes.INITIALIZE_DOCUMENT: {
       const { document } = action.payload
+      const { sections } = document
+      const { pages } = sections[0]
 
       return state
         .set('id', document.id)
-        .set('activeSectionId', document.sections[0].id)
+        .set('activeSectionId', sections[0].id)
+        .set('activePageId', pages[0].id)
     }
 
     case documentActionTypes.SWITCH_SECTION: {
