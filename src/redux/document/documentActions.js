@@ -22,3 +22,17 @@ export const initializeDocument = (document) => ({
     document,
   },
 })
+
+export const createSection = section => ({
+  type: documentActionTypes.CREATE_SECTION,
+  payload: {
+    section,
+  },
+})
+
+export const switchSection = (sectionId) => ({
+  type: documentActionTypes.SWITCH_SECTION,
+  payload: {
+    sectionId,
+  },
+})

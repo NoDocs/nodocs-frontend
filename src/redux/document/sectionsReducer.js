@@ -11,7 +11,10 @@ const sectionsReducer = (state = initialState, action) => {
         .document
         .sections
         .reduce(
-          (res, curr) => res.set(curr.id, new Map(curr)),
+          (res, curr) => res.set(
+            curr.id,
+            new Map(curr).set('pages', curr.pages.map(curr => curr.id))
+          ),
           new Map()
         )
     }
@@ -24,6 +27,20 @@ const sectionsReducer = (state = initialState, action) => {
           (res, curr) => res.set(curr.id, new Map(curr)),
           new Map()
         )
+    }
+
+    case documentActionTypes.CREATE_SECTION: {
+      const { section } = action.payload
+
+      return state.set(
+        section.id,
+        new Map({
+          id: section.id,
+          title: section.title,
+          sectionId: section.sectionId,
+          content: section.content,
+        })
+      )
     }
 
     default:

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Slate, Editable } from 'slate-react'
+import { useCursor } from '@slate-collaborative/client'
 
 import Component from './Component'
 import usePage from './hooks/usePage'
@@ -23,11 +24,11 @@ const StyledEditorContainer = styled.div`
 const Page = ({ id }) => {
   const {
     editor,
-    decorate,
     editorState,
-    onEditorStateChange,
+    onEditorChange,
     onPageClick,
   } = usePage()
+  const { decorate } = useCursor(editor)
 
   const renderElement = React.useCallback(
     ({ attributes, children, element }) => {
@@ -49,13 +50,15 @@ const Page = ({ id }) => {
     [decorate]
   )
 
+  if (!editorState) return <p>Fetching page...</p>
+
   return (
     <StyledEditorContainer
       contentEditable={false}
       onClick={onPageClick}
       data-page-id={id}
     >
-      <Slate editor={editor} value={editorState} onChange={onEditorStateChange}>
+      <Slate editor={editor} value={editorState} onChange={onEditorChange}>
         <Editable
           renderElement={renderElement}
           renderLeaf={renderLeaf}

@@ -1,9 +1,11 @@
 import React from 'react'
 import { createEditor } from 'slate'
-import { withReact, ReactEditor } from 'slate-react'
-import shortid from 'shortid'
+import { withReact } from 'slate-react'
 import { useSelector } from 'react-redux'
-import { withIOCollaboration, useCursor } from '@slate-collaborative/client'
+import { withIOCollaboration } from '@slate-collaborative/client'
+
+import { authSelectors } from 'logic/auth'
+import { documentSelectors } from 'logic/document'
 
 import withEditableComponentVoid from '../plugins/withEditableComponentVoid'
 import withDetectComponentInsert from '../plugins/withDetectComponentInsert'
@@ -12,19 +14,22 @@ import withPage from '../plugins/withPage'
 import withNodeId from '../plugins/withNodeId'
 
 const usePage = () => {
-  const userName = useSelector(state => state.getIn(['auth', 'fullName']))
-  const color = useSelector(state => state.getIn(['auth', 'color'])) || 'green'
+  const [editorState, updateEditorState] = React.useState(content
+    ? JSON.parse(content)
+    : null
+  )
 
-  const [editorState, updateEditorState] = React.useState([
-    { type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] },
-  ])
+  const name = useSelector(authSelectors.selectCurrUserProperty('name'))
+  const color = useSelector(authSelectors.selectCurrUserProperty('color')) || '#ffffff'
+  const activePageId = useSelector(documentSelectors.selectActivePageId)
+  const content = useSelector(documentSelectors.selectPageProperty('content'))
 
   const editor = React.useMemo(
     () => {
       const withPlugins = withEditableComponentVoid(
         withRectangleSelect(
-          withPage(
-            withDetectComponentInsert(
+          withDetectComponentInsert(
+            withPage(
               withNodeId(
                 withReact(
                   createEditor()
@@ -35,62 +40,55 @@ const usePage = () => {
         )
       )
 
-      return withPlugins
+      if (!activePageId) return withPlugins
+
       const origin = process.env.NODE_ENV === 'production'
         ? window.location.origin
         : 'http://localhost:8000'
 
       const options = {
-        docId: '/' + 'sectionID',
+        docId: `/${activePageId}`,
         cursorData: {
-          name: userName,
+          name,
           color,
           alphaColor: color.slice(0, -2) + '0.2)'
         },
-        url: `${origin}/sectionID`,
+        url: `${origin}/${activePageId}`,
         connectOpts: {
           query: {
-            name: userName,
+            name,
             token: 'id',
             type: 'document',
-            slug: 'sectionId',
+            slug: activePageId,
           }
         },
       }
 
       return withIOCollaboration(withPlugins, options)
     },
-    []
+    [activePageId]
   )
-  const { decorate } = useCursor(editor)
 
-  const onEditorStateChange = (newEditorState) => {
+  React.useEffect(
+    () => {
+      if (activePageId) {
+        const parsed = JSON.parse(content)
+        updateEditorState(parsed)
+      }
+    },
+    [activePageId]
+  )
+
+  const onEditorChange = (newEditorState) => {
     updateEditorState(newEditorState)
   }
 
-  const onPageClick = () => {
-    if (editor.selection) {
-      return
-    }
-
-    ReactEditor.focus(editor)
-  }
-
-  // React.useEffect(
-  //   () => {
-  //     editor.connect()
-  //     return editor.destroy
-  //   },
-  //   []
-  // )
-
   return {
-    editorState,
-    onEditorStateChange,
-    decorate,
-    onPageClick,
     editor,
+    editorState,
+    onEditorChange,
   }
 }
 
 export default usePage
+
