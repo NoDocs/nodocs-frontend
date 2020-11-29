@@ -6,6 +6,6 @@ steps:
     args: ["install"]
   - id: "build"
     name: 'gcr.io/cloud-builders/yarn'
-    args: ['build:develop']
+    args: ['build-develop']
   - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['-m', 'rsync', '-d', '-r', 'build/','gs://nodocs.app']
+    args: ['-m', 'rsync', '-d', '-r', 'build/','gs://dev.nodocs.app']
