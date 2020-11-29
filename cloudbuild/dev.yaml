@@ -8,4 +8,4 @@ steps:
     name: 'gcr.io/cloud-builders/yarn'
     args: ['build-develop']
   - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['-m', 'rsync', '-d', '-r', 'build/','gs://dev.nodocs.app']
+    args: ['-m', 'rsync', '-d', '-r', 'dist/','gs://dev.nodocs.app']
