@@ -21,7 +21,7 @@ const usePage = () => {
 
   const name = useSelector(authSelectors.selectCurrUserProperty('name'))
   const color = useSelector(authSelectors.selectCurrUserProperty('color')) || '#ffffff'
-  const activeSectionId = useSelector(documentSelectors.selectActiveSectionId)
+  const activePageId = useSelector(documentSelectors.selectActivePageId)
   const content = useSelector(documentSelectors.selectPageProperty('content'))
 
   const editor = React.useMemo(
@@ -40,43 +40,43 @@ const usePage = () => {
         )
       )
 
-      if (!activeSectionId) return withPlugins
+      if (!activePageId) return withPlugins
 
       const origin = process.env.NODE_ENV === 'production'
         ? window.location.origin
         : 'http://localhost:8000'
 
       const options = {
-        docId: `/${activeSectionId}`,
+        docId: `/${activePageId}`,
         cursorData: {
           name,
           color,
           alphaColor: color.slice(0, -2) + '0.2)'
         },
-        url: `${origin}/${activeSectionId}`,
+        url: `${origin}/${activePageId}`,
         connectOpts: {
           query: {
             name,
             token: 'id',
             type: 'document',
-            slug: activeSectionId,
+            slug: activePageId,
           }
         },
       }
 
       return withIOCollaboration(withPlugins, options)
     },
-    [activeSectionId]
+    [activePageId]
   )
 
   React.useEffect(
     () => {
-      if (activeSectionId) {
+      if (activePageId) {
         const parsed = JSON.parse(content)
         updateEditorState(parsed)
       }
     },
-    [activeSectionId]
+    [activePageId]
   )
 
   const onEditorChange = (newEditorState) => {
