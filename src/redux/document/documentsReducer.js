@@ -38,6 +38,15 @@ const documentsReducer = (state = initialState, action) => {
         }))
     }
 
+    case documentActionTypes.CREATE_SECTION: {
+      const { section } = action.payload
+
+      return state.updateIn(
+        [section.document.id, 'sections'],
+        sections => sections.push(section.id)
+      )
+    }
+
     default:
       return state
   }
