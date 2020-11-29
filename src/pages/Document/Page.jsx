@@ -60,6 +60,7 @@ const Page = ({ id }) => {
     >
       <Slate editor={editor} value={editorState} onChange={onEditorChange}>
         <Editable
+          decorate={decorate}
           renderElement={renderElement}
           renderLeaf={renderLeaf}
         />
