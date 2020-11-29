@@ -64,10 +64,15 @@ const usePage = () => {
         },
       }
 
-      return withIOCollaboration(withPlugins, options)
+      const withCollaborativeEditor = withIOCollaboration(withPlugins, options)
+      withCollaborativeEditor.connect()
+
+      return withCollaborativeEditor
     },
     [activePageId]
   )
+
+  React.useEffect(() => editor.destroy, [])
 
   React.useEffect(
     () => {
