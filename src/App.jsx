@@ -6,7 +6,7 @@ import Socket from './socket'
 import ProtectedRoute from './atoms/ProtectedRoute'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import Home from './pages/Home'
+import Team from './pages/Team'
 import Document from './pages/Document'
 import CreateCompany from './pages/CreateCompany'
 
@@ -15,7 +15,7 @@ const App = () => {
 
   return (
     <Switch>
-      <ProtectedRoute path="/" exact component={Home} />
+      <ProtectedRoute path="/" exact component={Team} />
       <ProtectedRoute path="/d/:documentId" exact component={Document} />
       <ProtectedRoute path="/create-company" exact component={CreateCompany} />
 
