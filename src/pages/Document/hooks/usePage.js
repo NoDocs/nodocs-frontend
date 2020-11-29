@@ -19,7 +19,7 @@ const usePage = () => {
     : null
   )
 
-  const name = useSelector(authSelectors.selectCurrUserProperty('name'))
+  const name = useSelector(authSelectors.selectCurrUserProperty('fullName'))
   const color = useSelector(authSelectors.selectCurrUserProperty('color')) || '#ffffff'
   const activePageId = useSelector(documentSelectors.selectActivePageId)
   const content = useSelector(documentSelectors.selectPageProperty('content'))
