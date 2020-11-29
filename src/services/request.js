@@ -55,7 +55,6 @@ const getHeaders = () => {
 }
 
 export default (parentUrl = '') => {
-  console.log(`${process.env.BASE_API_URL}/${parentUrl}`)
   const api = apisauce.create({
     baseURL: `${process.env.BASE_API_URL}/${parentUrl}`,
     headers: {
