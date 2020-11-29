@@ -5,8 +5,10 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import * as authServices from 'services/auth'
 import * as documentServices from 'services/document'
+import * as teamService from 'services/team'
 import { authActions } from 'logic/auth'
 import { documentActions } from 'logic/document'
+import { teamActions } from 'logic/team'
 import history from 'utils/history'
 
 import NavBar from './NavBar'
@@ -63,6 +65,9 @@ const MainLayout = ({ children }) => {
 
       const handleThen = (response) => {
         dispatch(authActions.signIn(response.data))
+        if (!response.data.currentCompany) {
+          history.push('/create-company')
+        }
       }
 
       const handleCatch = (error) => {
@@ -80,6 +85,14 @@ const MainLayout = ({ children }) => {
       documentServices
         .getDocuments()
         .then(response => { dispatch(documentActions.putDocuments(response.data)) })
+
+      teamService
+        .getTeams()
+        .then(response => {
+          dispatch(teamActions.putTeams(response.data))
+          dispatch(teamActions.initializeTeam(response.data[0]))
+        })
+      
     },
     []
   )

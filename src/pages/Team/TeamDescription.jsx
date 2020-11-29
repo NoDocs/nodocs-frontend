@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import atIcon from 'assets/at.svg'
@@ -30,17 +31,22 @@ const StyledTitleContainer = styled.div`
   align-items: center;
 `
 
-const TeamDescription = () => (
+const TeamDescription = ({ name, description }) => (
   <StyledContainer>
     <StyledCaptionContainer>
       <StyledTitleContainer>
         <img src={atIcon} alt="Team Name" />
-        <Title>Product team</Title>
+        <Title>{name}</Title>
       </StyledTitleContainer>
 
-      <Label weight={500}>We are in charge of the motor engine that will conquer mars.</Label>
+      <Label weight={500}>{description}</Label>
     </StyledCaptionContainer>
   </StyledContainer>
 )
+
+TeamDescription.propTypes = {
+  name: PropTypes.string.isRequired,
+  description: PropTypes.string,
+}
 
 export default TeamDescription

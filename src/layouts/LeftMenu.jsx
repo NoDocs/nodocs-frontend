@@ -3,12 +3,14 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 
+import IconButton from 'atoms/IconButton'
+import ContentToggler from 'atoms/ContentToggler'
+import UserCard from 'molecules/UserCard'
+import ListItem from 'molecules/ListItem'
+
 import arrowLeftIcon from 'assets/arrow-left.svg'
 import homeIcon from 'assets/home.svg'
 import teamsIcon from 'assets/teams.svg'
-import IconButton from 'atoms/IconButton'
-import UserCard from 'molecules/UserCard'
-import ListItem from 'molecules/ListItem'
 
 const StyledContainer = styled.div`
   grid-area: left;
@@ -30,9 +32,13 @@ const StyledGridContainer = styled.div`
   display: grid;
   grid-row-gap: 2px;
 `
+const SubListContainer = styled.div`
+  margin-left: 10px;
+`
 
 const LeftMenu = ({ toggleNavbar }) => {
   const activeUser = useSelector(state => state.get('auth'))
+  const teams = useSelector(state => state.getIn(['entities', 'teams']))
 
   return (
     <StyledContainer>
@@ -49,7 +55,19 @@ const LeftMenu = ({ toggleNavbar }) => {
         <ListItem icon={homeIcon} label="Explore" />
         <ListItem icon={homeIcon} label="Community" />
         <ListItem icon={homeIcon} label="Private" />
-        <ListItem icon={teamsIcon} label="Teams" />
+        <ContentToggler
+          displayTrigger
+          trigger={(<ListItem icon={teamsIcon} label="Teams" />)}
+        >
+          <SubListContainer>
+            {teams.map(team => (
+              <ListItem
+                key={'123s'}
+                label={`@ ${team.get('name')}`}
+                proportions='1fr' />
+            )).toList()}
+          </SubListContainer>
+        </ContentToggler>
       </StyledGridContainer>
     </StyledContainer>
   )

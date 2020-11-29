@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 
 import history from 'utils/history'
+import { teamSelectors } from 'logic/team'
+
 import Table from 'molecules/Table'
 import UserIcon from 'assets/userIcon.svg'
 
@@ -40,14 +42,17 @@ const StyledIcon = styled.div`
     background-repeat: no-repeat;
 `
 
-const Home = () => {
+const Team = () => {
+  const team = useSelector(teamSelectors.selectTeam())
   const documents = useSelector(state => state.getIn(['entities', 'documents']))
 
+  const loading = !team || !documents
+  if (loading) return <div>Loading...</div>
   return (
     <React.Fragment>
-      <TeamDescription />
+      <TeamDescription name={team.get('name')} description={team.get('description')} />
       <div style={{ margin: '0 130px' }}>
-        <TeamHeader />
+        <TeamHeader team={team} />
         <Table
           proportions="38px 405px 1fr 1fr 1fr 1fr"
           headerTabs={[
@@ -76,4 +81,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default Team
