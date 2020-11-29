@@ -19,7 +19,7 @@ const usePage = () => {
     : null
   )
 
-  const name = useSelector(authSelectors.selectCurrUserProperty('name'))
+  const name = undefined
   const color = useSelector(authSelectors.selectCurrUserProperty('color')) || '#ffffff'
   const activePageId = useSelector(documentSelectors.selectActivePageId)
   const content = useSelector(documentSelectors.selectPageProperty('content'))
@@ -43,8 +43,8 @@ const usePage = () => {
       if (!activePageId) return withPlugins
 
       const origin = process.env.NODE_ENV === 'production'
-        ? window.location.origin
-        : 'http://localhost:8000'
+        ? process.env.BASE_API_URL
+        : 'https://api.nodocs.app'
 
       const options = {
         docId: `/${activePageId}`,
