@@ -43,7 +43,7 @@ const usePage = () => {
       if (!activePageId) return withPlugins
 
       const origin = process.env.NODE_ENV === 'production'
-        ? window.location.origin
+        ? process.env.BASE_API_URL
         : 'http://localhost:8000'
 
       const options = {
@@ -64,10 +64,15 @@ const usePage = () => {
         },
       }
 
-      return withIOCollaboration(withPlugins, options)
+      const withCollaborativeEditor = withIOCollaboration(withPlugins, options)
+      withCollaborativeEditor.connect()
+
+      return withCollaborativeEditor
     },
     [activePageId]
   )
+
+  React.useEffect(() => editor.destroy, [])
 
   React.useEffect(
     () => {
