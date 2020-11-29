@@ -99,7 +99,7 @@ module.exports = {
       socket: path.resolve(__dirname, 'src/socket'),
     }
   },
-  devServer: {
-    historyApiFallback: true,
-  }
+  ...(isLocal
+    ? { devServer: { historyApiFallback: true } }
+    : {}),
 }
