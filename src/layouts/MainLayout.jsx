@@ -32,11 +32,6 @@ const StyledContainer = styled.div`
 `
 
 const GlobalStyles = createGlobalStyle`
-  *, body {
-    margin: 0px;
-    padding: 0px;
-  }
-
   body {
     background-color: #F9F9F9;
   }
@@ -92,7 +87,7 @@ const MainLayout = ({ children }) => {
           dispatch(teamActions.putTeams(response.data))
           dispatch(teamActions.initializeTeam(response.data[0]))
         })
-      
+
     },
     []
   )
