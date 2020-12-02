@@ -14,6 +14,9 @@ import ToggleListItem from 'molecules/ToggleListItem'
 import arrowLeftIcon from 'assets/arrow-left.svg'
 import homeIcon from 'assets/home.svg'
 import teamsIcon from 'assets/teams.svg'
+import AddIcon from 'assets/components/AddIcon'
+import ArrowDownIcon from 'assets/components/ArrowDownIcon'
+
 import CreateTeam from './CreateTeam'
 
 const StyledContainer = styled.div`
@@ -43,6 +46,19 @@ const SubListContainer = styled.div`
   grid-row-gap: 5px;
 `
 
+const StyledIconContainer = styled.div`
+  transition: all .2s ease;
+  transform: ${p => p.isOpen ? null : 'rotate(180deg)'};
+  display: flex;
+  align-items: center;
+`
+
+const StyledAdditionButtons = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  color: #fff;
+`
+
 const LeftMenu = ({ toggleNavbar }) => {
   const dispatch = useDispatch()
   const activeUser = useSelector(state => state.get('auth'))
@@ -61,7 +77,14 @@ const LeftMenu = ({ toggleNavbar }) => {
   }
 
   const renderAdditionalButtons = (active) => {
-    return (<div style={{ color: '#fff' }} onClick={(e) => createTeam(e, active)}>+</div>)
+    return (
+      <StyledAdditionButtons onClick={(e) => createTeam(e, active)}>
+        <AddIcon fill="#fff" height={12} />
+        <StyledIconContainer isOpen={active}>
+          <ArrowDownIcon fill="#fff" />
+        </StyledIconContainer>
+      </StyledAdditionButtons>
+    )
   }
 
   return (

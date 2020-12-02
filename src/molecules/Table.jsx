@@ -128,7 +128,7 @@ const Table = ({ headerTabs, proportions, data }) => {
         </StyledTableRow>
       )).toList()}
       <StyledAddDocument>
-        <AddIcon width={14} height={14} />
+        <AddIcon fill="#000" width={14} height={14} />
         <StyledAddText>Add a document</StyledAddText>
       </StyledAddDocument>
     </StyledTable>
