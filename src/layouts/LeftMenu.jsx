@@ -1,16 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+
+import { teamActions } from 'logic/team'
 
 import IconButton from 'atoms/IconButton'
 import ContentToggler from 'atoms/ContentToggler'
 import UserCard from 'molecules/UserCard'
 import ListItem from 'molecules/ListItem'
+import ToggleListItem from 'molecules/ToggleListItem'
 
 import arrowLeftIcon from 'assets/arrow-left.svg'
 import homeIcon from 'assets/home.svg'
 import teamsIcon from 'assets/teams.svg'
+import CreateTeam from './CreateTeam'
 
 const StyledContainer = styled.div`
   grid-area: left;
@@ -34,11 +38,31 @@ const StyledGridContainer = styled.div`
 `
 const SubListContainer = styled.div`
   margin-left: 10px;
+  display: grid;
+  align-items: start;
+  grid-row-gap: 5px;
 `
 
 const LeftMenu = ({ toggleNavbar }) => {
+  const dispatch = useDispatch()
   const activeUser = useSelector(state => state.get('auth'))
   const teams = useSelector(state => state.getIn(['entities', 'teams']))
+  const [newTeam, toggleNewTeam] = React.useState(false)
+
+  const chooseTeam = (team) => {
+    dispatch(teamActions.setActiveTeam(team))
+  }
+
+  const createTeam = (e, active) => {
+    if (active) {
+      e.stopPropagation()
+    }
+    toggleNewTeam(true)
+  }
+
+  const renderAdditionalButtons = (active) => {
+    return (<div style={{ color: '#fff' }} onClick={(e) => createTeam(e, active)}>+</div>)
+  }
 
   return (
     <StyledContainer>
@@ -57,15 +81,24 @@ const LeftMenu = ({ toggleNavbar }) => {
         <ListItem icon={homeIcon} label="Private" />
         <ContentToggler
           displayTrigger
-          trigger={(<ListItem icon={teamsIcon} label="Teams" />)}
+          trigger={(
+            <ToggleListItem
+              icon={teamsIcon}
+              label="Teams"
+              proportions='22px auto 22px' 
+              renderAdditionalButtons={renderAdditionalButtons}
+            />
+          )}
         >
           <SubListContainer>
             {teams.map(team => (
               <ListItem
+                onClick={() => chooseTeam(team)}
                 key={'123s'}
                 label={`@ ${team.get('name')}`}
                 proportions='1fr' />
             )).toList()}
+            {newTeam && <CreateTeam onDone={() => toggleNewTeam(false)} />}
           </SubListContainer>
         </ContentToggler>
       </StyledGridContainer>
