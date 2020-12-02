@@ -13,3 +13,18 @@ export const initializeTeam = (team) => ({
     team,
   },
 })
+
+export const setActiveTeam = (team) => ({
+  type: teamActionTypes.SET_ACTIVE_TEAM,
+  payload: {
+    team,
+  },
+})
+
+
+export const createTeam = (team) => ({
+  type: teamActionTypes.CREATE_TEAM,
+  payload: {
+    team,
+  }
+})

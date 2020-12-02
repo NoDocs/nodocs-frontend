@@ -34,11 +34,13 @@ const ListItem = ({
   label,
   onClick,
   proportions,
+  renderAdditionalButtons
 }) => (
   <StyledHoverableContainer proportions={proportions}active={active} onClick={onClick}>
+    {renderAdditionalButtons}
     {icon && <img src={icon} height={24} alt={label} />}
     <Label color="active">{label}</Label>
-
+    {renderAdditionalButtons && renderAdditionalButtons(active)}
     {active && showUnderline && <StyledUnderline />}
   </StyledHoverableContainer>
 )
@@ -49,7 +51,8 @@ ListItem.propTypes = {
   icon: PropTypes.string,
   label: PropTypes.string,
   onClick: PropTypes.func,
-  proportions: PropTypes.string
+  proportions: PropTypes.string,
+  renderAdditionalButtons: PropTypes.func,
 }
 
 export default ListItem
