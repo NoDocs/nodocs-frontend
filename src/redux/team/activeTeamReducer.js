@@ -12,6 +12,13 @@ const activeTeamReducer = (state = initialState, action) => {
         .set('id', team.id)
     }
 
+    case teamActionTypes.SET_ACTIVE_TEAM: {
+      const { team } = action.payload
+
+      return state
+        .set('id', team.get('id'))
+    }
+
     default:
       return state
   }

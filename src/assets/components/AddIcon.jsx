@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const AddIcon = (props) => {
   return (
@@ -12,7 +13,7 @@ const AddIcon = (props) => {
     >
       <path
         d="M3.75 12h16.5M12 3.75v16.5"
-        stroke="#000"
+        stroke={props.fill}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -20,4 +21,7 @@ const AddIcon = (props) => {
   )
 }
 
+AddIcon.propTypes = {
+  fill: PropTypes.string
+}
 export default AddIcon

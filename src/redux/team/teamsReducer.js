@@ -17,6 +17,13 @@ const teamsReducer = (state = initialState, action) => {
       return normalized
     }
 
+    case teamActionTypes.CREATE_TEAM: {
+      const { team } = action.payload
+      const { id, members, name } = team
+      const newState = state.set(id, fromJS({ id: id, members, name }))
+      return newState
+    }
+  
     default:
       return state
   }
