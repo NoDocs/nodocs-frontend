@@ -8,6 +8,7 @@ import pagesReducer from './document/pagesReducer'
 import componentsReducer from './component/componentsReducer'
 import teamsReducer from './team/teamsReducer'
 import activeTeamReducer from './team/activeTeamReducer'
+import teamMemberReducer from './member/membersReducer'
 
 export default combineReducers({
   auth: authReducer,
@@ -17,6 +18,7 @@ export default combineReducers({
     sections: sectionsReducer,
     teams: teamsReducer,
     pages: pagesReducer,
+    members: teamMemberReducer
   }),
   ui: combineReducers({
     activeDocument: activeDocumentReducer,
