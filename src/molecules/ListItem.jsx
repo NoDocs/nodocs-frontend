@@ -10,7 +10,7 @@ const StyledHoverableContainer = styled(HoverableContainer)`
   grid-auto-flow: column;
   grid-template-columns: ${({ proportions }) => proportions ? proportions : '22px auto'};
   align-items: center;
-  grid-column-gap: 15px;
+  grid-column-gap: 10px;
   position: relative;
   z-index: 2;
 `
@@ -27,19 +27,32 @@ const StyledUnderline = styled.span`
   border-bottom-left-radius: 15px;
 `
 
+const StyledLabel = styled(Label)`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
+
 const ListItem = ({
   active,
   icon,
   showUnderline,
   label,
+  color = 'active',
   onClick,
   proportions,
+  className,
   renderAdditionalButtons
 }) => (
-  <StyledHoverableContainer proportions={proportions}active={active} onClick={onClick}>
+  <StyledHoverableContainer
+    className={className}
+    proportions={proportions}
+    active={active}
+    onClick={onClick}
+  >
     {renderAdditionalButtons}
     {icon && <img src={icon} height={24} alt={label} />}
-    <Label color="active">{label}</Label>
+    <StyledLabel color={color}>{label}</StyledLabel>
     {renderAdditionalButtons && renderAdditionalButtons(active)}
     {active && showUnderline && <StyledUnderline />}
   </StyledHoverableContainer>
@@ -49,7 +62,9 @@ ListItem.propTypes = {
   active: PropTypes.bool,
   showUnderline: PropTypes.bool,
   icon: PropTypes.string,
+  className: PropTypes.string,
   label: PropTypes.string,
+  color: PropTypes.string,
   onClick: PropTypes.func,
   proportions: PropTypes.string,
   renderAdditionalButtons: PropTypes.func,
