@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Slate, Editable } from 'slate-react'
+import { Editable, Slate } from 'slate-react'
 import { useCursor } from '@slate-collaborative/client'
 
 import Component from './Component'
-import usePage from './hooks/usePage'
 import Leaf from './components/Leaf'
+import usePage from './hooks/usePage'
 
 const StyledEditorContainer = styled.div`
   background: #FFFFFF;
@@ -22,12 +22,7 @@ const StyledEditorContainer = styled.div`
 `
 
 const Page = ({ id }) => {
-  const {
-    editor,
-    editorState,
-    onEditorChange,
-    onPageClick,
-  } = usePage()
+  const { editor, editorState, onEditorChange, onPageClick } = usePage({ id })
   const { decorate } = useCursor(editor)
 
   const renderElement = React.useCallback(
@@ -47,10 +42,8 @@ const Page = ({ id }) => {
 
   const renderLeaf = React.useCallback(
     (props) => <Leaf {...props} />,
-    [decorate]
+    []
   )
-
-  if (!editorState) return <p>Fetching page...</p>
 
   return (
     <StyledEditorContainer

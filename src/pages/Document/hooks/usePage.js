@@ -13,7 +13,8 @@ import withRectangleSelect from '../plugins/withRectangleSelect'
 import withPage from '../plugins/withPage'
 import withNodeId from '../plugins/withNodeId'
 
-const usePage = () => {
+const usePage = ({ id }) => {
+  const content = useSelector(documentSelectors.selectPageProperty('content'), () => id)
   const [editorState, updateEditorState] = React.useState(content
     ? JSON.parse(content)
     : null
@@ -21,8 +22,14 @@ const usePage = () => {
 
   const name = useSelector(authSelectors.selectCurrUserProperty('fullName'))
   const color = useSelector(authSelectors.selectCurrUserProperty('color')) || '#ffffff'
-  const activePageId = useSelector(documentSelectors.selectActivePageId)
-  const content = useSelector(documentSelectors.selectPageProperty('content'))
+
+  React.useEffect(
+    () => {
+      const parsed = JSON.parse(content)
+      updateEditorState(parsed)
+    },
+    []
+  )
 
   const editor = React.useMemo(
     () => {
@@ -30,58 +37,51 @@ const usePage = () => {
         withRectangleSelect(
           withDetectComponentInsert(
             withPage(
-              withNodeId(
-                withReact(
-                  createEditor()
-                )
+              withReact(
+                createEditor()
               )
             )
           )
         )
       )
 
-      if (!activePageId) return withPlugins
-
       const origin = process.env.NODE_ENV === 'production'
         ? process.env.BASE_API_URL
         : 'http://localhost:8000'
 
       const options = {
-        docId: `/${activePageId}`,
+        docId: `/${id}`,
         cursorData: {
           name,
           color,
           alphaColor: color.slice(0, -2) + '0.2)'
         },
-        url: `${origin}/${activePageId}`,
+        url: `${origin}/${id}`,
         connectOpts: {
           query: {
             name,
             token: 'id',
             type: 'document',
-            slug: activePageId,
+            slug: id,
           }
         },
       }
 
       const withCollaborativeEditor = withIOCollaboration(withPlugins, options)
-      withCollaborativeEditor.connect()
 
-      return withCollaborativeEditor
+      return withNodeId(withCollaborativeEditor)
     },
-    [activePageId]
+    []
   )
-
-  React.useEffect(() => editor.destroy, [])
 
   React.useEffect(
     () => {
-      if (activePageId) {
-        const parsed = JSON.parse(content)
-        updateEditorState(parsed)
-      }
+      if (!editor.connect) return
+
+      editor.connect()
+      return editor.destroy
     },
-    [activePageId]
+    [editor]
   )
 
   const onEditorChange = (newEditorState) => {
