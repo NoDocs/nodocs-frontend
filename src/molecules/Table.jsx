@@ -103,8 +103,8 @@ const Table = ({ headerTabs, proportions, data }) => {
           ? <Label key={index} weight={500} textAlign={curr.position} color="black">{curr.content}</Label>
           : <StyledHeaderCell key={index}>{curr.content}</StyledHeaderCell>)}
       </StyledTableHeader>
-      {data.map((documentId, index) => (
-        <StyledTableRow key={documentId} proportions={proportions} onClick={() => history.push(`/d/${documentId}`)}>
+      {data.map((document, index) => (
+        <StyledTableRow key={document.get('id')} proportions={proportions} onClick={() => history.push(`/d/${document.get('id')}`)}>
           <StyledCell jc="start">
             <SelectedNeon selected={true} />
             <StyledHiddenSection>
