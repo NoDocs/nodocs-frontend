@@ -9,10 +9,9 @@ const CreateCompany = () => {
 
   const createCompany = (e) => {
     e.preventDefault()
-    const body = { name }
 
     companyService
-      .createCompany(body)
+      .createCompany({ name })
       .then(() => {
         history.push('/')
       })
@@ -26,6 +25,5 @@ const CreateCompany = () => {
     </form>
   )
 }
-
 
 export default CreateCompany

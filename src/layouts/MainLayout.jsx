@@ -87,7 +87,6 @@ const MainLayout = ({ children }) => {
           dispatch(teamActions.putTeams(response.data))
           dispatch(teamActions.initializeTeam(response.data[0]))
         })
-
     },
     []
   )
