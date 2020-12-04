@@ -1,8 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useSelector, useDispatch } from 'react-redux'
+
+import { memberActions } from 'logic/member'
+import * as membersService from 'services/member'
 
 import Avatar from 'atoms/Avatar'
-
 import addCollectionIcon from 'assets/add-collection.svg'
 
 const StyledContainer = styled.div`
@@ -68,21 +72,35 @@ const StyledText = styled.span`
   font-weight: 500;
 `
 
-const teamMembers = [
-  { img: '../../../src/assets/photo.png', color: '#E585EA' },
-  { img: '../../../src/assets/photo.png', color: '#72D374' },
-  { img: '../../../src/assets/photo.png', color: '#65D9F6' },
-  { img: '../../../src/assets/photo.png', color: '#FBB374' },
-]
+const TeamHeader = ({ team }) => {
+  const dispatch = useDispatch()
+  const members = useSelector(state => state.getIn(['entities', 'members']))
+  const membersBody = { teamId: team && team.get('id') }
 
-const TeamHeader = () => {
+  React.useEffect(
+    () => {
+      if (!team) return
+      membersService
+        .getMembers(membersBody)
+        .then(response => {
+          dispatch(memberActions.putMembers(response.data))
+        })
+        .catch(err => console.log('err', err))
+    }, [team])
+
   return (
     <StyledContainer>
       <LeftContainer>
         <StyledSection>
           <StyledMembersTitle>Members:</StyledMembersTitle>
           <StyledMemberImages>
-            {teamMembers.map((member, index) => <StyledMemberImage key={index} src={member.img} alt="icon" color={member.color} />)}
+            {members.map((member, index) => (
+              <StyledMemberImage
+                key={index} src={'../../../src/assets/photo.png'}
+                alt="icon"
+                color={member.getIn(['user', 'color'])}
+              />
+            )).toList()}
           </StyledMemberImages>
         </StyledSection>
         <StyledSection>
@@ -102,4 +120,7 @@ const TeamHeader = () => {
   )
 }
 
+TeamHeader.propTypes = {
+  team: PropTypes.object
+}
 export default TeamHeader
