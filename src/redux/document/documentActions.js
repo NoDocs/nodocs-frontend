@@ -9,9 +9,10 @@ export const createDocument = ({ id, sections, creator }) => ({
   }
 })
 
-export const putDocuments = (documents) => ({
+export const putDocuments = ({ collectionId, documents }) => ({
   type: documentActionTypes.PUT_DOCUMENTS,
   payload: {
+    collectionId,
     documents,
   },
 })

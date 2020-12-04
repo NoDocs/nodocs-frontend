@@ -79,10 +79,6 @@ const MainLayout = ({ children }) => {
         .then(handleThen)
         .catch(handleCatch)
 
-      documentServices
-        .getDocuments()
-        .then(response => { dispatch(documentActions.putDocuments(response.data)) })
-
       teamService
         .getTeams()
         .then(response => {

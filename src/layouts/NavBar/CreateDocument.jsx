@@ -1,18 +1,21 @@
 import React from 'react'
 import shortid from 'shortid'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import * as documentServices from 'services/document'
 import history from 'utils/history'
 import { documentActions } from 'logic/document'
+import { teamSelectors } from 'logic/team'
 import addIcon from 'assets/add.svg'
 import IconButton from 'atoms/IconButton'
 
 const CreateDocument = () => {
   const dispatch = useDispatch()
+  const firstCollectionId = useSelector(teamSelectors.selectFirstCollection)
 
   const addDocument = () => {
     const params = {
+      collectionId: firstCollectionId,
       content: JSON.stringify([
         { type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] },
       ])

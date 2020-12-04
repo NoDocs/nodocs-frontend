@@ -25,6 +25,11 @@ export const selectTeamProperty = (property, getTeamId) => createSelector(
   }
 )
 
+export const selectFirstCollection = createSelector(
+  [selectTeamProperty('collections')],
+  collections => collections.first(),
+)
+
 export const selectTeamMemberProperty = (property, memberId) => createSelector(
   [membersDomain],
   (members) => members.getIn([memberId, property])

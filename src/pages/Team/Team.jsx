@@ -16,7 +16,7 @@ const Team = () => {
       <div style={{ margin: '0 130px' }}>
         <TeamHeader />
 
-        {collections.map(collectionId => <Collection key={collectionId} id={collections} />)}
+        {collections.map(collectionId => <Collection key={collectionId} id={collectionId} />)}
       </div>
     </React.Fragment>
   )

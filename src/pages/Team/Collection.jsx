@@ -1,14 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
 
-import * as documentServices from 'services/document'
+import * as teamServices from 'services/team'
+import { documentActions } from 'logic/document'
 
 const Collection = ({ id }) => {
+  const dispatch = useDispatch()
+
   React.useEffect(
     () => {
-      documentServices
-        .getDocuments({ collectionId: id })
-        .then(console.log)
+      teamServices
+        .getCollection(id)
+        .then(response => {
+          const { data: { documents } } = response
+
+          dispatch(documentActions.putDocuments({ collectionId: id, documents }))
+        })
     },
     []
   )
