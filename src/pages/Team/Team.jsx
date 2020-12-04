@@ -1,14 +1,14 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import Table from 'molecules/Table'
-import UserIcon from 'assets/userIcon.svg'
+import { teamSelectors } from 'logic/team'
 
 import TeamDescription from './TeamDescription'
 import TeamHeader from './TeamHeader'
+import Collection from './Collection'
 
 const Team = () => {
-  const documents = useSelector(state => state.getIn(['entities', 'documents']))
+  const collections = useSelector(teamSelectors.selectTeamProperty('collections'))
 
   return (
     <React.Fragment>
@@ -16,18 +16,7 @@ const Team = () => {
       <div style={{ margin: '0 130px' }}>
         <TeamHeader />
 
-        {/* <Table
-          proportions="38px 405px 1fr 1fr 1fr 1fr"
-          headerTabs={[
-            { content: '', position: '' },
-            { content: 'Name', position: 'left' },
-            { content: 'Subscribers', position: 'center' },
-            { content: 'Linked to', position: 'center' },
-            { content: 'Mentions', position: 'center' },
-            { content: <img key="icon" src={UserIcon} />, }
-          ]}
-          data={documents}
-        /> */}
+        {collections.map(collectionId => <Collection key={collectionId} id={collections} />)}
       </div>
     </React.Fragment>
   )
