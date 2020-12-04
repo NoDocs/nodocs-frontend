@@ -1,17 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { contextes } from '@workep/core'
 
+import PortalContext from 'contexts'
 import PopupContent from './PopupContent'
-
-export const Positions = {
-  left: 'LEFT',
-  right: 'RIGHT',
-  center: 'CENTER',
-  rightCenter: 'RIGHT_CENTER',
-  centerInner: 'CENTER_INNER',
-  bottomCenter: 'BOTTOM_CENTER',
-}
 
 const Popup = React.forwardRef(({
   trigger,
@@ -29,7 +20,7 @@ const Popup = React.forwardRef(({
   hideOnScroll = true,
 }, handleRef) => {
   const triggerRef = React.useRef()
-  const { openPortal, closePortal, getPortalState } = React.useContext(contextes.PortalsContext)
+  const { openPortal, closePortal, getPortalState } = React.useContext(PortalContext)
   const open = !!getPortalState(name)
 
   const handlePopupClose = React.useCallback(
