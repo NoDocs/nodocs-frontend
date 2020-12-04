@@ -6,6 +6,7 @@ import { withReact } from 'slate-react'
 
 import * as documentServices from 'services/document'
 import { documentActions, documentSelectors } from 'logic/document'
+import withEditablePageVoid from '../plugins/withEditablePageVoid'
 
 const useDocument = () => {
   const [sectionState, updateSectionState] = React.useState()
@@ -43,9 +44,9 @@ const useDocument = () => {
     [pages]
   )
 
-  const editor = withReact(createEditor())
+  const editor = withEditablePageVoid(withReact(createEditor()))
 
-  return { editor, sectionState, updateSectionState }
+  return { pages, editor, sectionState, updateSectionState }
 }
 
 export default useDocument

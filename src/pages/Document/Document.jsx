@@ -20,12 +20,11 @@ const StyledDocumentContainer = styled.div`
 
 const Document = () => {
   const { editor, sectionState, updateSectionState } = useDocument()
-  const { decorate } = useCursor(editor)
 
   const renderElement = React.useCallback(
-    ({ element }) => {
+    ({ attributes, element }) => {
       return element.type === 'page'
-        ? <Page id={element.id} />
+        ? <Page id={element.id} attributes={attributes} />
         : null
     },
     []
@@ -45,10 +44,7 @@ const Document = () => {
         <DocumentPanel />
         <DocumentLeftPanel />
 
-        <Editable
-          decorate={decorate}
-          renderElement={renderElement}
-        />
+        <Editable renderElement={renderElement} />
       </Slate>
     </StyledDocumentContainer>
   )

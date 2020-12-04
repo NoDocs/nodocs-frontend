@@ -1,6 +1,6 @@
 import React from 'react'
 import { createEditor } from 'slate'
-import { withReact } from 'slate-react'
+import { withReact, useSlate } from 'slate-react'
 import { useSelector } from 'react-redux'
 import { withIOCollaboration } from '@slate-collaborative/client'
 
@@ -14,6 +14,7 @@ import withPage from '../plugins/withPage'
 import withNodeId from '../plugins/withNodeId'
 
 const usePage = ({ id }) => {
+  const sectionEditor = useSlate()
   const content = useSelector(documentSelectors.selectPageProperty('content'), () => id)
   const [editorState, updateEditorState] = React.useState(content
     ? JSON.parse(content)
@@ -36,7 +37,7 @@ const usePage = ({ id }) => {
       const withPlugins = withEditableComponentVoid(
         withRectangleSelect(
           withDetectComponentInsert(
-            withPage(
+            withPage(sectionEditor)(
               withReact(
                 createEditor()
               )

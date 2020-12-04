@@ -13,7 +13,7 @@ const activeDocumentReducer = (state = initialState, action) => {
       return state
         .set('id', document.id)
         .set('activeSectionId', sections[0].id)
-        .set('activePageId', pages[0].id)
+        .set('activePageId', pages[0].pageId)
     }
 
     case documentActionTypes.SWITCH_SECTION: {
