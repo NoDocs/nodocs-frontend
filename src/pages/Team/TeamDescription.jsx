@@ -1,7 +1,8 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useSelector } from 'react-redux'
 
+import { teamSelectors } from 'logic/team'
 import atIcon from 'assets/at.svg'
 import Label from 'atoms/Label'
 import Title from 'atoms/Title'
@@ -31,22 +32,22 @@ const StyledTitleContainer = styled.div`
   align-items: center;
 `
 
-const TeamDescription = ({ name, description }) => (
-  <StyledContainer>
-    <StyledCaptionContainer>
-      <StyledTitleContainer>
-        <img src={atIcon} alt="Team Name" />
-        <Title>{name}</Title>
-      </StyledTitleContainer>
+const TeamDescription = () => {
+  const name = useSelector(teamSelectors.selectTeamProperty('name'))
+  const description = useSelector(teamSelectors.selectTeamProperty('description'))
 
-      <Label weight={500}>{description}</Label>
-    </StyledCaptionContainer>
-  </StyledContainer>
-)
+  return (
+    <StyledContainer>
+      <StyledCaptionContainer>
+        <StyledTitleContainer>
+          <img src={atIcon} alt="Team Name" />
+          <Title>{name}</Title>
+        </StyledTitleContainer>
 
-TeamDescription.propTypes = {
-  name: PropTypes.string.isRequired,
-  description: PropTypes.string,
+        <Label weight={500}>{description}</Label>
+      </StyledCaptionContainer>
+    </StyledContainer>
+  )
 }
 
 export default TeamDescription

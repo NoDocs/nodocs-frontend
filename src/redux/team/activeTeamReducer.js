@@ -5,18 +5,8 @@ const initialState = new Map()
 
 const activeTeamReducer = (state = initialState, action) => {
   switch (action.type) {
-    case teamActionTypes.INITIALIZE_TEAM: {
-      const { team } = action.payload
-
-      return state
-        .set('id', team.id)
-    }
-
     case teamActionTypes.SET_ACTIVE_TEAM: {
-      const { team } = action.payload
-
-      return state
-        .set('id', team.get('id'))
+      return state.set('id', action.payload.teamId)
     }
 
     default:
