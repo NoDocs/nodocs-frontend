@@ -19,7 +19,7 @@ const StyledInput = styled.input`
 `
 
 const Input = ({ icon, placeholder, name, type }) => {
-  const clonedIcon = React.cloneElement(
+  const clonedIcon = icon && React.cloneElement(
     icon,
     {
       height: 18,

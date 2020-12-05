@@ -56,19 +56,19 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
         exclude: /\.module\.css$/
       },
+      // {
+      //   test: /\.svg$/,
+      //   use: [
+      //     {
+      //       loader: 'svg-url-loader',
+      //       options: {
+      //         limit: false,
+      //       },
+      //     },
+      //   ],
+      // },
       {
-        test: /\.svg$/,
-        use: [
-          {
-            loader: 'svg-url-loader',
-            options: {
-              limit: false,
-            },
-          },
-        ],
-      },
-      {
-        test: /\.(png|jpg|gif)$/i,
+        test: /\.(svg|png|jpg|gif)$/i,
         use: {
           loader: 'url-loader',
           options: {
