@@ -19,6 +19,8 @@ const collectionsReducer = (state = initialState, action) => {
     }
 
     case documentActionTypes.PUT_DOCUMENTS: {
+      if (!action.payload.collectionId) return state
+
       return state.setIn(
         [action.payload.collectionId, 'documents'],
         new List(action.payload.documents.map(curr => curr.id))

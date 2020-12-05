@@ -34,3 +34,7 @@ export const switchSection = ({ sectionId, pageId }) => ({
     pageId,
   },
 })
+
+export const clearDocument = () => ({
+  type: documentActionTypes.CLEAR_DOCUMENT,
+})

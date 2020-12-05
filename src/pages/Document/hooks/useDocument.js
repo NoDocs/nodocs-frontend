@@ -18,6 +18,8 @@ const useDocument = () => {
   React.useEffect(
     () => {
       const fetchDocument = async () => {
+        dispatch(documentActions.clearDocument())
+
         const docId = params.documentId
         const { data: doc } = await documentServices.getDocument(docId)
 
@@ -27,7 +29,7 @@ const useDocument = () => {
 
       fetchDocument()
     },
-    []
+    [params.documentId]
   )
 
   React.useEffect(

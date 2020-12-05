@@ -23,7 +23,7 @@ const Document = () => {
   const renderElement = React.useCallback(
     ({ attributes, element }) => {
       return element.type === 'page'
-        ? <Page id={element.id} attributes={attributes} />
+        ? <Page id={element.id} pageAttributes={attributes} />
         : null
     },
     []

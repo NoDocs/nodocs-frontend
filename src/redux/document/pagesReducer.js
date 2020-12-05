@@ -22,6 +22,10 @@ const pagesReducer = (state = initialState, action) => {
         )
     }
 
+    case documentActionTypes.CLEAR_DOCUMENT: {
+      return initialState
+    }
+
     default:
       return state
   }

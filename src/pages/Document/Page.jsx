@@ -21,7 +21,7 @@ const StyledEditorContainer = styled.div`
   overflow: hidden;
 `
 
-const Page = ({ id, attributes }) => {
+const Page = ({ id, pageAttributes }) => {
   const { editor, editorState, onEditorChange } = usePage({ id })
   const { decorate } = useCursor(editor)
 
@@ -48,7 +48,7 @@ const Page = ({ id, attributes }) => {
   return (
     <StyledEditorContainer
       contentEditable={false}
-      {...attributes}
+      {...pageAttributes}
       data-page-id={id}
     >
       <Slate editor={editor} value={editorState} onChange={onEditorChange}>
@@ -64,7 +64,7 @@ const Page = ({ id, attributes }) => {
 
 Page.propTypes = {
   id: PropTypes.string,
-  attributes: PropTypes.object,
+  pageAttributes: PropTypes.object,
 }
 
 export default Page

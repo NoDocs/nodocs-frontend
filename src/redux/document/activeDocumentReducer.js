@@ -28,6 +28,13 @@ const activeDocumentReducer = (state = initialState, action) => {
         .set('activePageId', action.payload.pageId)
     }
 
+    case documentActionTypes.CLEAR_DOCUMENT: {
+      return state
+        .delete('id')
+        .delete('activeSectionId')
+        .delete('activePageId')
+    }
+
     default:
       return state
   }
