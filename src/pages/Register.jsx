@@ -71,8 +71,7 @@ const Register = () => {
 
     const { email, password, confirmPassword, fullName } = document.authForm.elements
     if(password.value !== confirmPassword.value) {
-      dispatch(notificationActions.notify({ type: 'error', message: 'passwords do not match' }))
-      return
+      return dispatch(notificationActions.notify({ type: 'error', message: 'passwords do not match' }))
     }
 
     const data = {
