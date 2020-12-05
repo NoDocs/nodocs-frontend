@@ -1,7 +1,12 @@
-import { Map } from 'immutable'
+import { fromJS } from 'immutable'
 import * as documentActionTypes from './documentActionTypes'
 
-const initialState = new Map()
+const initialState = fromJS({
+  id: '',
+  activeSectionId: '',
+  activePageId: '',
+  openedDocumentIds: [],
+})
 
 const activeDocumentReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -13,14 +18,14 @@ const activeDocumentReducer = (state = initialState, action) => {
       return state
         .set('id', document.id)
         .set('activeSectionId', sections[0].id)
-        .set('activePageId', pages[0].id)
+        .set('activePageId', pages[0].pageId)
+        .update('openedDocumentIds', ids => ids.push(document.id))
     }
 
     case documentActionTypes.SWITCH_SECTION: {
-      return state.set(
-        'activeSectionId',
-        action.payload.sectionId
-      )
+      return state
+        .set('activeSectionId', action.payload.sectionId)
+        .set('activePageId', action.payload.pageId)
     }
 
     default:

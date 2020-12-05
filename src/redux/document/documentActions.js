@@ -31,9 +31,10 @@ export const createSection = section => ({
   },
 })
 
-export const switchSection = (sectionId) => ({
+export const switchSection = ({ sectionId, pageId }) => ({
   type: documentActionTypes.SWITCH_SECTION,
   payload: {
     sectionId,
+    pageId,
   },
 })

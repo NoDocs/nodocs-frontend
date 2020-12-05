@@ -8,6 +8,9 @@ import arrowRightIcon from 'assets/arrow-right.svg'
 import Label from 'atoms/Label'
 import IconButton from 'atoms/IconButton'
 import HoverableContainer from 'atoms/HoverableContainer'
+import ContentToggler from 'atoms/ContentToggler'
+import PageMenuItem from './PageMenuItem'
+import CreatePage from './CreatePage'
 
 const StyledSectionContainer = styled(HoverableContainer)`
   display: grid;
@@ -21,19 +24,35 @@ const Section = ({ id }) => {
   const dispatch = useDispatch()
   const activeSectionId = useSelector(documentSelectors.selectActiveSectionId)
   const title = useSelector(documentSelectors.selectSectionProperty('title', () => id))
+  const pages = useSelector(documentSelectors.selectSectionProperty('pages', () => id))
+
+  const onSectionClick = () => {
+    dispatch(documentActions.switchSection({
+      sectionId: id,
+      pageId: pages.first(),
+    }))
+  }
 
   return (
-    <StyledSectionContainer
-      variant="inverted"
-      active={activeSectionId === id}
-      onClick={() => dispatch(documentActions.switchSection(id))}
-    >
-      <IconButton>
-        <img src={arrowRightIcon} />
-      </IconButton>
+    <ContentToggler
+      displayTrigger
+      trigger={(
+        <StyledSectionContainer
+          variant="inverted"
+          active={activeSectionId === id}
+          onClick={onSectionClick}
+        >
+          <IconButton>
+            <img src={arrowRightIcon} />
+          </IconButton>
 
-      <Label color="black">{title || 'Untitled'}</Label>
-    </StyledSectionContainer>
+          <Label color="black">{title || 'Untitled'}</Label>
+        </StyledSectionContainer>
+      )}
+    >
+      {pages.map(pageId => <PageMenuItem key={pageId} id={pageId} />)}
+      <CreatePage />
+    </ContentToggler>
   )
 }
 

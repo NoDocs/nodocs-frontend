@@ -1,9 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Slate } from 'slate-react'
+import { Slate, Editable } from 'slate-react'
 
 import useDocument from './hooks/useDocument'
-import usePage from './hooks/usePage'
 import DocumentPanel from './DocumentPanel'
 import Page from './Page'
 import DocumentLeftPanel from './DocumentLeftPanel'
@@ -19,10 +18,18 @@ const StyledDocumentContainer = styled.div`
 `
 
 const Document = () => {
-  const { pages } = useDocument()
-  const { editor, editorState, onEditorChange } = usePage()
+  const { editor, sectionState, updateSectionState } = useDocument()
 
-  if (!editorState) {
+  const renderElement = React.useCallback(
+    ({ attributes, element }) => {
+      return element.type === 'page'
+        ? <Page id={element.id} attributes={attributes} />
+        : null
+    },
+    []
+  )
+
+  if (!sectionState) {
     return <div>Getting a document...</div>
   }
 
@@ -30,13 +37,13 @@ const Document = () => {
     <StyledDocumentContainer data-start="selection">
       <Slate
         editor={editor}
-        value={editorState}
-        onChange={onEditorChange}
+        value={sectionState}
+        onChange={updateSectionState}
       >
         <DocumentPanel />
         <DocumentLeftPanel />
 
-        {pages.map(pageId => <Page key={pageId} id={pageId} />)}
+        <Editable renderElement={renderElement} />
       </Slate>
     </StyledDocumentContainer>
   )

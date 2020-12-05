@@ -21,7 +21,6 @@ const Collection = ({ id }) => {
         .getCollection(id)
         .then(response => {
           const { data: { documents } } = response
-
           dispatch(documentActions.putDocuments({ collectionId: id, documents }))
         })
     },

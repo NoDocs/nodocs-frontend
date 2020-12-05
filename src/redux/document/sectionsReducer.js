@@ -13,7 +13,7 @@ const sectionsReducer = (state = initialState, action) => {
         .reduce(
           (res, curr) => res.set(
             curr.id,
-            new Map(curr).set('pages', curr.pages.map(curr => curr.id))
+            new Map(curr).set('pages', curr.pages.map(curr => curr.pageId))
           ),
           new Map()
         )
