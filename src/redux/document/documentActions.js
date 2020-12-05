@@ -1,12 +1,8 @@
 import * as documentActionTypes from './documentActionTypes'
 
-export const createDocument = ({ id, sections, creator }) => ({
+export const createDocument = document => ({
   type: documentActionTypes.CREATE_DOCUMENT,
-  payload: {
-    id,
-    sections,
-    creator,
-  }
+  payload: document,
 })
 
 export const putDocuments = ({ collectionId, documents }) => ({
