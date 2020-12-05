@@ -1,4 +1,4 @@
-import { Map, fromJS } from 'immutable'
+import { Map, fromJS, List } from 'immutable'
 import * as teamActionTypes from './teamActionTypes'
 
 const initialState = new Map()
@@ -17,13 +17,24 @@ const teamsReducer = (state = initialState, action) => {
       return normalized
     }
 
+    case teamActionTypes.INITIALIZE_TEAM: {
+      const { team } = action.payload
+
+      return state.update(
+        team.id,
+        currTeam => currTeam
+          .set('collections', new List(team.collections.map(collection => collection.id)))
+          .set('members', new List(team.members.map(member => member.user.id)))
+      )
+    }
+
     case teamActionTypes.CREATE_TEAM: {
       const { team } = action.payload
       const { id, members, name } = team
       const newState = state.set(id, fromJS({ id: id, members, name }))
       return newState
     }
-  
+
     default:
       return state
   }

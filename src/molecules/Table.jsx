@@ -14,8 +14,7 @@ import SubMenuIcon from 'assets/components/SubMenuIcon'
 
 const StyledTable = styled.div`
   padding: 18px 0;
-  margin: auto;
-  margin-bottom: 50px;
+  margin: 13px auto 50px auto;
   box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.15);
   border-radius: 8px;
 `
@@ -121,7 +120,7 @@ const Table = ({ headerTabs, proportions, data }) => {
           <StyledCell>19</StyledCell>
           <StyledCell>31</StyledCell>
           <StyledCell jc="space-evenly">
-            <NewAvatar src={'../../src/assets/photo.png'} />
+            <NewAvatar userId={document.get('creatorId')} />
             <SubMenuIcon />
             <MoreIcon />
           </StyledCell>

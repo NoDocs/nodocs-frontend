@@ -8,7 +8,7 @@ import * as documentServices from 'services/document'
 import * as teamService from 'services/team'
 import { authActions } from 'logic/auth'
 import { documentActions } from 'logic/document'
-import { teamActions } from 'logic/team'
+import { teamActions, teamSelectors } from 'logic/team'
 import history from 'utils/history'
 
 import NavBar from './NavBar'
@@ -51,6 +51,8 @@ const MainLayout = ({ children }) => {
   const [navbarToggled, toggleNavbar] = React.useState(false)
 
   const userId = useSelector(state => state.getIn(['auth', 'id']))
+  const activeTeamId = useSelector(teamSelectors.selectActiveTeamId)
+  const isTeamLoaded = useSelector(teamSelectors.selectIsTeamLoaded)
   const dispatch = useDispatch()
 
   React.useEffect(
@@ -77,21 +79,29 @@ const MainLayout = ({ children }) => {
         .then(handleThen)
         .catch(handleCatch)
 
-      documentServices
-        .getDocuments()
-        .then(response => { dispatch(documentActions.putDocuments(response.data)) })
-
       teamService
         .getTeams()
         .then(response => {
           dispatch(teamActions.putTeams(response.data))
-          dispatch(teamActions.initializeTeam(response.data[0]))
+          dispatch(teamActions.setActiveTeam(response.data[0].id))
         })
     },
     []
   )
 
-  if (!userId) return <div>Loading...</div>
+  React.useEffect(
+    () => {
+      if (!activeTeamId) return
+
+      teamService
+        .getTeam(activeTeamId)
+        .then((response) => { dispatch(teamActions.initializeTeam(response.data)) })
+    },
+    [activeTeamId]
+  )
+
+  if (!userId) return <div>Fetching user...</div>
+  if (!isTeamLoaded) return <div>Fetching team...</div>
 
   return (
     <React.Fragment>

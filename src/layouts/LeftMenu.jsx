@@ -66,7 +66,7 @@ const LeftMenu = ({ toggleNavbar }) => {
   const [newTeam, toggleNewTeam] = React.useState(false)
 
   const chooseTeam = (team) => {
-    dispatch(teamActions.setActiveTeam(team))
+    dispatch(teamActions.setActiveTeam(team.get('id')))
   }
 
   const createTeam = (e, active) => {
@@ -108,7 +108,7 @@ const LeftMenu = ({ toggleNavbar }) => {
             <ToggleListItem
               icon={teamsIcon}
               label="Teams"
-              proportions='22px auto 22px' 
+              proportions='22px auto 22px'
               renderAdditionalButtons={renderAdditionalButtons}
             />
           )}

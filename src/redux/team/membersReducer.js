@@ -1,22 +1,23 @@
 import { Map, fromJS } from 'immutable'
-import * as memberActionTypes from './memberActionTypes'
+import * as teamActionTypes from './teamActionTypes'
 
 const initialState = new Map()
 
 const membersReducer = (state = initialState, action) => {
   switch (action.type) {
-    case memberActionTypes.PUT_MEMBERS: {
+    case teamActionTypes.INITIALIZE_TEAM: {
       const normalized = action
         .payload
+        .team
         .members
         .reduce(
-          (res, curr) => res.set(curr.id, fromJS(curr)),
+          (res, curr) => res.set(curr.user.id, fromJS(curr.user)),
           new Map()
         )
 
       return normalized
     }
-  
+
     default:
       return state
   }
