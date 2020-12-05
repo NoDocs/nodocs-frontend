@@ -7,20 +7,19 @@ export const putTeams = (teams) => ({
   },
 })
 
+export const setActiveTeam = teamId => ({
+  type: teamActionTypes.SET_ACTIVE_TEAM,
+  payload: {
+    teamId,
+  },
+})
+
 export const initializeTeam = (team) => ({
   type: teamActionTypes.INITIALIZE_TEAM,
   payload: {
     team,
   },
 })
-
-export const setActiveTeam = (team) => ({
-  type: teamActionTypes.SET_ACTIVE_TEAM,
-  payload: {
-    team,
-  },
-})
-
 
 export const createTeam = (team) => ({
   type: teamActionTypes.CREATE_TEAM,

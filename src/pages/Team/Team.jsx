@@ -3,35 +3,20 @@ import { useSelector } from 'react-redux'
 
 import { teamSelectors } from 'logic/team'
 
-import Table from 'molecules/Table'
-import UserIcon from 'assets/userIcon.svg'
-
 import TeamDescription from './TeamDescription'
 import TeamHeader from './TeamHeader'
+import Collection from './Collection'
 
 const Team = () => {
-  const team = useSelector(teamSelectors.selectTeam())
-  const documents = useSelector(state => state.getIn(['entities', 'documents']))
+  const collections = useSelector(teamSelectors.selectTeamProperty('collections'))
 
-  const loading = !team || !documents
-  if (loading) return <div>Loading...</div>
   return (
     <React.Fragment>
-      <TeamDescription name={team.get('name')} description={team.get('description')} />
+      <TeamDescription />
       <div style={{ margin: '0 130px' }}>
-        <TeamHeader team={team} />
-        <Table
-          proportions="38px 405px 1fr 1fr 1fr 1fr"
-          headerTabs={[
-            { content: '', position: '' },
-            { content: 'Name', position: 'left' },
-            { content: 'Subscribers', position: 'center' },
-            { content: 'Linked to', position: 'center' },
-            { content: 'Mentions', position: 'center' },
-            { content: <img key="icon" src={UserIcon} />, }
-          ]}
-          data={documents}
-        />
+        <TeamHeader />
+
+        {collections.map(collectionId => <Collection key={collectionId} id={collectionId} />)}
       </div>
     </React.Fragment>
   )

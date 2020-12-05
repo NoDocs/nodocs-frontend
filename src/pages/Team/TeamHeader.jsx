@@ -1,11 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
-import { memberActions } from 'logic/member'
-import * as membersService from 'services/member'
-
+import { teamSelectors } from 'logic/team'
 import Avatar from 'atoms/Avatar'
 import addCollectionIcon from 'assets/add-collection.svg'
 
@@ -38,14 +36,12 @@ const StyledMembersTitle = styled.span`
   font-weight: 700;
   grid-column-gap: 22px;
 `
-const StyledMemberImage = styled(Avatar)`
-  width: 22.67px;
-  height: 22.67px;
+
+const StyledAvatar = styled(Avatar)`
   :not(:last-child) {
     margin-left: -10px;
   }
 `
-
 
 const StyledBtn = styled.button`
   border: none;
@@ -72,46 +68,33 @@ const StyledText = styled.span`
   font-weight: 500;
 `
 
-const TeamHeader = ({ team }) => {
-  const dispatch = useDispatch()
-  const members = useSelector(state => state.getIn(['entities', 'members']))
-  const membersBody = { teamId: team && team.get('id') }
-
-  React.useEffect(
-    () => {
-      if (!team) return
-      membersService
-        .getMembers(membersBody)
-        .then(response => {
-          dispatch(memberActions.putMembers(response.data))
-        })
-        .catch(err => console.log('err', err))
-    }, [team])
+const TeamHeader = () => {
+  const members = useSelector(teamSelectors.selectTeamProperty('members'))
 
   return (
     <StyledContainer>
       <LeftContainer>
         <StyledSection>
           <StyledMembersTitle>Members:</StyledMembersTitle>
+
           <StyledMemberImages>
-            {members.map((member, index) => (
-              <StyledMemberImage
-                key={index} src={'../../../src/assets/photo.png'}
-                alt="icon"
-                color={member.getIn(['user', 'color'])}
-              />
-            )).toList()}
+            {members
+              .map(memberId => <StyledAvatar size={23} key={memberId} userId={memberId} />)
+              .toList()}
           </StyledMemberImages>
         </StyledSection>
+
         <StyledSection>
           <StyledText>Group by:</StyledText>
           <StyledText color={'rgba(0,0,0,0.5)'}>Collections</StyledText>
         </StyledSection>
+
         <StyledSection>
           <StyledText>Filter by:</StyledText>
           <StyledText color={'rgba(0,0,0,0.5)'}>Last Updated</StyledText>
         </StyledSection>
       </LeftContainer>
+
       <StyledBtn>
         <img src={addCollectionIcon} />
         <StyledLabel>Add Collection</StyledLabel>
