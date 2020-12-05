@@ -1,4 +1,4 @@
-import { notificationActionTypes } from '.'
+import * as notificationActionTypes from './notificationActionTypes'
 
 export const notify = ({ type, message }) => ({
   type: notificationActionTypes.NOTIFY,
