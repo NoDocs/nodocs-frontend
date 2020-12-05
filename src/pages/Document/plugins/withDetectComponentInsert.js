@@ -5,7 +5,7 @@ const withDetectComponent = (editor) => {
   const { apply } = editor
 
   editor.apply = (operation) => {
-    const regex = /\[\[component\=.*\]\]$/
+    const regex = /\[\[component\=.*\]\]$/ // eslint-disable-line
 
     if (operation.type === 'insert_node' || operation.type === 'insert_text') {
       const text = operation.text || operation.node.text

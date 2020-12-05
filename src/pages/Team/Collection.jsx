@@ -12,13 +12,13 @@ import UserIcon from 'assets/userIcon.svg'
 const Collection = ({ id }) => {
   const dispatch = useDispatch()
   const documents = useSelector(state => state.getIn(['entities', 'documents']))
+
   React.useEffect(
     () => {
       teamServices
         .getCollection(id)
         .then(response => {
           const { data: { documents } } = response
-
           dispatch(documentActions.putDocuments({ collectionId: id, documents }))
         })
     },

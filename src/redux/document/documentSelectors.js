@@ -20,6 +20,16 @@ export const selectActivePageId = createSelector(
   domain => domain.get('activePageId')
 )
 
+export const selectOpenedDocuments = createSelector(
+  [activeDocumentDomain, documentsDomain],
+  (domain, documents) => domain
+    .get('openedDocumentIds')
+    .map(id => documents
+      .get(id)
+      .filter((_, key) => ['id', 'title'].includes(key))
+    )
+)
+
 export const selectDocumentProperty = (property, getDocumentId) => createSelector(
   [selectActiveDocumentId, documentsDomain, (_, props) => props],
   (activeDocumentId, documents, props) => {
@@ -32,13 +42,24 @@ export const selectDocumentProperty = (property, getDocumentId) => createSelecto
 )
 
 export const selectSectionProperty = (property, getSectionId) => createSelector(
-  [selectActiveSectionId, sectionsDomain, (_, props) => props],
-  (activeSectionId, sections, props) => {
+  [
+    selectActiveSectionId,
+    sectionsDomain,
+    pagesDomain,
+    (_, props) => props
+  ],
+  (activeSectionId, sections, pages, props) => {
     const sectionId = getSectionId
       ? getSectionId(props)
       : activeSectionId
 
-    return sections.getIn([sectionId, property])
+    const field = sections.getIn([sectionId, property])
+
+    if (!field) return null
+
+    return property !== 'pages'
+      ? field
+      : field
   }
 )
 

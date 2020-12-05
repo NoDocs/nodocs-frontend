@@ -1,15 +1,27 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import styled from 'styled-components'
+import { useSlate } from 'slate-react'
 
-import { documentSelectors } from 'logic/document'
+import textIcon from 'assets/text.svg'
+import ListItem from 'molecules/ListItem'
+
+const StyledListItem = styled(ListItem)`
+  padding: 0px;
+`
 
 const SectionElements = () => {
-  const content = useSelector(documentSelectors.selectPageProperty('content'))
-  const elements = JSON.parse(content)
+  const slate = useSlate()
 
-  return elements.map(curr => {
+  return slate.children.map(curr => {
     if (curr.type === 'paragraph') {
-      return <div key={curr.id}>Something</div>
+      return (
+        <StyledListItem
+          key={curr.id}
+          icon={textIcon}
+          color="black"
+          label={curr.children[0].text}
+        />
+      )
     }
   })
 }

@@ -14,7 +14,7 @@ const pagesReducer = (state = initialState, action) => {
           (res, curr) => {
             const { pages } = curr
 
-            pages.forEach(page => { res = res.set(page.id, new Map(page)) })
+            pages.forEach(page => { res = res.set(page.pageId, new Map(page)) })
 
             return res
           },

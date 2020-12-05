@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Slate, Editable } from 'slate-react'
+import { Editable, Slate } from 'slate-react'
 import { useCursor } from '@slate-collaborative/client'
 
 import Component from './Component'
-import usePage from './hooks/usePage'
 import Leaf from './components/Leaf'
+import usePage from './hooks/usePage'
 
 const StyledEditorContainer = styled.div`
   background: #FFFFFF;
@@ -21,13 +21,8 @@ const StyledEditorContainer = styled.div`
   overflow: hidden;
 `
 
-const Page = ({ id }) => {
-  const {
-    editor,
-    editorState,
-    onEditorChange,
-    onPageClick,
-  } = usePage()
+const Page = ({ id, attributes }) => {
+  const { editor, editorState, onEditorChange } = usePage({ id })
   const { decorate } = useCursor(editor)
 
   const renderElement = React.useCallback(
@@ -47,15 +42,13 @@ const Page = ({ id }) => {
 
   const renderLeaf = React.useCallback(
     (props) => <Leaf {...props} />,
-    [decorate]
+    []
   )
-
-  if (!editorState) return <p>Fetching page...</p>
 
   return (
     <StyledEditorContainer
       contentEditable={false}
-      onClick={onPageClick}
+      {...attributes}
       data-page-id={id}
     >
       <Slate editor={editor} value={editorState} onChange={onEditorChange}>
@@ -71,6 +64,7 @@ const Page = ({ id }) => {
 
 Page.propTypes = {
   id: PropTypes.string,
+  attributes: PropTypes.object,
 }
 
 export default Page
