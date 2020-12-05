@@ -21,6 +21,7 @@ const useDocument = () => {
         const docId = params.documentId
         const { data: doc } = await documentServices.getDocument(docId)
 
+        dispatch(documentActions.putDocuments({ documents: [doc] }))
         dispatch(documentActions.initializeDocument(doc))
       }
 
