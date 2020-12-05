@@ -65,7 +65,7 @@ const Register = () => {
   const [submitting, toggleSubmitting] = React.useState()
   const dispatch = useDispatch()
 
-  const handleSignIn = (event) => {
+  const handleRegister = (event) => {
     event.preventDefault()
     toggleSubmitting(true)
 
@@ -96,7 +96,7 @@ const Register = () => {
         <StyledLabel weight={700} color="black">✨ Welcome to the Memex for teams!</StyledLabel>
         <StyledLabel color="black">“A place where individuals would compress and store all of their information”, "mechanized so that it may be consulted with exceeding speed and flexibility," Dr. Vannevar Bush writes in 1945, coining the term memex.</StyledLabel>
 
-        <StyledForm name="authForm" onSubmit={handleSignIn}>
+        <StyledForm name="authForm" onSubmit={handleRegister}>
           <Input
             icon={<img src={mentionIcon} alt="Full Name" />}
             name="fullName"
