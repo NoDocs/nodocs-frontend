@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Route, Redirect } from 'react-router-dom'
 
-const ProtectedRoute = ({ component: Component, Layout, ...rest }) => (
+const ProtectedRoute = ({ component: RouteComponent, Layout, ...rest }) => (
   <Route
     {...rest}
     render={({ location }) => {
@@ -10,11 +10,11 @@ const ProtectedRoute = ({ component: Component, Layout, ...rest }) => (
         return <Redirect to={{ pathname: '/login', state: { from: location } }} />
       }
 
-      if (!Layout) return <Component />
+      if (!Layout) return <RouteComponent />
 
       return (
         <Layout>
-          <Component />
+          <RouteComponent />
         </Layout>
       )
     }}
@@ -23,7 +23,7 @@ const ProtectedRoute = ({ component: Component, Layout, ...rest }) => (
 
 ProtectedRoute.propTypes = {
   component: PropTypes.any,
-  Layout: PropTypes.element,
+  Layout: PropTypes.any,
 }
 
 export default ProtectedRoute

@@ -10,14 +10,13 @@ import ContentToggler from 'atoms/ContentToggler'
 import UserCard from 'molecules/UserCard'
 import ListItem from 'molecules/ListItem'
 import ToggleListItem from 'molecules/ToggleListItem'
+import history from 'utils/history'
 
 import arrowLeftIcon from 'assets/arrow-left.svg'
 import homeIcon from 'assets/home.svg'
 import teamsIcon from 'assets/teams.svg'
 import AddIcon from 'assets/components/AddIcon'
 import ArrowDownIcon from 'assets/components/ArrowDownIcon'
-
-import CreateTeam from './CreateTeam'
 
 const StyledContainer = styled.div`
   grid-area: left;
@@ -63,23 +62,18 @@ const LeftMenu = ({ toggleNavbar }) => {
   const dispatch = useDispatch()
   const activeUser = useSelector(state => state.get('auth'))
   const teams = useSelector(state => state.getIn(['entities', 'teams']))
-  const [newTeam, toggleNewTeam] = React.useState(false)
 
   const chooseTeam = (team) => {
     dispatch(teamActions.setActiveTeam(team.get('id')))
   }
 
-  const createTeam = (e, active) => {
-    if (active) {
-      e.stopPropagation()
-    }
-    toggleNewTeam(true)
-  }
-
   const renderAdditionalButtons = (active) => {
     return (
-      <StyledAdditionButtons onClick={(e) => createTeam(e, active)}>
-        <AddIcon fill="#fff" height={12} />
+      <StyledAdditionButtons>
+        <IconButton onClick={() => history.push('/create-team')}>
+          <AddIcon fill="#fff" height={12} />
+        </IconButton>
+
         <StyledIconContainer isOpen={active}>
           <ArrowDownIcon fill="#fff" />
         </StyledIconContainer>
@@ -102,6 +96,7 @@ const LeftMenu = ({ toggleNavbar }) => {
         <ListItem icon={homeIcon} label="Explore" />
         <ListItem icon={homeIcon} label="Community" />
         <ListItem icon={homeIcon} label="Private" />
+
         <ContentToggler
           displayTrigger
           trigger={(
@@ -117,11 +112,10 @@ const LeftMenu = ({ toggleNavbar }) => {
             {teams.map(team => (
               <ListItem
                 onClick={() => chooseTeam(team)}
-                key={'123s'}
+                key={team.get('id')}
                 label={`@ ${team.get('name')}`}
                 proportions='1fr' />
             )).toList()}
-            {newTeam && <CreateTeam onDone={() => toggleNewTeam(false)} />}
           </SubListContainer>
         </ContentToggler>
       </StyledGridContainer>

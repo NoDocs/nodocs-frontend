@@ -50,7 +50,6 @@ const ListItem = ({
     active={active}
     onClick={onClick}
   >
-    {renderAdditionalButtons}
     {icon && <img src={icon} height={24} alt={label} />}
     <StyledLabel color={color}>{label}</StyledLabel>
     {renderAdditionalButtons && renderAdditionalButtons(active)}

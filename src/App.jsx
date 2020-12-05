@@ -5,7 +5,6 @@ import { Switch, Route } from 'react-router-dom'
 import Socket from './socket'
 
 import MainLayout from './layouts/MainLayout'
-import FullHeightPageLayout from './layouts/FullHeightPageLayout'
 import ProtectedRoute from './atoms/ProtectedRoute'
 import Notifications from './molecules/Notifications'
 import Login from './pages/Login'
@@ -13,6 +12,7 @@ import Register from './pages/Register'
 import Team from './pages/Team'
 import Document from './pages/Document'
 import CreateCompany from './pages/CreateCompany'
+import CreateTeam from './pages/CreateTeam'
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -40,11 +40,8 @@ const App = () => {
           component={Document}
         />
 
-        <ProtectedRoute
-          path="/create-company"
-          Layout={FullHeightPageLayout}
-          component={CreateCompany}
-        />
+        <ProtectedRoute path="/create-company" component={CreateCompany} />
+        <ProtectedRoute path="/create-team" component={CreateTeam} />
 
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
