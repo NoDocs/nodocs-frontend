@@ -4,10 +4,8 @@ import styled, { createGlobalStyle } from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 
 import * as authServices from 'services/auth'
-import * as documentServices from 'services/document'
 import * as teamService from 'services/team'
 import { authActions } from 'logic/auth'
-import { documentActions } from 'logic/document'
 import { teamActions, teamSelectors } from 'logic/team'
 import history from 'utils/history'
 
