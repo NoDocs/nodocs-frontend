@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import * as teamServices from 'services/team'
 import { documentActions } from 'logic/document'
+import { teamSelectors } from 'logic/team'
 
 import Table from 'molecules/Table'
 import Toggle from 'molecules/Toggle'
@@ -12,6 +13,8 @@ import UserIcon from 'assets/userIcon.svg'
 const Collection = ({ id }) => {
   const dispatch = useDispatch()
   const documents = useSelector(state => state.getIn(['entities', 'documents']))
+  const collectionName = useSelector(teamSelectors.selectCollectionProperty('name', id))
+
   React.useEffect(
     () => {
       teamServices
@@ -27,7 +30,7 @@ const Collection = ({ id }) => {
 
   return (
     <>
-      <Toggle title={`Collection: ${id}`}>
+      <Toggle title={`Collection: ${collectionName}`}>
         <Table
           proportions="38px 405px 1fr 1fr 1fr 1fr"
           headerTabs={[

@@ -3,6 +3,7 @@ import { createSelector } from 'reselect'
 const activeTeamDomain = state => state.getIn(['ui', 'activeTeam'])
 const teamsDomain = state => state.getIn(['entities', 'teams'])
 const membersDomain = state => state.getIn(['entities', 'members'])
+const collectionsDomain = state => state.getIn(['entities', 'collections'])
 
 export const selectActiveTeamId = createSelector(
   activeTeamDomain,
@@ -35,3 +36,7 @@ export const selectTeamMemberProperty = (property, memberId) => createSelector(
   (members) => members.getIn([memberId, property])
 )
 
+export const selectCollectionProperty = (property, collectionId) => createSelector(
+  [collectionsDomain],
+  collections => collections.getIn([collectionId, property])
+)

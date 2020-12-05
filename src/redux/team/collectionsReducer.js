@@ -25,6 +25,12 @@ const collectionsReducer = (state = initialState, action) => {
       )
     }
 
+    case teamActionTypes.CREATE_COLLECTION: {
+      const { collection } = action.payload
+      const newState = state.set(collection.id, fromJS(collection))
+      return newState
+    }
+
     default:
       return state
   }
