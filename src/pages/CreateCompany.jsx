@@ -1,13 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useDispatch } from 'react-redux'
 
 import backgroundImage from 'assets/background-dark.svg'
 import logoWhite from 'assets/logo-white.svg'
+import { notificationActions } from 'logic/notification'
 import * as companyService from 'services/company'
 import history from 'utils/history'
 import Label from 'atoms/Label'
 import Input from 'atoms/Input'
 import Button from 'atoms/Button'
+import Notifications from 'molecules/Notifications'
 
 const StyledContainer = styled.form`
   min-height: 100vh;
@@ -39,13 +42,17 @@ const StyledCaption = styled(Label)`
 `
 
 const CreateCompany = () => {
+  const dispatch = useDispatch()
+
   const createCompany = (e) => {
     e.preventDefault()
 
     const { name } = document.createCompanyForm.elements
 
-    console.log(name.value)
-    return
+    if (!name.value) {
+      dispatch(notificationActions.notify({ type: 'error', message: 'Please fill the company name' }))
+      return
+    }
 
     companyService
       .createCompany({ name })
@@ -54,17 +61,21 @@ const CreateCompany = () => {
   }
 
   return (
-    <StyledContainer name="createCompanyForm" onSubmit={createCompany}>
-      <img src={logoWhite} />
+    <React.Fragment>
+      <StyledContainer name="createCompanyForm" onSubmit={createCompany}>
+        <img src={logoWhite} />
 
-      <StyledTitle color="active">Name your workspace</StyledTitle>
-      <StyledDescription color="active">Send invitation links to team members</StyledDescription>
+        <StyledTitle color="active">Name your workspace</StyledTitle>
+        <StyledDescription color="active">Send invitation links to team members</StyledDescription>
 
-      <Input name="name" placeholder="i.e company name" />
-      <StyledCaption color="active">After creating a workspace, you can invite others to join.</StyledCaption>
+        <Input name="name" placeholder="i.e company name" />
+        <StyledCaption color="active">After creating a workspace, you can invite others to join.</StyledCaption>
 
-      <Button type="submit">CREATE WORKSPACE</Button>
-    </StyledContainer>
+        <Button type="submit">CREATE WORKSPACE</Button>
+      </StyledContainer>
+
+      <Notifications />
+    </React.Fragment>
   )
 }
 

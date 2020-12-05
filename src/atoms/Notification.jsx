@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 
 import { notificationActions } from 'logic/notification'
+import Label from 'atoms/Label'
 
 const StyledContainer = styled.div`
   background-color: ${({ error }) => error ? 'red' : 'green'};
@@ -19,16 +20,16 @@ const Notification = ({ type, message, id }) => {
   React.useEffect(() => {
     const timer = setTimeout(() => {
       dispatch(notificationActions.deleteNotification({ id }))
-    }, 1000)
+    }, 2000)
 
     return () => clearTimeout(timer)
   }, [])
 
   const isError = React.useMemo(() => type === 'error', [type])
-  
+
   return (
     <StyledContainer error={isError}>
-      {message}
+      <Label color="active">{message}</Label>
     </StyledContainer>
   )
 }
