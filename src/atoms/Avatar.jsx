@@ -19,6 +19,7 @@ const StyledAvatar = styled.div`
       content: "${props.name.slice(0, 2)}";
       height: 100%;
       display: flex;
+      font-family: quicksand;
       align-items: center;
       justify-content: center;
       font-size: 12px;
