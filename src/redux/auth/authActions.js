@@ -10,3 +10,14 @@ export const signIn = ({ id, fullName, email, token, color }) => ({
     color
   },
 })
+
+export const register = ({ id, fullName, email, token, color }) => ({
+  type: authActionTypes.REGISTER,
+  payload: {
+    id,
+    fullName,
+    email,
+    token,
+    color
+  },
+})
