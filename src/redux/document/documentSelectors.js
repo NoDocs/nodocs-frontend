@@ -20,6 +20,16 @@ export const selectActivePageId = createSelector(
   domain => domain.get('activePageId')
 )
 
+export const selectOpenedDocuments = createSelector(
+  [activeDocumentDomain, documentsDomain],
+  (domain, documents) => domain
+    .get('openedDocumentIds')
+    .map(id => documents
+      .get(id)
+      .filter((_, key) => ['id', 'title'].includes(key))
+    )
+)
+
 export const selectDocumentProperty = (property, getDocumentId) => createSelector(
   [selectActiveDocumentId, documentsDomain, (_, props) => props],
   (activeDocumentId, documents, props) => {
