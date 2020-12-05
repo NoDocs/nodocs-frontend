@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect'
+import { List } from 'immutable'
 
 const activeTeamDomain = state => state.getIn(['ui', 'activeTeam'])
 const teamsDomain = state => state.getIn(['entities', 'teams'])
@@ -28,7 +29,7 @@ export const selectTeamProperty = (property, getTeamId) => createSelector(
 
 export const selectFirstCollection = createSelector(
   [selectTeamProperty('collections')],
-  collections => collections.first(),
+  collections => (collections || new List()).first(),
 )
 
 export const selectTeamMemberProperty = (property, memberId) => createSelector(

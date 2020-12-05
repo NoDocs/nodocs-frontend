@@ -45,6 +45,16 @@ const teamsReducer = (state = initialState, action) => {
       return newState
     }
 
+    case teamActionTypes.SET_ACTIVE_TEAM: {
+      const { teamId } = action.payload
+
+      return state.update(teamId, currTeam =>
+        currTeam
+          .delete('members')
+          .delete('collections')
+      )
+    }
+
     default:
       return state
   }

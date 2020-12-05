@@ -14,7 +14,7 @@ const documentsReducer = (state = initialState, action) => {
           new Map()
         )
 
-      return normalized
+      return state.merge(normalized)
     }
 
     case documentActionTypes.INITIALIZE_DOCUMENT: {

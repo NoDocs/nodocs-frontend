@@ -13,7 +13,7 @@ const collectionsReducer = (state = initialState, action) => {
         .team
         .collections
         .reduce(
-          (res, curr) => res.set(curr.id, fromJS({ ...curr, documents: [] })),
+          (res, curr) => res.set(curr.id, fromJS({ ...curr, documents: new List() })),
           new Map()
         )
     }
