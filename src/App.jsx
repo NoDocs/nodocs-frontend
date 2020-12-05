@@ -7,6 +7,7 @@ import Socket from './socket'
 import MainLayout from './layouts/MainLayout'
 import FullHeightPageLayout from './layouts/FullHeightPageLayout'
 import ProtectedRoute from './atoms/ProtectedRoute'
+import Notifications from './molecules/Notifications'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Team from './pages/Team'
@@ -49,6 +50,7 @@ const App = () => {
         <Route path="/register" component={Register} />
       </Switch>
 
+      <Notifications />
       <GlobalStyles />
     </React.Fragment>
   )

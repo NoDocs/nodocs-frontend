@@ -10,10 +10,12 @@ import teamsReducer from './team/teamsReducer'
 import activeTeamReducer from './team/activeTeamReducer'
 import membersReducer from './team/membersReducer'
 import collectionsReducer from './team/collectionsReducer'
+import notificationReducer from './notification/notificationReducer'
 
 export default combineReducers({
   auth: authReducer,
   components: componentsReducer,
+  notifications: notificationReducer,
   entities: combineReducers({
     documents: documentsReducer,
     sections: sectionsReducer,

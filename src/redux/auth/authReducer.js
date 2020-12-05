@@ -12,6 +12,13 @@ const authReducer = (state = initialState, action) => {
         .set('email', action.payload.email)
         .set('token', action.payload.token)
         .set('color', action.payload.color)
+    case authActionTypes.REGISTER:
+      return initialState
+        .set('id', action.payload.id)
+        .set('fullName', action.payload.fullName)
+        .set('email', action.payload.email)
+        .set('token', action.payload.token)
+        .set('color', action.payload.color)
 
     default:
       return state
