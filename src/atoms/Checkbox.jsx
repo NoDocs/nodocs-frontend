@@ -46,7 +46,7 @@ export const StyledInput = styled.input`
 const Checkbox = ({ label, checked }) => {
   return(
     <>
-      <StyledInput type="checkbox" checked={checked} />
+      <StyledInput type="checkbox" checked={checked} onChange={() => {}} />
       {label && <label>{label}</label>}
     </>
   )

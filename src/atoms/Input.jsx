@@ -18,8 +18,8 @@ const StyledInput = styled.input`
   box-sizing: border-box;
 `
 
-const Input = ({ icon, placeholder, name, type }) => {
-  const clonedIcon = React.cloneElement(
+const Input = ({ icon, placeholder, className, name, type }) => {
+  const clonedIcon = icon && React.cloneElement(
     icon,
     {
       height: 18,
@@ -28,7 +28,7 @@ const Input = ({ icon, placeholder, name, type }) => {
   )
 
   return (
-    <StyledInputContainer>
+    <StyledInputContainer className={className}>
       <StyledInput
         hasIcon={Boolean(icon)}
         placeholder={placeholder}
@@ -44,6 +44,7 @@ const Input = ({ icon, placeholder, name, type }) => {
 Input.propTypes = {
   icon: PropTypes.element,
   placeholder: PropTypes.string,
+  className: PropTypes.string,
   name: PropTypes.string,
   type: PropTypes.string,
 }

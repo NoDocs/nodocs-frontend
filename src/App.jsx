@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom'
 
 import Socket from './socket'
 
+import MainLayout from './layouts/MainLayout'
 import ProtectedRoute from './atoms/ProtectedRoute'
 import Notifications from './molecules/Notifications'
 import Login from './pages/Login'
@@ -11,6 +12,8 @@ import Register from './pages/Register'
 import Team from './pages/Team'
 import Document from './pages/Document'
 import CreateCompany from './pages/CreateCompany'
+import CreateTeam from './pages/CreateTeam'
+import InviteUsersToTeam from './pages/InviteTeamMembers'
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -25,9 +28,22 @@ const App = () => {
   return (
     <React.Fragment>
       <Switch>
-        <ProtectedRoute path="/" exact component={Team} />
-        <ProtectedRoute path="/d/:documentId" exact component={Document} />
-        <ProtectedRoute path="/create-company" exact component={CreateCompany} />
+        <ProtectedRoute
+          path="/"
+          exact
+          Layout={MainLayout}
+          component={Team}
+        />
+
+        <ProtectedRoute
+          path="/d/:documentId"
+          Layout={MainLayout}
+          component={Document}
+        />
+
+        <ProtectedRoute path="/create-company" component={CreateCompany} />
+        <ProtectedRoute path="/create-team" component={CreateTeam} />
+        <ProtectedRoute path="/invite-team-members" component={InviteUsersToTeam} />
 
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />

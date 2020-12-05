@@ -3,14 +3,16 @@ import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 
 import backgroundImage from 'assets/background-dark.svg'
-import logoWhite from 'assets/logo-white.svg'
+import closeIcon from 'assets/close.svg'
 import { notificationActions } from 'logic/notification'
-import * as companyService from 'services/company'
+import { teamActions } from 'logic/team'
+import * as teamServices from 'services/team'
 import history from 'utils/history'
 import Label from 'atoms/Label'
 import Input from 'atoms/Input'
 import Button from 'atoms/Button'
 import Notifications from 'molecules/Notifications'
+import IconButton from 'atoms/IconButton'
 
 const StyledContainer = styled.div`
   min-height: 100vh;
@@ -22,6 +24,7 @@ const StyledContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  position: relative;
 `
 
 const StyledForm = styled.form`
@@ -53,37 +56,52 @@ const StyledCaption = styled(Label)`
   margin-bottom: 100px;
 `
 
-const CreateCompany = () => {
+const StyledCloseIconButton = styled(IconButton)`
+  position: absolute;
+  top: 30px;
+  right: 30px;
+`
+
+const CreateTeam = () => {
   const dispatch = useDispatch()
 
-  const createCompany = (e) => {
+  const close = () => {
+    history.push('/')
+  }
+
+  const createTeam = (e) => {
     e.preventDefault()
 
-    const { name } = document.createCompanyForm.elements
+    const { name } = document.createTeamForm.elements
 
     if (!name.value) {
-      dispatch(notificationActions.notify({ type: 'error', message: 'Please fill the company name' }))
+      dispatch(notificationActions.notify({ type: 'error', message: 'Please fill the team name' }))
       return
     }
 
-    companyService
-      .createCompany({ name: name.value })
-      .then(() => history.push('/'))
+    teamServices
+      .createTeam({ name: name.value })
+      .then(({ data }) => {
+        dispatch(teamActions.createTeam(data))
+        history.push('/')
+      })
       .catch(error => console.log(error))
   }
 
   return (
     <StyledContainer>
-      <StyledForm name="createCompanyForm" onSubmit={createCompany}>
-        <img src={logoWhite} />
+      <StyledCloseIconButton onClick={close}>
+        <img src={closeIcon} alt="go back" />
+      </StyledCloseIconButton>
 
-        <StyledTitle color="active">Name your workspace</StyledTitle>
+      <StyledForm name="createTeamForm" onSubmit={createTeam}>
+        <StyledTitle color="active">Create team</StyledTitle>
         <StyledDescription color="active">Send invitation links to team members</StyledDescription>
 
-        <StyledInput name="name" placeholder="i.e company name" />
+        <StyledInput name="name" placeholder="i.e team name" />
         <StyledCaption color="active">After creating a workspace, you can invite others to join.</StyledCaption>
 
-        <Button type="submit">CREATE WORKSPACE</Button>
+        <Button type="submit">CREATE TEAM</Button>
       </StyledForm>
 
       <Notifications />
@@ -91,4 +109,4 @@ const CreateCompany = () => {
   )
 }
 
-export default CreateCompany
+export default CreateTeam

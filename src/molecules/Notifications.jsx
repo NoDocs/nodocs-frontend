@@ -9,7 +9,7 @@ import { notificationSelectors } from 'logic/notification'
 const StyledContainer = styled.div`
   position: fixed;
   z-index: 1;
-  top: 10px;
+  bottom: 20px;
   right: 20px;
   display: flex;
   flex-direction: column;
@@ -17,7 +17,7 @@ const StyledContainer = styled.div`
 
 const Notifications = () => {
   const notifications = useSelector(notificationSelectors.selectAllNotifications())
-  
+
   return (
     <StyledContainer>
       {notifications.map(

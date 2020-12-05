@@ -73,7 +73,7 @@ const getAccessToken = async () => {
 
 const getHeaders = async () => {
   const socketId = localStorage.getItem('client-socket-id')
-    
+
   const headers = {
     'Content-type': 'application/json',
   }
