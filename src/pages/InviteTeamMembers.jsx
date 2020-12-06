@@ -79,7 +79,7 @@ const InviteTeamMembers = () => {
 
   const inviteUsers = (e) => {
     e.preventDefault()
-    const body = { teamId: activeTeamId, members: emails.toJS() }
+    const body = { teamId: activeTeamId, emails: emails.toJS() }
 
     memberService
       .addMembers(body)
@@ -113,7 +113,7 @@ const InviteTeamMembers = () => {
 
         <StyledCaption onClick={() => updateEmails(emails.push(''))}>+ Add another</StyledCaption>
 
-        <Button type="submit">CREATE TEAM</Button>
+        <Button type="submit">Invite to TEAM</Button>
       </StyledForm>
 
       <Notifications />

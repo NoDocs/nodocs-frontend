@@ -41,9 +41,13 @@ const App = () => {
           component={Document}
         />
 
+        <ProtectedRoute
+          path="/invite-team-members"
+          Layout={MainLayout}
+          component={InviteUsersToTeam}
+        />
         <ProtectedRoute path="/create-company" component={CreateCompany} />
         <ProtectedRoute path="/create-team" component={CreateTeam} />
-        <ProtectedRoute path="/invite-team-members" component={InviteUsersToTeam} />
 
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
