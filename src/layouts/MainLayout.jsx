@@ -5,8 +5,10 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import * as authServices from 'services/auth'
 import * as teamService from 'services/team'
+import * as companyServices from 'services/company'
 import { authActions } from 'logic/auth'
 import { teamActions, teamSelectors } from 'logic/team'
+import { companyActions } from 'logic/company'
 import history from 'utils/history'
 
 import NavBar from './NavBar'
@@ -59,10 +61,11 @@ const MainLayout = ({ children }) => {
       if (!localStorage.getItem('token')) return
 
       const handleThen = (response) => {
-        dispatch(authActions.signIn(response.data))
-        if (!response.data.currentCompany) {
-          history.push('/create-company')
-        }
+        const { data } = response
+
+        dispatch(authActions.signIn(data))
+        dispatch(companyActions.setCompanies([data.currentCompany]))
+        dispatch(companyActions.setActiveCompany(data.currentCompany.id))
       }
 
       const handleCatch = (error) => {
@@ -76,6 +79,10 @@ const MainLayout = ({ children }) => {
         .me()
         .then(handleThen)
         .catch(handleCatch)
+
+      companyServices
+        .getCompanies()
+        .then(response => { dispatch(companyActions.setCompanies(response.data)) })
 
       teamService
         .getTeams()
@@ -93,8 +100,7 @@ const MainLayout = ({ children }) => {
 
       teamService
         .getTeam(activeTeamId)
-        .then((response) => { console.log('response', response.data)
-          dispatch(teamActions.initializeTeam(response.data)) })
+        .then((response) => { dispatch(teamActions.initializeTeam(response.data)) })
     },
     [activeTeamId]
   )
