@@ -1,11 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { List } from 'immutable'
+
+import * as memberService from 'services/member'
+import { teamSelectors, teamActions } from 'logic/team'
 
 import backgroundImage from 'assets/background-dark.svg'
 import closeIcon from 'assets/close.svg'
-import { notificationActions } from 'logic/notification'
 import history from 'utils/history'
 import Label from 'atoms/Label'
 import Input from 'atoms/Input'
@@ -67,6 +69,7 @@ const StyledCloseIconButton = styled(IconButton)`
 `
 
 const InviteTeamMembers = () => {
+  const activeTeamId = useSelector(teamSelectors.selectActiveTeamId)
   const [emails, updateEmails] = React.useState(new List(['']))
   const dispatch = useDispatch()
 
@@ -76,13 +79,17 @@ const InviteTeamMembers = () => {
 
   const inviteUsers = (e) => {
     e.preventDefault()
+    const body = { teamId: activeTeamId, emails: emails.toJS() }
 
-    const { name } = document.createTeamForm.elements
+    memberService
+      .addMembers(body)
+      .then(response => {
+        const { data } = response
 
-    if (!name.value) {
-      dispatch(notificationActions.notify({ type: 'error', message: 'Please fill the team name' }))
-      return
-    }
+        dispatch(teamActions.addMembers(data.members, activeTeamId))
+        history.push('/')
+      })
+      .catch(error => console.log(error))
   }
 
   return (
@@ -98,7 +105,7 @@ const InviteTeamMembers = () => {
         <StyledInputsContainer>
           {emails.map((email, index) => (
             <Input
-              key={email}
+              key={index}
               placeholder="i.e team member email"
               value={email}
               onChange={event => updateEmails(emails.set(index, event.target.value))}
@@ -108,7 +115,7 @@ const InviteTeamMembers = () => {
 
         <StyledCaption onClick={() => updateEmails(emails.push(''))}>+ Add another</StyledCaption>
 
-        <Button type="submit">CREATE TEAM</Button>
+        <Button type="submit">Invite to TEAM</Button>
       </StyledForm>
 
       <Notifications />
