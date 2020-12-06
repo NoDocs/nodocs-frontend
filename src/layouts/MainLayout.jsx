@@ -57,7 +57,6 @@ const MainLayout = ({ children }) => {
 
   React.useEffect(
     () => {
-      if (userId) return
       if (!localStorage.getItem('token')) return
 
       const handleThen = (response) => {
