@@ -13,7 +13,7 @@ const collectionsReducer = (state = initialState, action) => {
         .team
         .collections
         .reduce(
-          (res, curr) => res.set(curr.id, fromJS({ ...curr, documents: [] })),
+          (res, curr) => res.set(curr.id, fromJS({ ...curr, documents: new List() })),
           new Map()
         )
     }
@@ -23,6 +23,12 @@ const collectionsReducer = (state = initialState, action) => {
         [action.payload.collectionId, 'documents'],
         new List(action.payload.documents.map(curr => curr.id))
       )
+    }
+
+    case teamActionTypes.CREATE_COLLECTION: {
+      const { collection } = action.payload
+      const newState = state.set(collection.id, fromJS(collection))
+      return newState
     }
 
     default:

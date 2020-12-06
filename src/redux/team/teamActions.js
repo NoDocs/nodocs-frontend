@@ -27,3 +27,9 @@ export const createTeam = (team) => ({
     team,
   }
 })
+
+
+export const createCollection = (collection) => ({
+  type: teamActionTypes.CREATE_COLLECTION,
+  payload: { collection }
+})

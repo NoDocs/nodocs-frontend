@@ -93,13 +93,13 @@ const MainLayout = ({ children }) => {
 
       teamService
         .getTeam(activeTeamId)
-        .then((response) => { dispatch(teamActions.initializeTeam(response.data)) })
+        .then((response) => { console.log('response', response.data)
+          dispatch(teamActions.initializeTeam(response.data)) })
     },
     [activeTeamId]
   )
 
   if (!userId) return <div>Fetching user...</div>
-  if (!isTeamLoaded) return <div>Fetching team...</div>
 
   return (
     <React.Fragment>
@@ -111,7 +111,7 @@ const MainLayout = ({ children }) => {
           navbarToggled={navbarToggled}
         />
 
-        <div>{children}</div>
+        {isTeamLoaded && <div>{children}</div>}
       </StyledContainer>
 
       <GlobalStyles />

@@ -68,7 +68,7 @@ const StyledText = styled.span`
   font-weight: 500;
 `
 
-const TeamHeader = () => {
+const TeamHeader = ({ toggleNewCollection }) => {
   const members = useSelector(teamSelectors.selectTeamProperty('members'))
 
   return (
@@ -95,7 +95,7 @@ const TeamHeader = () => {
         </StyledSection>
       </LeftContainer>
 
-      <StyledBtn>
+      <StyledBtn onClick={() => toggleNewCollection(true)}>
         <img src={addCollectionIcon} />
         <StyledLabel>Add Collection</StyledLabel>
       </StyledBtn>
@@ -104,6 +104,6 @@ const TeamHeader = () => {
 }
 
 TeamHeader.propTypes = {
-  team: PropTypes.object
+  toggleNewCollection: PropTypes.func
 }
 export default TeamHeader

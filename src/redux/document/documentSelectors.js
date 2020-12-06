@@ -4,6 +4,7 @@ const activeDocumentDomain = state => state.getIn(['ui', 'activeDocument'])
 const documentsDomain = state => state.getIn(['entities', 'documents'])
 const sectionsDomain = state => state.getIn(['entities', 'sections'])
 const pagesDomain = state => state.getIn(['entities', 'pages'])
+const collectionsDomain = state => state.getIn(['entities', 'collections'])
 
 export const selectActiveDocumentId = createSelector(
   activeDocumentDomain,
@@ -72,4 +73,13 @@ export const selectPageProperty = (property, getPageId) => createSelector(
 
     return pages.getIn([pageId, property])
   }
+)
+
+
+export const selectDocumentsByCollection = (collectionId) => createSelector(
+  [collectionsDomain, documentsDomain],
+  (collections, documents) => collections
+    .get(collectionId)
+    .get('documents')
+    .map(id => documents.get(id))
 )
