@@ -4,8 +4,9 @@ import { useDispatch } from 'react-redux'
 
 import backgroundImage from 'assets/background-dark.svg'
 import logoWhite from 'assets/logo-white.svg'
-import { notificationActions } from 'logic/notification'
 import * as companyService from 'services/company'
+import { notificationActions } from 'logic/notification'
+import { companyActions } from 'logic/company'
 import history from 'utils/history'
 import Label from 'atoms/Label'
 import Input from 'atoms/Input'
@@ -68,7 +69,11 @@ const CreateCompany = () => {
 
     companyService
       .createCompany({ name: name.value })
-      .then(() => history.push('/'))
+      .then((response) => {
+        dispatch(companyActions.setCompanies([response.data]))
+        dispatch(companyActions.setActiveCompany(response.data.id))
+        history.push('/')
+      })
       .catch(error => console.log(error))
   }
 
