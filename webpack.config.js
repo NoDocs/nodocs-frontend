@@ -56,17 +56,6 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
         exclude: /\.module\.css$/
       },
-      // {
-      //   test: /\.svg$/,
-      //   use: [
-      //     {
-      //       loader: 'svg-url-loader',
-      //       options: {
-      //         limit: false,
-      //       },
-      //     },
-      //   ],
-      // },
       {
         test: /\.(svg|png|jpg|gif)$/i,
         use: {
@@ -97,7 +86,8 @@ module.exports = {
       services: path.resolve(__dirname, 'src/services'),
       logic: path.resolve(__dirname, 'src/redux'),
       socket: path.resolve(__dirname, 'src/socket'),
-      contexts: path.resolve(__dirname, 'src/contexts')
+      contexts: path.resolve(__dirname, 'src/contexts'),
+      modals: path.resolve(__dirname, 'src/modals'),
     }
   },
   ...(isLocal

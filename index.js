@@ -7,13 +7,16 @@ import history from './src/utils/history'
 import App from './src/App'
 import store from './src/store'
 import PortalProvider from './src/providers/PortalProvider'
+import ShortcutsProvider from './src/providers/ShortcutsProvider'
 
 const Index = () => {
   return (
     <Router history={history}>
       <Provider store={store}>
         <PortalProvider>
-          <App />
+          <ShortcutsProvider>
+            <App />
+          </ShortcutsProvider>
         </PortalProvider>
       </Provider>
     </Router>

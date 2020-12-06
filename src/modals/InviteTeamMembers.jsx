@@ -1,32 +1,18 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { List } from 'immutable'
 
 import * as memberService from 'services/member'
 import { teamSelectors, teamActions } from 'logic/team'
+import withRenderPortal from 'molecules/withRenderPortal'
 
-import backgroundImage from 'assets/background-dark.svg'
-import closeIcon from 'assets/close.svg'
 import history from 'utils/history'
 import Label from 'atoms/Label'
 import Input from 'atoms/Input'
 import Button from 'atoms/Button'
-import Notifications from 'molecules/Notifications'
-import IconButton from 'atoms/IconButton'
-
-const StyledContainer = styled.div`
-  min-height: 100vh;
-  overflow: auto;
-  background-image: url(${backgroundImage});
-  background-size: cover;
-  background-position: center center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  position: relative;
-`
+import FullScreenModal from 'molecules/FullScreenModal'
 
 const StyledForm = styled.form`
   display: flex;
@@ -62,20 +48,10 @@ const StyledCaption = styled(Label)`
   cursor: pointer;
 `
 
-const StyledCloseIconButton = styled(IconButton)`
-  position: absolute;
-  top: 30px;
-  right: 30px;
-`
-
-const InviteTeamMembers = () => {
+const InviteTeamMembers = ({ closePortal }) => {
   const activeTeamId = useSelector(teamSelectors.selectActiveTeamId)
   const [emails, updateEmails] = React.useState(new List(['']))
   const dispatch = useDispatch()
-
-  const close = () => {
-    history.push('/')
-  }
 
   const inviteUsers = (e) => {
     e.preventDefault()
@@ -87,18 +63,14 @@ const InviteTeamMembers = () => {
         const { data } = response
 
         dispatch(teamActions.addMembers(data.members, activeTeamId))
-        history.push('/')
+        closePortal()
       })
       .catch(error => console.log(error))
   }
 
   return (
-    <StyledContainer>
-      <StyledCloseIconButton onClick={close}>
-        <img src={closeIcon} alt="go back" />
-      </StyledCloseIconButton>
-
-      <StyledForm name="createTeamForm" onSubmit={inviteUsers}>
+    <FullScreenModal close={closePortal}>
+      <StyledForm onSubmit={inviteUsers}>
         <StyledTitle color="active">Invite new members</StyledTitle>
         <StyledDescription color="active">Send invitation links to team members</StyledDescription>
 
@@ -117,10 +89,12 @@ const InviteTeamMembers = () => {
 
         <Button type="submit">Invite to TEAM</Button>
       </StyledForm>
-
-      <Notifications />
-    </StyledContainer>
+    </FullScreenModal>
   )
 }
 
-export default InviteTeamMembers
+InviteTeamMembers.propTypes = {
+  closePortal: PropTypes.func,
+}
+
+export default withRenderPortal(() => 'invite-team-members')(InviteTeamMembers)

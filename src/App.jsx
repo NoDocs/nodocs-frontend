@@ -13,7 +13,6 @@ import Team from './pages/Team'
 import Document from './pages/Document'
 import CreateCompany from './pages/CreateCompany'
 import CreateTeam from './pages/CreateTeam'
-import InviteUsersToTeam from './pages/InviteTeamMembers'
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -41,11 +40,6 @@ const App = () => {
           component={Document}
         />
 
-        <ProtectedRoute
-          path="/invite-team-members"
-          Layout={MainLayout}
-          component={InviteUsersToTeam}
-        />
         <ProtectedRoute path="/create-company" component={CreateCompany} />
         <ProtectedRoute path="/create-team" component={CreateTeam} />
 
