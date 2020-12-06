@@ -86,8 +86,10 @@ const InviteTeamMembers = () => {
       .then(response => {
         const { data } = response
 
-        dispatch(teamActions.addMembers(data, activeTeamId))
+        dispatch(teamActions.addMembers(data.members, activeTeamId))
+        history.push('/')
       })
+      .catch(error => console.log(error))
   }
 
   return (
