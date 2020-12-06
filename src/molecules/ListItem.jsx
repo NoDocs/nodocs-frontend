@@ -8,7 +8,9 @@ import Label from 'atoms/Label'
 const StyledHoverableContainer = styled(HoverableContainer)`
   display: grid;
   grid-auto-flow: column;
-  grid-template-columns: ${({ proportions }) => proportions ? proportions : '22px auto'};
+  grid-template-columns: ${({ proportions, iconExists }) => proportions
+    ? proportions
+    : iconExists ? '22px auto' : 'auto'};
   align-items: center;
   grid-column-gap: 10px;
   position: relative;
@@ -47,6 +49,7 @@ const ListItem = ({
   <StyledHoverableContainer
     className={className}
     proportions={proportions}
+    iconExists={Boolean(icon)}
     active={active}
     onClick={onClick}
   >

@@ -70,7 +70,8 @@ const Register = () => {
     toggleSubmitting(true)
 
     const { email, password, confirmPassword, fullName } = document.authForm.elements
-    if(password.value !== confirmPassword.value) {
+
+    if (password.value !== confirmPassword.value) {
       return dispatch(notificationActions.notify({ type: 'error', message: 'passwords do not match' }))
     }
 
@@ -85,7 +86,9 @@ const Register = () => {
         const { data: { token, user } } = response
 
         localStorage.setItem('token', token)
-        history.push('/')
+        history.push(user.currentCompany
+          ? `/?companyId=${user.currentCompany.id}`
+          : '/create-company')
         dispatch(authActions.register({ token, ...user }))
       })
   }

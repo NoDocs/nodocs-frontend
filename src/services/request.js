@@ -1,8 +1,11 @@
 import apisauce from 'apisauce'
 import jwt_decode from 'jwt-decode'
 
+import { notificationActions } from 'logic/notification'
+import store from '../store'
+
 const checkStatus = (response) => {
-  const { data, error, status } = response
+  const { data, status } = response
 
   if (status >= 200 && status < 300) {
     return Promise.resolve({
@@ -15,7 +18,10 @@ const checkStatus = (response) => {
     return Promise.reject({ message: 'NotAuthorized' })
   }
 
-  return Promise.reject(error)
+  const { errors } = data
+  store.dispatch(notificationActions.notify({ type: 'error', message: errors[0].message }))
+
+  return Promise.reject(errors)
 }
 
 const serialize = (obj, prefix) => {

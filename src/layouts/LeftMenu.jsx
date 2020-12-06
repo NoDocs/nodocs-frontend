@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { teamActions } from 'logic/team'
+import { teamActions, teamSelectors } from 'logic/team'
 
 import IconButton from 'atoms/IconButton'
 import ContentToggler from 'atoms/ContentToggler'
@@ -61,9 +61,12 @@ const StyledAdditionButtons = styled.div`
 const LeftMenu = ({ toggleNavbar }) => {
   const dispatch = useDispatch()
   const activeUser = useSelector(state => state.get('auth'))
+  const activeTeamId = useSelector(teamSelectors.selectActiveTeamId)
   const teams = useSelector(state => state.getIn(['entities', 'teams']))
 
   const chooseTeam = (team) => {
+    if (activeTeamId === team.get('id')) return
+
     dispatch(teamActions.setActiveTeam(team.get('id')))
   }
 

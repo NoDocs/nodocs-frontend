@@ -11,11 +11,14 @@ import activeTeamReducer from './team/activeTeamReducer'
 import membersReducer from './team/membersReducer'
 import collectionsReducer from './team/collectionsReducer'
 import notificationReducer from './notification/notificationReducer'
+import companiesReducer from './company/companiesReducer'
+import activeCompanyReducer from './company/activeCompanyReducer'
 
 export default combineReducers({
   auth: authReducer,
   components: componentsReducer,
   notifications: notificationReducer,
+  companies: companiesReducer,
   entities: combineReducers({
     documents: documentsReducer,
     sections: sectionsReducer,
@@ -26,6 +29,7 @@ export default combineReducers({
   }),
   ui: combineReducers({
     activeDocument: activeDocumentReducer,
-    activeTeam: activeTeamReducer
+    activeTeam: activeTeamReducer,
+    activeCompany: activeCompanyReducer,
   }),
 })
