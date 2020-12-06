@@ -10,7 +10,6 @@ import CreateCollection from './CreateCollection'
 
 const Team = () => {
   const collections = useSelector(teamSelectors.selectTeamProperty('collections'))
-  console.log('Team -> collections', collections)
   const [newCollection, toggleNewCollection] = React.useState(false)
   return (
     <React.Fragment>
