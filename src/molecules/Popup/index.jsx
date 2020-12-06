@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import PortalContext from 'contexts'
+import { PortalContext } from 'contexts'
 import PopupContent from './PopupContent'
 
 const Popup = React.forwardRef(({

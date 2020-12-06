@@ -5,8 +5,11 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import * as authServices from 'services/auth'
 import * as teamService from 'services/team'
+import * as companyServices from 'services/company'
 import { authActions } from 'logic/auth'
+import { companySelectors } from 'logic/company'
 import { teamActions, teamSelectors } from 'logic/team'
+import { companyActions } from 'logic/company'
 import history from 'utils/history'
 
 import NavBar from './NavBar'
@@ -49,20 +52,21 @@ const MainLayout = ({ children }) => {
   const [navbarToggled, toggleNavbar] = React.useState(false)
 
   const userId = useSelector(state => state.getIn(['auth', 'id']))
+  const activeCompanyId = useSelector(companySelectors.selectActiveCompanyId)
   const activeTeamId = useSelector(teamSelectors.selectActiveTeamId)
   const isTeamLoaded = useSelector(teamSelectors.selectIsTeamLoaded)
   const dispatch = useDispatch()
 
   React.useEffect(
     () => {
-      if (userId) return
       if (!localStorage.getItem('token')) return
 
       const handleThen = (response) => {
-        dispatch(authActions.signIn(response.data))
-        if (!response.data.currentCompany) {
-          history.push('/create-company')
-        }
+        const { data } = response
+
+        dispatch(authActions.signIn(data))
+        dispatch(companyActions.setCompanies([data.currentCompany]))
+        dispatch(companyActions.setActiveCompany(data.currentCompany.id))
       }
 
       const handleCatch = (error) => {
@@ -77,14 +81,25 @@ const MainLayout = ({ children }) => {
         .then(handleThen)
         .catch(handleCatch)
 
+      companyServices
+        .getCompanies()
+        .then(response => { dispatch(companyActions.setCompanies(response.data)) })
+    },
+    []
+  )
+
+  React.useEffect(
+    () => {
+      if (!activeCompanyId) return
+
       teamService
-        .getTeams()
+        .getTeams({ companyId: activeCompanyId })
         .then(response => {
           dispatch(teamActions.putTeams(response.data))
           dispatch(teamActions.setActiveTeam(response.data[0].id))
         })
     },
-    []
+    [activeCompanyId]
   )
 
   React.useEffect(
@@ -93,8 +108,7 @@ const MainLayout = ({ children }) => {
 
       teamService
         .getTeam(activeTeamId)
-        .then((response) => { console.log('response', response.data)
-          dispatch(teamActions.initializeTeam(response.data)) })
+        .then((response) => { dispatch(teamActions.initializeTeam(response.data)) })
     },
     [activeTeamId]
   )
