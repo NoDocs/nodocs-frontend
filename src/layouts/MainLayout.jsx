@@ -7,6 +7,7 @@ import * as authServices from 'services/auth'
 import * as teamService from 'services/team'
 import * as companyServices from 'services/company'
 import { authActions } from 'logic/auth'
+import { companySelectors } from 'logic/company'
 import { teamActions, teamSelectors } from 'logic/team'
 import { companyActions } from 'logic/company'
 import history from 'utils/history'
@@ -51,6 +52,7 @@ const MainLayout = ({ children }) => {
   const [navbarToggled, toggleNavbar] = React.useState(false)
 
   const userId = useSelector(state => state.getIn(['auth', 'id']))
+  const activeCompanyId = useSelector(companySelectors.selectActiveCompanyId)
   const activeTeamId = useSelector(teamSelectors.selectActiveTeamId)
   const isTeamLoaded = useSelector(teamSelectors.selectIsTeamLoaded)
   const dispatch = useDispatch()
@@ -82,15 +84,22 @@ const MainLayout = ({ children }) => {
       companyServices
         .getCompanies()
         .then(response => { dispatch(companyActions.setCompanies(response.data)) })
+    },
+    []
+  )
+
+  React.useEffect(
+    () => {
+      if (!activeCompanyId) return
 
       teamService
-        .getTeams()
+        .getTeams({ companyId: activeCompanyId })
         .then(response => {
           dispatch(teamActions.putTeams(response.data))
           dispatch(teamActions.setActiveTeam(response.data[0].id))
         })
     },
-    []
+    [activeCompanyId]
   )
 
   React.useEffect(

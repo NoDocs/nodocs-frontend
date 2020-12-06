@@ -14,3 +14,8 @@ export const selectCompanyProperty = (property, getCompanyId) => createSelector(
     return companies.getIn([companyId, property])
   }
 )
+
+export const selectAvailableCompanies = createSelector(
+  [selectActiveCompanyId, companiesDomain],
+  (activeCompanyId, companies) => companies.delete(activeCompanyId)
+)
