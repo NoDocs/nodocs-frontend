@@ -5,18 +5,15 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { teamActions, teamSelectors } from 'logic/team'
 
+import arrowLeftIcon from 'assets/arrow-left.svg'
+import MentionIcon from 'assets/components/MentionIcon'
+import homeIcon from 'assets/home.svg'
 import IconButton from 'atoms/IconButton'
 import ContentToggler from 'atoms/ContentToggler'
 import UserCard from 'molecules/UserCard'
 import ListItem from 'molecules/ListItem'
-import ToggleListItem from 'molecules/ToggleListItem'
-import history from 'utils/history'
 
-import arrowLeftIcon from 'assets/arrow-left.svg'
-import homeIcon from 'assets/home.svg'
-import teamsIcon from 'assets/teams.svg'
-import AddIcon from 'assets/components/AddIcon'
-import ArrowDownIcon from 'assets/components/ArrowDownIcon'
+import ToggleTeams from './components/ToggleTeams'
 
 const StyledContainer = styled.div`
   grid-area: left;
@@ -38,24 +35,13 @@ const StyledGridContainer = styled.div`
   display: grid;
   grid-row-gap: 2px;
 `
-const SubListContainer = styled.div`
-  margin-left: 10px;
+
+const StyledTeamListContainer = styled.div`
+  margin-left: 15px;
+  margin-top: 5px;
   display: grid;
   align-items: start;
   grid-row-gap: 5px;
-`
-
-const StyledIconContainer = styled.div`
-  transition: all .2s ease;
-  transform: ${p => p.isOpen ? null : 'rotate(180deg)'};
-  display: flex;
-  align-items: center;
-`
-
-const StyledAdditionButtons = styled.div`
-  display: grid;
-  grid-auto-flow: column;
-  color: #fff;
 `
 
 const LeftMenu = ({ toggleNavbar }) => {
@@ -64,24 +50,10 @@ const LeftMenu = ({ toggleNavbar }) => {
   const activeTeamId = useSelector(teamSelectors.selectActiveTeamId)
   const teams = useSelector(state => state.getIn(['entities', 'teams']))
 
-  const chooseTeam = (team) => {
+  const chooseTeam = (team) => () => {
     if (activeTeamId === team.get('id')) return
 
     dispatch(teamActions.setActiveTeam(team.get('id')))
-  }
-
-  const renderAdditionalButtons = (active) => {
-    return (
-      <StyledAdditionButtons>
-        <IconButton onClick={() => history.push('/create-team')}>
-          <AddIcon fill="#fff" height={12} />
-        </IconButton>
-
-        <StyledIconContainer isOpen={active}>
-          <ArrowDownIcon fill="#fff" />
-        </StyledIconContainer>
-      </StyledAdditionButtons>
-    )
   }
 
   return (
@@ -102,24 +74,21 @@ const LeftMenu = ({ toggleNavbar }) => {
 
         <ContentToggler
           displayTrigger
-          trigger={(
-            <ToggleListItem
-              icon={teamsIcon}
-              label="Teams"
-              proportions='22px auto 22px'
-              renderAdditionalButtons={renderAdditionalButtons}
-            />
-          )}
+          trigger={<ToggleTeams />}
         >
-          <SubListContainer>
-            {teams.map(team => (
-              <ListItem
-                onClick={() => chooseTeam(team)}
-                key={team.get('id')}
-                label={`@ ${team.get('name')}`}
-                proportions='1fr' />
-            )).toList()}
-          </SubListContainer>
+          <StyledTeamListContainer>
+            {teams
+              .map(team => (
+                <ListItem
+                  onClick={chooseTeam(team)}
+                  active={team.get('id') === activeTeamId}
+                  key={team.get('id')}
+                  icon={<MentionIcon fill="#fff" size={18} />}
+                  label={team.get('name')}
+                  proportions="18px auto"
+                />))
+              .toList()}
+          </StyledTeamListContainer>
         </ContentToggler>
       </StyledGridContainer>
     </StyledContainer>

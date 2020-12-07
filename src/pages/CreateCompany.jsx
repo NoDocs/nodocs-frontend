@@ -85,7 +85,7 @@ const CreateCompany = () => {
         <StyledTitle color="active">Name your workspace</StyledTitle>
         <StyledDescription color="active">Send invitation links to team members</StyledDescription>
 
-        <StyledInput name="name" placeholder="i.e company name" />
+        <StyledInput name="name" placeholder="i.e company name" autoFocus />
         <StyledCaption color="active">After creating a workspace, you can invite others to join.</StyledCaption>
 
         <Button type="submit">CREATE WORKSPACE</Button>

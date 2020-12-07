@@ -6,16 +6,23 @@ const ContentToggler = ({ trigger, children, displayTrigger = false, onToggled, 
   const unToggleContent = () => {
     toggle(false)
   }
+
   const content = typeof children === 'function' ? children(unToggleContent) : children
+
   React.useEffect(() => toggle(toggled), [toggled])
+
   if (!isToggled && !trigger) return null
   if (isToggled && !trigger) return content
+
   const toggleContent = () => {
     if (onToggled) onToggled()
     toggle(flag => !flag)
   }
+
   const clonedTrigger = React.cloneElement(trigger, { onClick: toggleContent, active: isToggled })
+
   if (!isToggled) return clonedTrigger
+
   return (
     <React.Fragment>
       {displayTrigger && clonedTrigger}

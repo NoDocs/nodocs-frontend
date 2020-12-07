@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
+import styled from 'styled-components'
 import shortid from 'shortid'
+import { useDispatch, useSelector } from 'react-redux'
 
 import history from 'utils/history'
 import * as teamServices from 'services/team'
@@ -13,11 +14,16 @@ import Table from 'molecules/Table'
 import Toggle from 'molecules/Toggle'
 import UserIcon from 'assets/userIcon.svg'
 
+const StyledToggle = styled(Toggle)`
+  margin-bottom: 10px;
+`
+
 const Collection = ({ id }) => {
+  const [loading, setLoading] = React.useState(true)
+
   const dispatch = useDispatch()
   const documents = useSelector(documentSelectors.selectDocumentsByCollection(id))
   const collectionName = useSelector(teamSelectors.selectCollectionProperty('name', id))
-  const [loading, setLoading] = React.useState(true)
 
   React.useEffect(
     () => {
@@ -52,24 +58,23 @@ const Collection = ({ id }) => {
   }
 
   if (loading) return <div>Loading</div>
+
   return (
-    <>
-      <Toggle title={`Collection: ${collectionName}`}>
-        <Table
-          proportions="38px 405px 1fr 1fr 1fr 1fr"
-          headerTabs={[
-            { content: '', position: '' },
-            { content: 'Name', position: 'left' },
-            { content: 'Subscribers', position: 'center' },
-            { content: 'Linked to', position: 'center' },
-            { content: 'Mentions', position: 'center' },
-            { content: <img key="icon" src={UserIcon} />, }
-          ]}
-          data={documents}
-          createDocument={createDocument}
-        />
-      </Toggle>
-    </>
+    <StyledToggle title={collectionName}>
+      <Table
+        proportions="38px 405px 1fr 1fr 1fr 1fr"
+        headerTabs={[
+          { content: '', position: '' },
+          { content: 'Name', position: 'left' },
+          { content: 'Subscribers', position: 'center' },
+          { content: 'Linked to', position: 'center' },
+          { content: 'Mentions', position: 'center' },
+          { content: <img key="icon" src={UserIcon} />, }
+        ]}
+        data={documents}
+        createDocument={createDocument}
+      />
+    </StyledToggle>
   )
 }
 

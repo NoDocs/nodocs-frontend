@@ -98,7 +98,7 @@ const CreateTeam = () => {
         <StyledTitle color="active">Create team</StyledTitle>
         <StyledDescription color="active">Send invitation links to team members</StyledDescription>
 
-        <StyledInput name="name" placeholder="i.e team name" />
+        <StyledInput name="name" placeholder="i.e team name" autoFocus />
         <StyledCaption color="active">After creating a workspace, you can invite others to join.</StyledCaption>
 
         <Button type="submit">CREATE TEAM</Button>

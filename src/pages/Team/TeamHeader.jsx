@@ -24,13 +24,15 @@ const LeftContainer = styled.div`
 const StyledSection = styled.div`
   display: inline-grid;
   grid-auto-flow: column;
-  grid-column-gap: 20px;
+  grid-column-gap: 10px;
   font-family: quicksand;
 `
+
 const StyledMemberImages = styled.div`
   display: inline-flex;
   flex-direction: row-reverse;
 `
+
 const StyledMembersTitle = styled.span`
   font-size: 18px;
   font-weight: 700;
@@ -56,6 +58,7 @@ const StyledBtn = styled.button`
   align-items: center;
   grid-column-gap: 8.5px;
 `
+
 const StyledLabel = styled.span`
   color: #FFFFFF;
   font-weight: 500;
@@ -87,11 +90,6 @@ const TeamHeader = ({ toggleNewCollection }) => {
         <StyledSection>
           <StyledText>Group by:</StyledText>
           <StyledText color={'rgba(0,0,0,0.5)'}>Collections</StyledText>
-        </StyledSection>
-
-        <StyledSection>
-          <StyledText>Filter by:</StyledText>
-          <StyledText color={'rgba(0,0,0,0.5)'}>Last Updated</StyledText>
         </StyledSection>
       </LeftContainer>
 

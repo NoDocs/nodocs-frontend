@@ -50,6 +50,7 @@ const UserCard = ({ user }) => {
         <StyledPopup
           name="switch-company-popup"
           trigger={<StyledLabel color="active">{activeCompanyName}</StyledLabel>}
+          disabled={!availableCompanies.size}
         >
           {availableCompanies
             .map(company => (

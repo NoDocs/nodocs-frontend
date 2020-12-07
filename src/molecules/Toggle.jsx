@@ -11,6 +11,7 @@ const StyledTitleContainer = styled.div`
   grid-column-gap: 12px;
   cursor: pointer;
 `
+
 const StyledIconContainer = styled.div`
   transition: all .2s ease;
   transform: ${p => p.isOpen ? null : 'rotate(180deg)'};
@@ -24,23 +25,27 @@ const StyledTitle = styled.div`
   font-family: Quicksand;
 `
 
-const Toggle = ({ title, children }) => {
+const Toggle = ({ title, className, children }) => {
   const [isOpen, setOpen] = React.useState(true)
+
   return (
-    <div>
+    <div className={className}>
       <StyledTitleContainer onClick={() => setOpen(!isOpen)}>
         <StyledIconContainer isOpen={isOpen}>
-          <ArrowDownIcon fill="#000000" />
+          <ArrowDownIcon size={12} fill="#000000" />
         </StyledIconContainer>
+
         <StyledTitle>{title}</StyledTitle>
       </StyledTitleContainer>
-      {isOpen && <>{children}</>}
+
+      {isOpen && children}
     </div>
   )
 }
 
 Toggle.propTypes = {
   title: PropTypes.string.isRequired,
+  className: PropTypes.string,
   children: PropTypes.element.isRequired
 }
 

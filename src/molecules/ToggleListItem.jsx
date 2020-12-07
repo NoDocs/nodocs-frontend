@@ -25,7 +25,6 @@ const ToggleListItem = ({
   )
 }
 
-
 ToggleListItem.propTypes = {
   active: PropTypes.bool,
   showUnderline: PropTypes.bool,
