@@ -20,12 +20,11 @@ const membersReducer = (state = initialState, action) => {
 
     case teamActionTypes.ADD_MEMBERS: {
       const { members } = action.payload
-      const normalized = members.reduce(
-        (res, curr) => res.set(curr.member.id, fromJS(curr.member)),
+
+      return members.reduce(
+        (res, curr) => res.set(curr.id, fromJS(curr)),
         state
       )
-
-      return normalized
     }
 
     default:

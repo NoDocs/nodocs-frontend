@@ -8,7 +8,7 @@ import { notificationSelectors } from 'logic/notification'
 
 const StyledContainer = styled.div`
   position: fixed;
-  z-index: 1;
+  z-index: 101;
   bottom: 20px;
   right: 20px;
   display: flex;

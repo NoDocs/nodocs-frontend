@@ -57,13 +57,12 @@ const teamsReducer = (state = initialState, action) => {
 
     case teamActionTypes.ADD_MEMBERS: {
       const { members, teamId } = action.payload
-      const team = state.get(teamId)
-      members.reduce(
-        (res, curr) => res.set(curr.member.id, curr.member.id),
-        team.members
-      )
 
-      return state
+      return state.updateIn(
+        [teamId, 'members'],
+        teamMembers => teamMembers
+          .concat(new List(members.map(member => member.id)))
+      )
     }
 
     default:

@@ -6,9 +6,9 @@ import { List } from 'immutable'
 
 import * as memberService from 'services/member'
 import { teamSelectors, teamActions } from 'logic/team'
+import { notificationActions } from 'logic/notification'
 import withRenderPortal from 'molecules/withRenderPortal'
 
-import history from 'utils/history'
 import Label from 'atoms/Label'
 import Input from 'atoms/Input'
 import Button from 'atoms/Button'
@@ -62,8 +62,28 @@ const InviteTeamMembers = ({ closePortal }) => {
       .then(response => {
         const { data } = response
 
-        dispatch(teamActions.addMembers(data.members, activeTeamId))
-        closePortal()
+        if (data.failed.length) {
+          dispatch(notificationActions.notify({
+            type: 'error',
+            message: `Failed to add users ${data.failed.join(', ')}`,
+          }))
+        }
+
+        if (data.members.length) {
+          dispatch(notificationActions.notify({
+            type: 'success',
+            message: `Added users ${data
+              .members
+              .map(member => member.user.email)
+              .join(', ')}`,
+          }))
+
+          dispatch(teamActions.addMembers({
+            members: data.members.map(curr => curr.user),
+            teamId: activeTeamId
+          }))
+          closePortal()
+        }
       })
       .catch(error => console.log(error))
   }
