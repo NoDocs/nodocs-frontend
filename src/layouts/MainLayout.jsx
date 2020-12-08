@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import * as authServices from 'services/auth'
 import * as teamService from 'services/team'
 import * as companyServices from 'services/company'
-import { authActions } from 'logic/auth'
+import { authActions, authSelectors } from 'logic/auth'
 import { companySelectors } from 'logic/company'
 import { teamActions, teamSelectors } from 'logic/team'
 import { companyActions } from 'logic/company'
@@ -51,7 +51,9 @@ const GlobalStyles = createGlobalStyle`
 const MainLayout = ({ children }) => {
   const [navbarToggled, toggleNavbar] = React.useState(false)
 
-  const userId = useSelector(state => state.getIn(['auth', 'id']))
+  const userId = useSelector(authSelectors.selectCurrUserProperty('id'))
+  const userCompanyId = useSelector(authSelectors.selectCurrUserProperty('currentCompanyId'))
+  const userTeamId = useSelector(authSelectors.selectCurrUserProperty('currentTeamId'))
   const activeCompanyId = useSelector(companySelectors.selectActiveCompanyId)
   const activeTeamId = useSelector(teamSelectors.selectActiveTeamId)
   const isTeamLoaded = useSelector(teamSelectors.selectIsTeamLoaded)
@@ -92,11 +94,17 @@ const MainLayout = ({ children }) => {
     () => {
       if (!activeCompanyId) return
 
+      companyServices
+        .setCurrentCompany({ companyId: activeCompanyId })
+        .then(response => { dispatch(authActions.updateCurrentUserCompany(response.data.id)) })
+
       teamService
         .getTeams({ companyId: activeCompanyId })
         .then(response => {
           dispatch(teamActions.putTeams(response.data))
-          dispatch(teamActions.setActiveTeam(response.data[0].id))
+          dispatch(teamActions.setActiveTeam(activeCompanyId === userCompanyId
+            ? userTeamId
+            : response.data[0].id))
         })
     },
     [activeCompanyId]
@@ -109,6 +117,9 @@ const MainLayout = ({ children }) => {
       teamService
         .getTeam(activeTeamId)
         .then((response) => { dispatch(teamActions.initializeTeam(response.data)) })
+
+      teamService.setCurrentTeam({ teamId: activeTeamId })
+        .then(response => { dispatch(authActions.updateCurrentUserTeam(response.data.id)) })
     },
     [activeTeamId]
   )

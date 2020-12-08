@@ -12,7 +12,6 @@ import Register from './pages/Register'
 import Team from './pages/Team'
 import Document from './pages/Document'
 import CreateCompany from './pages/CreateCompany'
-import CreateTeam from './pages/CreateTeam'
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -41,7 +40,6 @@ const App = () => {
         />
 
         <ProtectedRoute path="/create-company" component={CreateCompany} />
-        <ProtectedRoute path="/create-team" component={CreateTeam} />
 
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />

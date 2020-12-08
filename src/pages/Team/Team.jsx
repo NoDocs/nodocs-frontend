@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux'
 
 import { teamSelectors } from 'logic/team'
 import { PortalContext } from 'contexts'
-import InviteTeamMembers from 'modals/InviteTeamMembers'
+import InviteTeamMembersModal from 'modals/InviteTeamMembersModal'
+import CreateTeamModal from 'modals/CreateTeamModal'
 import Shortcut from 'atoms/Shortcut'
 import TeamDescription from './TeamDescription'
 import TeamHeader from './TeamHeader'
@@ -31,7 +32,8 @@ const Team = () => {
         {collections.map(collectionId => <Collection key={collectionId} id={collectionId} />)}
       </StyledContentContainer>
 
-      <InviteTeamMembers />
+      <InviteTeamMembersModal />
+      <CreateTeamModal />
 
       <Shortcut
         name="open-team-invitation"

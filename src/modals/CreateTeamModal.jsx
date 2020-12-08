@@ -1,31 +1,17 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 
-import backgroundImage from 'assets/background-dark.svg'
-import closeIcon from 'assets/close.svg'
 import { notificationActions } from 'logic/notification'
 import { teamActions } from 'logic/team'
 import * as teamServices from 'services/team'
-import history from 'utils/history'
 import Label from 'atoms/Label'
 import Input from 'atoms/Input'
 import Button from 'atoms/Button'
 import Notifications from 'molecules/Notifications'
-import IconButton from 'atoms/IconButton'
-
-const StyledContainer = styled.div`
-  min-height: 100vh;
-  overflow: auto;
-  background-image: url(${backgroundImage});
-  background-size: cover;
-  background-position: center center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  position: relative;
-`
+import FullScreenModal from 'molecules/FullScreenModal'
+import withRenderPortal from 'molecules/withRenderPortal'
 
 const StyledForm = styled.form`
   display: flex;
@@ -56,18 +42,8 @@ const StyledCaption = styled(Label)`
   margin-bottom: 100px;
 `
 
-const StyledCloseIconButton = styled(IconButton)`
-  position: absolute;
-  top: 30px;
-  right: 30px;
-`
-
-const CreateTeam = () => {
+const CreateTeamModal = ({ closePortal }) => {
   const dispatch = useDispatch()
-
-  const close = () => {
-    history.push('/')
-  }
 
   const createTeam = (e) => {
     e.preventDefault()
@@ -83,17 +59,16 @@ const CreateTeam = () => {
       .createTeam({ name: name.value })
       .then(({ data }) => {
         dispatch(teamActions.createTeam(data))
-        history.push('/')
+        dispatch(teamActions.setActiveTeam(data.id))
+
+        teamServices.setCurrentTeam({ teamId: data.id }) // update currentTeam on authenticated user
+        closePortal()
       })
       .catch(error => console.log(error))
   }
 
   return (
-    <StyledContainer>
-      <StyledCloseIconButton onClick={close}>
-        <img src={closeIcon} alt="go back" />
-      </StyledCloseIconButton>
-
+    <FullScreenModal close={closePortal}>
       <StyledForm name="createTeamForm" onSubmit={createTeam}>
         <StyledTitle color="active">Create team</StyledTitle>
         <StyledDescription color="active">Send invitation links to team members</StyledDescription>
@@ -105,8 +80,12 @@ const CreateTeam = () => {
       </StyledForm>
 
       <Notifications />
-    </StyledContainer>
+    </FullScreenModal>
   )
 }
 
-export default CreateTeam
+CreateTeamModal.propTypes = {
+  closePortal: PropTypes.func,
+}
+
+export default withRenderPortal(() => 'create-team-modal')(CreateTeamModal)

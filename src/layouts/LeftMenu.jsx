@@ -8,6 +8,7 @@ import { teamActions, teamSelectors } from 'logic/team'
 import arrowLeftIcon from 'assets/arrow-left.svg'
 import MentionIcon from 'assets/components/MentionIcon'
 import homeIcon from 'assets/home.svg'
+import * as teamServices from 'services/team'
 import IconButton from 'atoms/IconButton'
 import ContentToggler from 'atoms/ContentToggler'
 import UserCard from 'molecules/UserCard'
@@ -54,6 +55,7 @@ const LeftMenu = ({ toggleNavbar }) => {
     if (activeTeamId === team.get('id')) return
 
     dispatch(teamActions.setActiveTeam(team.get('id')))
+    teamServices.setCurrentTeam({ teamId: team.get('id') }) // update currentTeam on authenticated user
   }
 
   return (

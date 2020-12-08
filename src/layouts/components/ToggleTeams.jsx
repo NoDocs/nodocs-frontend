@@ -2,10 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
+import { PortalContext } from 'contexts'
 import teamsIcon from 'assets/teams.svg'
 import AddIcon from 'assets/components/AddIcon'
 import ArrowDownIcon from 'assets/components/ArrowDownIcon'
-import history from 'utils/history'
 import Label from 'atoms/Label'
 import IconButton from 'atoms/IconButton'
 
@@ -16,15 +16,18 @@ const StyledContainer = styled.div`
   align-items: center;
   padding-left: 18px;
   height: 30px;
+  cursor: pointer;
 `
 
 const ToggleTeams = ({ onClick }) => {
+  const { openPortal } = React.useContext(PortalContext)
+
   return (
     <StyledContainer>
       <img src={teamsIcon} height={24} alt="teams" />
-      <Label color="active">Teams</Label>
+      <Label color="active" onClick={onClick}>Teams</Label>
 
-      <IconButton onClick={() => history.push('/create-team')}>
+      <IconButton onClick={() => openPortal({ name: 'create-team-modal' })}>
         <AddIcon size={12} fill="#fff" />
       </IconButton>
 

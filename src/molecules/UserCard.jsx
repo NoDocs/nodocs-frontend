@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 
+import { PortalContext } from 'contexts'
+import { companyActions, companySelectors } from 'logic/company'
+import { notificationActions } from 'logic/notification'
 import Avatar from 'atoms/Avatar'
 import Label from 'atoms/Label'
-import * as companyServices from 'services/company'
-import { companyActions, companySelectors } from 'logic/company'
 import ListItem from 'molecules/ListItem'
 import Popup from 'molecules/Popup'
 
@@ -31,13 +32,18 @@ const StyledLabel = styled(Label)`
 `
 
 const UserCard = ({ user }) => {
+  const { closePortal } = React.useContext(PortalContext)
   const activeCompanyName = useSelector(companySelectors.selectCompanyProperty('name'))
   const availableCompanies = useSelector(companySelectors.selectAvailableCompanies)
   const dispatch = useDispatch()
 
-  const switchCompany = companyId => () => {
-    dispatch(companyActions.setActiveCompany(companyId))
-    companyServices.setCurrentCompany({ companyId })
+  const switchCompany = company => () => {
+    dispatch(companyActions.setActiveCompany(company.get('id')))
+    dispatch(notificationActions.notify({
+      type: 'success',
+      message: `Switched to ${company.get('name')} company`
+    }))
+    closePortal('switch-company-popup')
   }
 
   return (
@@ -57,7 +63,7 @@ const UserCard = ({ user }) => {
               <ListItem
                 key={company.get('id')}
                 label={company.get('name')}
-                onClick={switchCompany(company.get('id'))}
+                onClick={switchCompany(company)}
                 color="black"
               />
             ))
