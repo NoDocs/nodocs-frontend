@@ -1,53 +1,93 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { createEditor } from 'slate'
+import { useSelector } from 'react-redux'
 import { withReact } from 'slate-react'
+import { createEditor } from 'slate'
+import { withIOCollaboration } from '@slate-collaborative/client'
 
-import * as documentServices from 'services/document'
-import { documentActions, documentSelectors } from 'logic/document'
-import withEditablePageVoid from '../plugins/withEditablePageVoid'
+import { authSelectors } from 'logic/auth'
+import {documentSelectors } from 'logic/document'
+
+import withEditableComponentVoid from '../plugins/withEditableComponentVoid'
+import withRectangleSelect from '../plugins/withRectangleSelect'
+import withDetectComponentInsert from '../plugins/withDetectComponentInsert'
+import withPagination from '../plugins/withPagination'
+import withNodeId from '../plugins/withNodeId'
 
 const useDocument = () => {
-  const [sectionState, updateSectionState] = React.useState()
+  const content = useSelector(documentSelectors.selectSectionProperty('content'))
+  const [editorState, updateEditorState] = React.useState(
+    content
+      ? JSON.parse(content)
+      : null
+  )
 
-  const params = useParams()
-  const dispatch = useDispatch()
-  const pages = useSelector(documentSelectors.selectSectionProperty('pages'))
+  const name = useSelector(authSelectors.selectCurrUserProperty('fullName'))
+  const color = useSelector(authSelectors.selectCurrUserProperty('color')) || '#ffffff'
+  const activeSectionId = useSelector(documentSelectors.selectSectionProperty('sectionId'))
 
   React.useEffect(
     () => {
-      const fetchDocument = async () => {
-        const docId = params.documentId
-        const { data: doc } = await documentServices.getDocument(docId)
+      const parsed = JSON.parse(content)
+      updateEditorState(parsed)
+    },
+    [content]
+  )
 
-        dispatch(documentActions.putDocuments({ documents: [doc] }))
-        dispatch(documentActions.initializeDocument(doc))
+  const editor = React.useMemo(
+    () => {
+      const withPlugins = withEditableComponentVoid(
+        withRectangleSelect(
+          withDetectComponentInsert(
+            withPagination(
+              withReact(
+                createEditor()
+              )
+            )
+          )
+        )
+      )
+
+      const origin = process.env.NODE_ENV === 'production'
+        ? process.env.BASE_API_URL
+        : 'http://localhost:8000'
+
+      const options = {
+        docId: `/${activeSectionId}`,
+        cursorData: {
+          name,
+          color,
+          alphaColor: color.slice(0, -2) + '0.2)'
+        },
+        url: `${origin}/${activeSectionId}`,
+        connectOpts: {
+          query: {
+            name,
+            token: 'id',
+            type: 'document',
+            slug: activeSectionId,
+          }
+        },
       }
 
-      fetchDocument()
+      return withNodeId(withIOCollaboration(withPlugins, options))
     },
     []
   )
 
   React.useEffect(
     () => {
-      if (!pages) return
-
-      const newSectionState = pages.map(pageId => ({
-        type: 'page',
-        id: pageId,
-        children: [{ text: '' }],
-      }))
-
-      updateSectionState(newSectionState)
+      editor.connect()
+      return editor.destroy
     },
-    [pages]
+    [editor]
   )
 
-  const editor = withEditablePageVoid(withReact(createEditor()))
-
-  return { pages, editor, sectionState, updateSectionState }
+  return {
+    editor,
+    editorState,
+    updateEditorState,
+  }
 }
 
 export default useDocument

@@ -1,16 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Editable, Slate } from 'slate-react'
-import { useCursor } from '@slate-collaborative/client'
-
-import Component from './Component'
-import Leaf from './components/Leaf'
-import usePage from './hooks/usePage'
 
 const StyledEditorContainer = styled.div`
   background: #FFFFFF;
-  height: 60px;
+  height: 54px;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
   border-radius: 10px;
   margin-top: 25px;
@@ -21,50 +15,24 @@ const StyledEditorContainer = styled.div`
   overflow: hidden;
 `
 
-const Page = ({ id, attributes }) => {
-  const { editor, editorState, onEditorChange } = usePage({ id })
-  const { decorate } = useCursor(editor)
-
-  const renderElement = React.useCallback(
-    ({ attributes, children, element }) => {
-      if (element.type === 'component') {
-        return <Component id={element.id} />
-      }
-
-      return (
-        <p data-node-id={element.id} {...attributes}>
-          {children}
-        </p>
-      )
-    },
-    []
-  )
-
-  const renderLeaf = React.useCallback(
-    (props) => <Leaf {...props} />,
-    []
-  )
-
+const Page = React.forwardRef(({ attributes, id, content }, ref) => {
   return (
     <StyledEditorContainer
-      contentEditable={false}
-      {...attributes}
+      ref={ref}
       data-page-id={id}
+      {...attributes}
     >
-      <Slate editor={editor} value={editorState} onChange={onEditorChange}>
-        <Editable
-          decorate={decorate}
-          renderElement={renderElement}
-          renderLeaf={renderLeaf}
-        />
-      </Slate>
+      {content}
     </StyledEditorContainer>
   )
-}
+})
 
+Page.displayName = 'Page'
 Page.propTypes = {
-  id: PropTypes.string,
   attributes: PropTypes.object,
+  id: PropTypes.string,
+  content: PropTypes.any,
 }
 
 export default Page
+

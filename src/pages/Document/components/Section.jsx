@@ -9,7 +9,7 @@ import Label from 'atoms/Label'
 import IconButton from 'atoms/IconButton'
 import HoverableContainer from 'atoms/HoverableContainer'
 import ContentToggler from 'atoms/ContentToggler'
-import PageMenuItem from './PageMenuItem'
+// import PageMenuItem from './PageMenuItem'
 import CreatePage from './CreatePage'
 
 const StyledSectionContainer = styled(HoverableContainer)`
@@ -50,7 +50,7 @@ const Section = ({ id }) => {
         </StyledSectionContainer>
       )}
     >
-      {pages.map(pageId => <PageMenuItem key={pageId} id={pageId} />)}
+      {/* {pages.map(pageId => <PageMenuItem key={pageId} id={pageId} />)} */}
       <CreatePage />
     </ContentToggler>
   )

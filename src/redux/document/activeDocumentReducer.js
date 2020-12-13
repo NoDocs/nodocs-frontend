@@ -13,12 +13,10 @@ const activeDocumentReducer = (state = initialState, action) => {
     case documentActionTypes.INITIALIZE_DOCUMENT: {
       const { document } = action.payload
       const { sections } = document
-      const { pages } = sections[0]
 
       return state
         .set('id', document.id)
         .set('activeSectionId', sections[0].id)
-        .set('activePageId', pages[0].pageId)
         .update('openedDocumentIds', ids => ids.push(document.id))
     }
 
