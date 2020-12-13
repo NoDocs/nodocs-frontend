@@ -8,14 +8,16 @@ const initialState = new Map()
 const collectionsReducer = (state = initialState, action) => {
   switch (action.type) {
     case teamActionTypes.INITIALIZE_TEAM: {
-      return action
-        .payload
-        .team
-        .collections
-        .reduce(
-          (res, curr) => res.set(curr.id, fromJS({ ...curr, documents: new List() })),
-          new Map()
-        )
+      const { team: { collections, otherCollections } } = action.payload
+      const stateCollections = collections.reduce(
+        (res, curr) => res.set(curr.id, fromJS({ ...curr, documents: new List() })),
+        new Map()
+      )
+      const newState = otherCollections.reduce(
+        (res, curr) => res.set(curr.id, fromJS({ ...curr, documents: new List() })),
+        stateCollections
+      )
+      return newState
     }
 
     case documentActionTypes.PUT_DOCUMENTS: {

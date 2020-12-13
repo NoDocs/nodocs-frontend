@@ -114,9 +114,11 @@ const MainLayout = ({ children }) => {
     () => {
       if (!activeTeamId) return
 
+      const body = { teamId: activeTeamId }
       teamService
-        .getTeam(activeTeamId)
+        .getTeamsWithGrouped(body)
         .then((response) => { dispatch(teamActions.initializeTeam(response.data)) })
+        .catch(err => console.log('err', err))
 
       teamService.setCurrentTeam({ teamId: activeTeamId })
         .then(response => { dispatch(authActions.updateCurrentUserTeam(response.data.id)) })
