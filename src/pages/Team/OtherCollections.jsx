@@ -6,7 +6,7 @@ import { teamSelectors } from 'logic/team'
 import Toggle from 'molecules/Toggle'
 import Collection from './Collection'
 
-const InnerContainer = styled.div`
+const StyledInnerContainer = styled.div`
   margin: 20px 0px 0px 20px;
 `
 
@@ -14,10 +14,10 @@ const OtherCollections = () => {
   const otherCollections = useSelector(teamSelectors.selectTeamProperty('otherCollections'))
 
   return (
-    <Toggle title="Other Collections">
-      <InnerContainer>
+    <Toggle defaultOpen={false} title="Other Collections">
+      <StyledInnerContainer>
         {otherCollections.map(collectionId => <Collection key={collectionId} id={collectionId} />)}
-      </InnerContainer>
+      </StyledInnerContainer>
     </Toggle>
   )
 }

@@ -25,8 +25,8 @@ const StyledTitle = styled.div`
   font-family: Quicksand;
 `
 
-const Toggle = ({ title, className, children }) => {
-  const [isOpen, setOpen] = React.useState(true)
+const Toggle = ({ title, className, defaultOpen = true, children }) => {
+  const [isOpen, setOpen] = React.useState(defaultOpen)
 
   return (
     <div className={className}>
@@ -46,7 +46,8 @@ const Toggle = ({ title, className, children }) => {
 Toggle.propTypes = {
   title: PropTypes.string.isRequired,
   className: PropTypes.string,
-  children: PropTypes.element.isRequired
+  children: PropTypes.element.isRequired,
+  defaultOpen: PropTypes.bool,
 }
 
 export default Toggle

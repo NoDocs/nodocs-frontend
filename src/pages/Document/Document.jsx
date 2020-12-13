@@ -26,8 +26,6 @@ const Document = () => {
     []
   )
 
-  console.log(activeSectionId)
-
   return activeSectionId
     ? <SectionEditor />
     : <p>Loading Document...</p>
