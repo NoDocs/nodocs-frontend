@@ -11,6 +11,7 @@ import TeamDescription from './TeamDescription'
 import TeamHeader from './TeamHeader'
 import Collection from './Collection'
 import CreateCollection from './CreateCollection'
+import OtherCollections from './OtherCollections'
 
 const StyledContentContainer = styled.div`
   margin: 0px 130px;
@@ -30,6 +31,7 @@ const Team = () => {
         {newCollection && <CreateCollection onDone={() => toggleNewCollection(false)} />}
 
         {collections.map(collectionId => <Collection key={collectionId} id={collectionId} />)}
+        <OtherCollections />
       </StyledContentContainer>
 
       <InviteTeamMembersModal />
