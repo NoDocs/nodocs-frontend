@@ -24,6 +24,7 @@ const teamsReducer = (state = initialState, action) => {
         team.id,
         currTeam => currTeam
           .set('collections', new List(team.collections.map(collection => collection.id)))
+          .set('otherCollections', new List(team.otherCollections.map(collection => collection.id)))
           .set('members', new List(team.members.map(member => member.user.id)))
       )
     }
@@ -52,6 +53,7 @@ const teamsReducer = (state = initialState, action) => {
         currTeam
           .delete('members')
           .delete('collections')
+          .delete('otherCollections')
       )
     }
 
