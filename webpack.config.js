@@ -8,6 +8,7 @@ const config = dotenv.config({ path: path.resolve(__dirname, `env/${process.env.
 const isLocal = process.env.APP_ENV === 'local'
 
 module.exports = {
+  target: 'node',
   entry: ['babel-polyfill', './index.js'],
   output: {
     path: path.resolve(__dirname, 'dist'),

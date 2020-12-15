@@ -4,6 +4,7 @@ import { Slate, Editable } from 'slate-react'
 import { useCursor } from '@slate-collaborative/client'
 
 import useDocument from './hooks/useDocument'
+// import useCollaborative from './hooks/useCollaborative'
 import DocumentPanel from './DocumentPanel'
 import Page from './Page'
 import DocumentLeftPanel from './DocumentLeftPanel'
@@ -21,7 +22,7 @@ const StyledDocumentContainer = styled.div`
 `
 
 const SectionEditor = () => {
-  const { editor, editorState, updateEditorState } = useDocument()
+  const { editor, editorState, onEditorStateChange } = useDocument()
   const { decorate } = useCursor(editor)
 
   const renderElement = React.useCallback(
@@ -53,7 +54,7 @@ const SectionEditor = () => {
       <Slate
         editor={editor}
         value={editorState}
-        onChange={updateEditorState}
+        onChange={onEditorStateChange}
       >
         <DocumentPanel />
         <DocumentLeftPanel />
@@ -68,4 +69,4 @@ const SectionEditor = () => {
   )
 }
 
-export default SectionEditor
+export default React.memo(SectionEditor)
