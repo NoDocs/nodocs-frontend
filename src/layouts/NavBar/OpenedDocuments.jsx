@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 
 import { documentSelectors } from 'logic/document'
+import history from 'utils/history'
 import Label from 'atoms/Label'
 import HoverableContainer from 'atoms/HoverableContainer'
 
@@ -19,7 +20,10 @@ const OpenedDocuments = () => {
   return (
     <StyledContainer>
       {openedDocumentIds.map(document => (
-        <HoverableContainer key={document.get('id')}>
+        <HoverableContainer
+          key={document.get('id')}
+          onClick={() => history.push(`/d/${document.get('id')}`)}
+        >
           <Label>{document.get('title')}</Label>
         </HoverableContainer>
       ))}

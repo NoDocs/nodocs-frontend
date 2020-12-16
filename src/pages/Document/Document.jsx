@@ -22,8 +22,12 @@ const Document = () => {
       }
 
       fetchDocument()
+
+      // return () => {
+      //   documentActions
+      // }
     },
-    []
+    [params.documentId]
   )
 
   return activeSectionId
