@@ -8,7 +8,7 @@ import Websocket from 'reconnecting-websocket'
 import * as sharedb from 'sharedb/lib/client'
 import * as jsondiff from 'json0-ot-diff'
 
-const ws_client = new Websocket('ws://localhost:8001')
+const ws_client = new Websocket('ws://localhost:8000')
 const connection = new sharedb.Connection(ws_client)
 
 const doc = connection.get('documents', '55111004-4cba-44b0-96ea-45801231a5b7')
