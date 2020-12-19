@@ -4,15 +4,15 @@ import { withReact } from 'slate-react'
 import { createEditor } from 'slate'
 import Websocket from 'reconnecting-websocket'
 import flow from 'lodash/flow'
+import { withPaging } from 'slate-paged'
 import * as sharedb from 'sharedb/lib/client'
 import * as jsondiff from 'json0-ot-diff'
 import shortid from 'shortid'
 
-const ws_client = new Websocket('ws://localhost:8000')
+const ws_client = new Websocket('ws://localhost:8000/doc/cbb063a5-2b17-4ba0-83d4-ac4243e16670') // sectionId
 const connection = new sharedb.Connection(ws_client)
 
-const doc = connection.get('documents', '55111004-4cba-44b0-96ea-45801231a5b7')
-
+const doc = connection.get('sections', 'cbb063a5-2b17-4ba0-83d4-ac4243e16670') // sectionId
 
 import { authSelectors } from 'logic/auth'
 import {documentSelectors } from 'logic/document'
@@ -20,7 +20,6 @@ import {documentSelectors } from 'logic/document'
 import withEditableComponentVoid from '../plugins/withEditableComponentVoid'
 import withRectangleSelect from '../plugins/withRectangleSelect'
 import withDetectComponentInsert from '../plugins/withDetectComponentInsert'
-import withPagination from '../plugins/withPagination'
 import withNodeId from '../plugins/withNodeId'
 import { withHistory } from 'slate-history'
 
@@ -46,7 +45,7 @@ const useDocument = () => {
         withEditableComponentVoid,
         withRectangleSelect,
         withDetectComponentInsert,
-        withPagination,
+        withPaging,
         withNodeId,
         withHistory,
         withReact,
@@ -58,17 +57,16 @@ const useDocument = () => {
   const sendOp = (...args) => {
     console.log("🚀 ~ file: App.js ~ line 56 ~ sendOp ~ args", args)
     return new Promise((resolve, reject) => {
-      doc.submitOp(...args, () => {
-        resolve()
-      })
+      doc.submitOp(...args, resolve)
     })
   }
 
   React.useEffect(() => {
     doc.subscribe(() => {
       syncMutex.current = true
-      updateEditorState(doc.data.children)
+      console.log(doc)
       console.log("🚀 ~ file: useCollaborative.js ~ line 45 ~ doc.subscribe ~ doc.data.children", doc.data.children)
+      updateEditorState(doc.data.children)
       syncMutex.current = false
     })
 
@@ -79,7 +77,6 @@ const useDocument = () => {
       updateEditorState(doc.data.children)
       syncMutex.current = false
     })
-
   }, [])
 
   const onEditorStateChange = (newValue) => {
