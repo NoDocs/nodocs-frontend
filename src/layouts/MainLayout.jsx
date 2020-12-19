@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { createGlobalStyle } from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
+import { useLocation } from 'react-router-dom'
+import queryString from 'query-string'
 
 import * as authServices from 'services/auth'
 import * as teamService from 'services/team'
@@ -50,6 +52,7 @@ const GlobalStyles = createGlobalStyle`
 
 const MainLayout = ({ children }) => {
   const [navbarToggled, toggleNavbar] = React.useState(false)
+  const { search } = useLocation()
 
   const userId = useSelector(authSelectors.selectCurrUserProperty('id'))
   const userCompanyId = useSelector(authSelectors.selectCurrUserProperty('currentCompanyId'))
@@ -58,6 +61,16 @@ const MainLayout = ({ children }) => {
   const activeTeamId = useSelector(teamSelectors.selectActiveTeamId)
   const isTeamLoaded = useSelector(teamSelectors.selectIsTeamLoaded)
   const dispatch = useDispatch()
+
+
+  React.useEffect(
+    () => {
+      const { companyId, teamId } = queryString.parse(search)
+      if (companyId) { dispatch(companyActions.setActiveCompany(companyId)) }
+      if (teamId) { dispatch(teamActions.setActiveTeam(teamId)) }
+    },
+    [search]
+  )
 
   React.useEffect(
     () => {
