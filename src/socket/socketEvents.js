@@ -3,11 +3,13 @@ const disconnect = 'disconnect'
 const ListenComponent = 'listen-component'
 const ComponentUpdated = 'component-updated'
 const UpdateComponent = 'update-component'
+const TeamCreated = 'team-created'
 
 export default {
   connection,
   disconnect,
   ListenComponent,
   ComponentUpdated,
-  UpdateComponent
+  UpdateComponent,
+  TeamCreated
 }

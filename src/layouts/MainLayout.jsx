@@ -14,6 +14,8 @@ import { teamActions, teamSelectors } from 'logic/team'
 import { companyActions } from 'logic/company'
 import history from 'utils/history'
 
+import Socket from '../socket'
+
 import NavBar from './NavBar'
 import LeftMenu from './LeftMenu'
 
@@ -138,6 +140,11 @@ const MainLayout = ({ children }) => {
     },
     [activeTeamId]
   )
+
+  React.useEffect(() => {
+    if (!activeCompanyId) return
+    Socket.connect(activeCompanyId)
+  }, [activeCompanyId])
 
   if (!userId) return <div>Fetching user...</div>
 

@@ -2,8 +2,6 @@ import React from 'react'
 import { createGlobalStyle } from 'styled-components'
 import { Switch, Route } from 'react-router-dom'
 
-import Socket from './socket'
-
 import MainLayout from './layouts/MainLayout'
 import ProtectedRoute from './atoms/ProtectedRoute'
 import Notifications from './molecules/Notifications'
@@ -21,7 +19,6 @@ const GlobalStyles = createGlobalStyle`
 `
 
 const App = () => {
-  React.useEffect(() => { Socket.connect() }, [])
 
   return (
     <React.Fragment>
