@@ -10,6 +10,7 @@ import Register from './pages/Register'
 import Team from './pages/Team'
 import Document from './pages/Document'
 import CreateCompany from './pages/CreateCompany'
+import NotFoundTeam from './pages/NotFoundTeam'
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -34,6 +35,12 @@ const App = () => {
           path="/d/:documentId"
           Layout={MainLayout}
           component={Document}
+        />
+        <ProtectedRoute
+          path="/team/404"
+          Layout={MainLayout}
+          component={NotFoundTeam}
+          isTeamError
         />
 
         <ProtectedRoute path="/create-company" component={CreateCompany} />

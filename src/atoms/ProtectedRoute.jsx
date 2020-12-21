@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Route, Redirect } from 'react-router-dom'
 
-const ProtectedRoute = ({ component: RouteComponent, Layout, ...rest }) => (
+const ProtectedRoute = ({ component: RouteComponent, Layout, isTeamError, ...rest }) => (
   <Route
     {...rest}
     render={({ location }) => {
@@ -13,7 +13,7 @@ const ProtectedRoute = ({ component: RouteComponent, Layout, ...rest }) => (
       if (!Layout) return <RouteComponent />
 
       return (
-        <Layout>
+        <Layout isTeamError={isTeamError}>
           <RouteComponent />
         </Layout>
       )
@@ -24,6 +24,7 @@ const ProtectedRoute = ({ component: RouteComponent, Layout, ...rest }) => (
 ProtectedRoute.propTypes = {
   component: PropTypes.any,
   Layout: PropTypes.any,
+  isTeamError: PropTypes.bool
 }
 
 export default ProtectedRoute

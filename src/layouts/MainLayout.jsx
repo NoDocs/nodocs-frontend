@@ -52,9 +52,9 @@ const GlobalStyles = createGlobalStyle`
   }
 `
 
-const MainLayout = ({ children }) => {
+const MainLayout = ({ children, isTeamError }) => {
   const [navbarToggled, toggleNavbar] = React.useState(false)
-  const { search } = useLocation()
+  const { search, pathname } = useLocation()
 
   const userId = useSelector(authSelectors.selectCurrUserProperty('id'))
   const userCompanyId = useSelector(authSelectors.selectCurrUserProperty('currentCompanyId'))
@@ -132,8 +132,17 @@ const MainLayout = ({ children }) => {
       const body = { teamId: activeTeamId }
       teamService
         .getTeamsWithGrouped(body)
-        .then((response) => { dispatch(teamActions.initializeTeam(response.data)) })
-        .catch(err => console.log('err', err))
+        .then((response) => {
+          if (pathname === '/team/404') {
+            history.push('/')
+          }
+          dispatch(teamActions.initializeTeam(response.data))
+        })
+        .catch(err => {
+          if (err.message === 'NotAuthorized') {
+            history.push('team/404')
+          }
+        })
 
       teamService.setCurrentTeam({ teamId: activeTeamId })
         .then(response => { dispatch(authActions.updateCurrentUserTeam(response.data.id)) })
@@ -158,7 +167,7 @@ const MainLayout = ({ children }) => {
           navbarToggled={navbarToggled}
         />
 
-        {isTeamLoaded && <div>{children}</div>}
+        {(isTeamError || isTeamLoaded) && <div>{children}</div>}
       </StyledContainer>
 
       <GlobalStyles />
@@ -168,6 +177,7 @@ const MainLayout = ({ children }) => {
 
 MainLayout.propTypes = {
   children: PropTypes.any,
+  isTeamError: PropTypes.bool
 }
 
 export default MainLayout
