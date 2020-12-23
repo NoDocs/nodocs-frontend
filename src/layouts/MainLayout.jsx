@@ -26,7 +26,7 @@ const StyledContainer = styled.div`
   height: 100vh;
 `
 
-const MainLayout = ({ children }) => {
+const MainLayout = ({ children, isTeamError }) => {
   const [navbarToggled, toggleNavbar] = React.useState(false)
 
   const { userId, isTeamLoaded } = usePageLoadFlow()
@@ -45,7 +45,7 @@ const MainLayout = ({ children }) => {
           navbarToggled={navbarToggled}
         />
 
-        {isTeamLoaded && <div>{children}</div>}
+        {(isTeamError || isTeamLoaded) && <div>{children}</div>}
       </StyledContainer>
 
       <GlobalStyles />
@@ -55,6 +55,7 @@ const MainLayout = ({ children }) => {
 
 MainLayout.propTypes = {
   children: PropTypes.any,
+  isTeamError: PropTypes.bool
 }
 
 export default MainLayout

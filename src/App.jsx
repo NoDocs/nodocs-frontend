@@ -2,8 +2,6 @@ import React from 'react'
 import { createGlobalStyle } from 'styled-components'
 import { Switch, Route } from 'react-router-dom'
 
-import Socket from './socket'
-
 import MainLayout from './layouts/MainLayout'
 import ProtectedRoute from './atoms/ProtectedRoute'
 import Notifications from './molecules/Notifications'
@@ -12,6 +10,7 @@ import Register from './pages/Register'
 import Team from './pages/Team'
 import Document from './pages/Document'
 import CreateCompany from './pages/CreateCompany'
+import NotFoundTeam from './pages/NotFoundTeam'
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -21,7 +20,6 @@ const GlobalStyles = createGlobalStyle`
 `
 
 const App = () => {
-  React.useEffect(() => { Socket.connect() }, [])
 
   return (
     <React.Fragment>
@@ -37,6 +35,12 @@ const App = () => {
           path="/d/:documentId"
           Layout={MainLayout}
           component={Document}
+        />
+        <ProtectedRoute
+          path="/team/404"
+          Layout={MainLayout}
+          component={NotFoundTeam}
+          isTeamError
         />
 
         <ProtectedRoute path="/create-company" component={CreateCompany} />

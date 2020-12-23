@@ -2,13 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 
 import { teamActions, teamSelectors } from 'logic/team'
+import history from 'utils/history'
 
 import arrowLeftIcon from 'assets/arrow-left.svg'
 import MentionIcon from 'assets/components/MentionIcon'
 import homeIcon from 'assets/home.svg'
-import * as teamServices from 'services/team'
 import IconButton from 'atoms/IconButton'
 import ContentToggler from 'atoms/ContentToggler'
 import UserCard from 'molecules/UserCard'
@@ -46,6 +47,7 @@ const StyledTeamListContainer = styled.div`
 `
 
 const LeftMenu = ({ toggleNavbar }) => {
+  const { pathname } = useLocation()
   const dispatch = useDispatch()
   const activeUser = useSelector(state => state.get('auth'))
   const activeTeamId = useSelector(teamSelectors.selectActiveTeamId)
@@ -54,8 +56,10 @@ const LeftMenu = ({ toggleNavbar }) => {
   const chooseTeam = (team) => () => {
     if (activeTeamId === team.get('id')) return
 
+    if (pathname === '/team/404') {
+      history.push('/')
+    }
     dispatch(teamActions.setActiveTeam(team.get('id')))
-    teamServices.setCurrentTeam({ teamId: team.get('id') }) // update currentTeam on authenticated user
   }
 
   return (
