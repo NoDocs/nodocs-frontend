@@ -1,10 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { teamSelectors } from 'logic/team'
-import * as local from 'utils/local'
+import { teamSelectors, teamActions } from 'logic/team'
+import { setTeamGroupBy } from 'utils/local'
+import { PortalContext } from 'contexts'
 import Avatar from 'atoms/Avatar'
+import Popup from 'molecules/Popup'
+import ListItem from 'molecules/ListItem'
 
 const StyledContainer = styled.div`
   display: grid;
@@ -49,11 +52,21 @@ const StyledText = styled.span`
   color: ${p => p.color ? p.color : '#000000'};
   font-size: 16px;
   font-weight: 500;
+  cursor: pointer;
 `
 
 const TeamHeader = () => {
+  const { closePortal } = React.useContext(PortalContext)
   const members = useSelector(teamSelectors.selectTeamProperty('members'))
-  const teamId = useSelector(teamSelectors.selectTeamProperty('id'))
+  const activeTeamId = useSelector(teamSelectors.selectActiveTeamId)
+  const groupBy = useSelector(teamSelectors.selectActiveTeamGroupBy)
+  const dispatch = useDispatch()
+
+  const changeGroupBy = (value) => () => {
+    dispatch(teamActions.changeGroupBy(value))
+    setTeamGroupBy(activeTeamId, value)
+    closePortal('switch-group-by-popup')
+  }
 
   return (
     <StyledContainer>
@@ -70,7 +83,27 @@ const TeamHeader = () => {
 
         <StyledSection>
           <StyledText>Group by:</StyledText>
-          <StyledText color={'rgba(0,0,0,0.5)'}>{local.getTeamGroupBy(teamId)}</StyledText>
+
+          <Popup
+            name="switch-group-by-popup"
+            fullWidth={false}
+            direction="RIGHT"
+            trigger={<StyledText color={'rgba(0,0,0,0.5)'}>{groupBy}</StyledText>}
+          >
+            <ListItem
+              active={groupBy === 'members'}
+              label="Members"
+              onClick={changeGroupBy('members')}
+              color="black"
+            />
+
+            <ListItem
+              active={groupBy === 'tags'}
+              label="Tags"
+              onClick={changeGroupBy('tags')}
+              color="black"
+            />
+          </Popup>
         </StyledSection>
       </LeftContainer>
     </StyledContainer>

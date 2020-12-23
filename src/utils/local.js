@@ -1,4 +1,4 @@
-const setTeamGroupBy = (teamId, newGroupBy) => {
+export const setTeamGroupBy = (teamId, newGroupBy) => {
   const stringified = localStorage.getItem('groupBys')
   const parsed = stringified
     ? JSON.parse(stringified)

@@ -10,6 +10,11 @@ export const selectActiveTeamId = createSelector(
   domain => domain.get('id')
 )
 
+export const selectActiveTeamGroupBy = createSelector(
+  activeTeamDomain,
+  domain => domain.get('groupBy')
+)
+
 export const selectIsTeamLoaded = createSelector(
   [selectActiveTeamId, teamsDomain],
   (activeTeamId, teams) => Boolean(teams.getIn([activeTeamId, 'members']))

@@ -29,7 +29,7 @@ const useTeam = () => {
             // Do something here
           }
 
-          dispatch(teamActions.initializeTeam({ ...response.data, groups }))
+          dispatch(teamActions.initializeTeam({ ...response.data, groupBy, groups }))
         })
 
       teamServices.setCurrentTeam({ teamId: activeTeamId })

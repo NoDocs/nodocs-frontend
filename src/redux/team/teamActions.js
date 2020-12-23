@@ -32,3 +32,8 @@ export const addMembers = ({ members, teamId }) => ({
   type: teamActionTypes.ADD_MEMBERS,
   payload: { members, teamId }
 })
+
+export const changeGroupBy = groupBy => ({
+  type: teamActionTypes.CHANGE_GROUP_BY,
+  payload: { groupBy }
+})
