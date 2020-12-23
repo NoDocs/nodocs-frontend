@@ -9,10 +9,14 @@ import * as sharedb from 'sharedb/lib/client'
 import * as jsondiff from 'json0-ot-diff'
 import shortid from 'shortid'
 
-const ws_client = new Websocket('ws://localhost:8000/doc/cbb063a5-2b17-4ba0-83d4-ac4243e16670') // sectionId
+const token = localStorage.getItem('token')
+const parsedToken = token.startsWith('Bearer') ? token.slice(7) : token
+
+const ws_client = new Websocket('ws://localhost:8000/doc/c19e60d9-222a-49f9-bb8e-169c2a7dcd8f', parsedToken) // sectionId
+
 const connection = new sharedb.Connection(ws_client)
 
-const doc = connection.get('sections', 'cbb063a5-2b17-4ba0-83d4-ac4243e16670') // sectionId
+const doc = connection.get('sections', 'c19e60d9-222a-49f9-bb8e-169c2a7dcd8f') // sectionId
 
 import { authSelectors } from 'logic/auth'
 import {documentSelectors } from 'logic/document'
