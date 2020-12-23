@@ -4,6 +4,7 @@ const ListenComponent = 'listen-component'
 const ComponentUpdated = 'component-updated'
 const UpdateComponent = 'update-component'
 const TeamCreated = 'team-created'
+const TeamMemberAdded = 'team-member-added'
 
 export default {
   connection,
@@ -11,5 +12,6 @@ export default {
   ListenComponent,
   ComponentUpdated,
   UpdateComponent,
-  TeamCreated
+  TeamCreated,
+  TeamMemberAdded
 }

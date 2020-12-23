@@ -28,8 +28,12 @@ class Socket {
         resolve()
       })
 
-      socket.on('team-created', (data) => {
+      socket.on(socketEvents.TeamCreated, (data) => {
         handleSocketEvents(socketEvents.TeamCreated, data)
+      })
+
+      socket.on(socketEvents.TeamMemberAdded, (data) => {
+        handleSocketEvents(socketEvents.TeamMemberAdded, data)
       })
 
       socket.on('error', () => {

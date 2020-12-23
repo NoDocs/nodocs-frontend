@@ -18,8 +18,11 @@ const handleSocketEvents = (event, data) => {
       if (isSameCompany) {
         store.dispatch(teamActions.createTeam(data))
       }
+      break
+    case socketEvents.TeamMemberAdded:
       store.dispatch(notificationActions.notify({ type: 'notification', message: `You have been added to the team: ${data.name}` }))
       break
+
   }
 }
 
