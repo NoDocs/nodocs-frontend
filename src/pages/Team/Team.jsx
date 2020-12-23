@@ -13,7 +13,7 @@ import TeamHeader from './TeamHeader'
 import Group from './Group'
 
 const StyledContentContainer = styled.div`
-  margin: 0px 130px;
+  margin: 0px 50px;
 `
 
 const Team = () => {
