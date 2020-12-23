@@ -16,7 +16,7 @@ class Socket {
       if (Socket.socket && !force) return
 
       const token = localStorage.getItem('token')
-      const socket = io(`${process.env.BASE_API_URL}/company-${id}`, {
+      const socket = io(`${process.env.BASE_API_URL}/`, {
         reconnectionDelayMax: 10000,
         transports: ['websocket'],
         secure: true,
