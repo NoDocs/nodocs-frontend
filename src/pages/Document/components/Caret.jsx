@@ -22,7 +22,7 @@ const caretStyleBase = {
   background: 'palevioletred'
 }
 
-const Caret = ({ color, isForward, name }) => {
+const Caret = ({ color = '#000', isForward, name }) => {
   const cursorStyles = {
     ...cursorStyleBase,
     background: color,

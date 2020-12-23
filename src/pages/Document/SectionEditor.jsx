@@ -22,8 +22,7 @@ const StyledDocumentContainer = styled.div`
 `
 
 const SectionEditor = () => {
-  const { editor, editorState, onEditorStateChange } = useDocument()
-  const { decorate } = useCursor(editor)
+  const { editor, editorState, onEditorStateChange, decorate } = useDocument()
 
   const renderElement = React.useCallback(
     ({ attributes, element, children }) => {
