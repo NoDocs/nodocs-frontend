@@ -1,11 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 
 import { teamSelectors } from 'logic/team'
+import * as local from 'utils/local'
 import Avatar from 'atoms/Avatar'
-import addCollectionIcon from 'assets/add-collection.svg'
 
 const StyledContainer = styled.div`
   display: grid;
@@ -23,6 +22,7 @@ const LeftContainer = styled.div`
 
 const StyledSection = styled.div`
   display: inline-grid;
+  align-items: center;
   grid-auto-flow: column;
   grid-column-gap: 10px;
   font-family: quicksand;
@@ -45,34 +45,15 @@ const StyledAvatar = styled(Avatar)`
   }
 `
 
-const StyledBtn = styled.button`
-  border: none;
-  background-color: #000000;
-  padding: 9px 13px;
-  border-radius: 80px;
-  cursor: pointer;
-  font-family: quicksand;
-
-  display: grid;
-  grid-auto-flow: column;
-  align-items: center;
-  grid-column-gap: 8.5px;
-`
-
-const StyledLabel = styled.span`
-  color: #FFFFFF;
-  font-weight: 500;
-  font-size: 14px;
-`
-
 const StyledText = styled.span`
   color: ${p => p.color ? p.color : '#000000'};
   font-size: 16px;
   font-weight: 500;
 `
 
-const TeamHeader = ({ toggleNewCollection }) => {
+const TeamHeader = () => {
   const members = useSelector(teamSelectors.selectTeamProperty('members'))
+  const teamId = useSelector(teamSelectors.selectTeamProperty('id'))
 
   return (
     <StyledContainer>
@@ -89,19 +70,11 @@ const TeamHeader = ({ toggleNewCollection }) => {
 
         <StyledSection>
           <StyledText>Group by:</StyledText>
-          <StyledText color={'rgba(0,0,0,0.5)'}>Collections</StyledText>
+          <StyledText color={'rgba(0,0,0,0.5)'}>{local.getTeamGroupBy(teamId)}</StyledText>
         </StyledSection>
       </LeftContainer>
-
-      <StyledBtn onClick={() => toggleNewCollection(true)}>
-        <img src={addCollectionIcon} />
-        <StyledLabel>Add Collection</StyledLabel>
-      </StyledBtn>
     </StyledContainer>
   )
 }
 
-TeamHeader.propTypes = {
-  toggleNewCollection: PropTypes.func
-}
 export default TeamHeader
