@@ -24,8 +24,6 @@ const Group = ({ group }) => {
 
   React.useEffect(
     () => {
-      console.log('fetch documents !!')
-
       documentServices
         .getDocuments({ userId: group.get('id') })
         .then(response => {
