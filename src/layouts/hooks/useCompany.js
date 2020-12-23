@@ -6,6 +6,7 @@ import * as teamServices from 'services/team'
 import { companySelectors } from 'logic/company'
 import { teamActions } from 'logic/team'
 import { authSelectors, authActions } from 'logic/auth'
+import Socket from '../../socket'
 
 const useCompany = () => {
   const userCompanyId = useSelector(authSelectors.selectCurrUserProperty('currentCompanyId'))
@@ -30,6 +31,8 @@ const useCompany = () => {
             ? userTeamId
             : response.data[0].id))
         })
+
+      Socket.connect(activeCompanyId)
     },
     [activeCompanyId]
   )

@@ -4,6 +4,7 @@ import { fromJS, OrderedMap } from 'immutable'
 
 import * as teamServices from 'services/team'
 import * as local from 'utils/local'
+import history from 'utils/history'
 import { authActions } from 'logic/auth'
 import { teamSelectors, teamActions } from 'logic/team'
 
@@ -30,6 +31,11 @@ const useTeam = () => {
           }
 
           dispatch(teamActions.initializeTeam({ ...response.data, groupBy, groups }))
+        })
+        .catch(err => {
+          if (err.message === 'NotAuthorized') {
+            history.push('team/404')
+          }
         })
 
       teamServices.setCurrentTeam({ teamId: activeTeamId })

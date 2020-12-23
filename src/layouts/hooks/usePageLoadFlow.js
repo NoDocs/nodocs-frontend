@@ -1,13 +1,15 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 
 import * as authServices from 'services/auth'
 import * as companyServices from 'services/company'
 import { authActions, authSelectors } from 'logic/auth'
 import { companyActions } from 'logic/company'
-import { teamSelectors } from 'logic/team'
+import { teamSelectors, teamActions } from 'logic/team'
 
 const usePageLoadFlow = () => {
+  const { search } = useLocation()
   const dispatch = useDispatch()
   const userId = useSelector(authSelectors.selectCurrUserProperty('id'))
   const isTeamLoaded = useSelector(teamSelectors.selectIsTeamLoaded)
@@ -41,6 +43,19 @@ const usePageLoadFlow = () => {
         .then(response => { dispatch(companyActions.setCompanies(response.data)) })
     },
     []
+  )
+
+  React.useEffect(
+    () => {
+      const query = new URLSearchParams(search)
+
+      const teamId = query.get('teamId')
+      const companyId = query.get('companyId')
+
+      if (companyId) { dispatch(companyActions.setActiveCompany(companyId)) }
+      if (teamId) { dispatch(teamActions.setActiveTeam(teamId)) }
+    },
+    [search]
   )
 
   return {
