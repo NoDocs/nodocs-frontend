@@ -1,21 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { createGlobalStyle } from 'styled-components'
-import { useSelector, useDispatch } from 'react-redux'
-import { fromJS, OrderedMap } from 'immutable'
+import styled from 'styled-components'
 
-import * as authServices from 'services/auth'
-import * as teamService from 'services/team'
-import * as companyServices from 'services/company'
-import { authActions, authSelectors } from 'logic/auth'
-import { companySelectors } from 'logic/company'
-import { teamActions, teamSelectors } from 'logic/team'
-import { companyActions } from 'logic/company'
-import history from 'utils/history'
-import * as local from 'utils/local'
-
+import GlobalStyles from './GlobalStyles'
 import NavBar from './NavBar'
 import LeftMenu from './LeftMenu'
+import usePageLoadFlow from './hooks/usePageLoadFlow'
+import useCompany from './hooks/useCompany'
+import useTeam from './hooks/useTeam'
 
 const StyledContainer = styled.div`
   display: grid;
@@ -34,110 +26,12 @@ const StyledContainer = styled.div`
   height: 100vh;
 `
 
-const GlobalStyles = createGlobalStyle`
-  body {
-    background-color: #F9F9F9;
-  }
-
-  .selection-area {
-    background-color: rgba(0, 0, 0, 0.2);
-  }
-
-  .selected {
-    background: rgba(211,218,225,0.5);
-    padding: 0 5px;
-    border-left: 2px solid black;
-  }
-`
-
 const MainLayout = ({ children }) => {
   const [navbarToggled, toggleNavbar] = React.useState(false)
 
-  const userId = useSelector(authSelectors.selectCurrUserProperty('id'))
-  const userCompanyId = useSelector(authSelectors.selectCurrUserProperty('currentCompanyId'))
-  const userTeamId = useSelector(authSelectors.selectCurrUserProperty('currentTeamId'))
-  const activeCompanyId = useSelector(companySelectors.selectActiveCompanyId)
-  const activeTeamId = useSelector(teamSelectors.selectActiveTeamId)
-  const isTeamLoaded = useSelector(teamSelectors.selectIsTeamLoaded)
-  const dispatch = useDispatch()
-
-  React.useEffect(
-    () => {
-      if (!localStorage.getItem('token')) return
-
-      const handleThen = (response) => {
-        const { data } = response
-
-        dispatch(authActions.signIn(data))
-        dispatch(companyActions.setCompanies([data.currentCompany]))
-        dispatch(companyActions.setActiveCompany(data.currentCompany.id))
-      }
-
-      const handleCatch = (error) => {
-        if (error.message === 'NotAuthorized') {
-          localStorage.clear()
-          history.push('/login')
-        }
-      }
-
-      authServices
-        .me()
-        .then(handleThen)
-        .catch(handleCatch)
-
-      companyServices
-        .getCompanies()
-        .then(response => { dispatch(companyActions.setCompanies(response.data)) })
-    },
-    []
-  )
-
-  React.useEffect(
-    () => {
-      if (!activeCompanyId) return
-
-      companyServices
-        .setCurrentCompany({ companyId: activeCompanyId })
-        .then(response => { dispatch(authActions.updateCurrentUserCompany(response.data.id)) })
-
-      teamService
-        .getTeams({ companyId: activeCompanyId })
-        .then(response => {
-          dispatch(teamActions.putTeams(response.data))
-          dispatch(teamActions.setActiveTeam(activeCompanyId === userCompanyId
-            ? userTeamId
-            : response.data[0].id))
-        })
-    },
-    [activeCompanyId]
-  )
-
-  React.useEffect(
-    () => {
-      if (!activeTeamId) return
-
-      teamService
-        .getTeam(activeTeamId)
-        .then((response) => {
-          const groupBy = local.getTeamGroupBy(activeTeamId)
-          const groups = response
-            .data
-            .members
-            .map(curr => curr.user)
-            .reduce((acc, curr) => acc.set(curr.id, fromJS(curr)), new OrderedMap())
-
-          if (groupBy === 'tags') {
-            // Do something here
-          }
-
-          dispatch(teamActions.initializeTeam({ ...response.data, groups }))
-        })
-
-      teamService.setCurrentTeam({ teamId: activeTeamId })
-        .then(response => { dispatch(authActions.updateCurrentUserTeam(response.data.id)) })
-    },
-    [activeTeamId]
-  )
+  const { userId, isTeamLoaded } = usePageLoadFlow()
+  useCompany()
+  useTeam()
 
   if (!userId) return <div>Fetching user...</div>
 
