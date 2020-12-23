@@ -28,11 +28,6 @@ export const createTeam = (team) => ({
   }
 })
 
-export const createCollection = (collection) => ({
-  type: teamActionTypes.CREATE_COLLECTION,
-  payload: { collection }
-})
-
 export const addMembers = ({ members, teamId }) => ({
   type: teamActionTypes.ADD_MEMBERS,
   payload: { members, teamId }

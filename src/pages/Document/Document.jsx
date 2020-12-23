@@ -22,8 +22,10 @@ const Document = () => {
       }
 
       fetchDocument()
+
+      return () => { dispatch(documentActions.clearDocument()) }
     },
-    []
+    [params.documentId]
   )
 
   return activeSectionId

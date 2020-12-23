@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { createGlobalStyle } from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
+import { fromJS, OrderedMap } from 'immutable'
 
 import * as authServices from 'services/auth'
 import * as teamService from 'services/team'
@@ -11,6 +12,7 @@ import { companySelectors } from 'logic/company'
 import { teamActions, teamSelectors } from 'logic/team'
 import { companyActions } from 'logic/company'
 import history from 'utils/history'
+import * as local from 'utils/local'
 
 import NavBar from './NavBar'
 import LeftMenu from './LeftMenu'
@@ -114,11 +116,22 @@ const MainLayout = ({ children }) => {
     () => {
       if (!activeTeamId) return
 
-      const body = { teamId: activeTeamId }
       teamService
-        .getTeamsWithGrouped(body)
-        .then((response) => { dispatch(teamActions.initializeTeam(response.data)) })
-        .catch(err => console.log('err', err))
+        .getTeam(activeTeamId)
+        .then((response) => {
+          const groupBy = local.getTeamGroupBy(activeTeamId)
+          const groups = response
+            .data
+            .members
+            .map(curr => curr.user)
+            .reduce((acc, curr) => acc.set(curr.id, fromJS(curr)), new OrderedMap())
+
+          if (groupBy === 'tags') {
+            // Do something here
+          }
+
+          dispatch(teamActions.initializeTeam({ ...response.data, groups }))
+        })
 
       teamService.setCurrentTeam({ teamId: activeTeamId })
         .then(response => { dispatch(authActions.updateCurrentUserTeam(response.data.id)) })

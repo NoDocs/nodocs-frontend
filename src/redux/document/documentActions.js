@@ -5,10 +5,10 @@ export const createDocument = document => ({
   payload: document,
 })
 
-export const putDocuments = ({ collectionId, documents }) => ({
+export const putDocuments = ({ groupId, documents }) => ({
   type: documentActionTypes.PUT_DOCUMENTS,
   payload: {
-    collectionId,
+    groupId,
     documents,
   },
 })
@@ -33,4 +33,9 @@ export const switchSection = ({ sectionId, pageId }) => ({
     sectionId,
     pageId,
   },
+})
+
+export const clearDocument = () => ({
+  type: documentActionTypes.CLEAR_DOCUMENT,
+  payload: {},
 })

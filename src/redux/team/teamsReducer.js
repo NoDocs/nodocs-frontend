@@ -23,8 +23,6 @@ const teamsReducer = (state = initialState, action) => {
       return state.update(
         team.id,
         currTeam => currTeam
-          .set('collections', new List(team.collections.map(collection => collection.id)))
-          .set('otherCollections', new List(team.otherCollections.map(collection => collection.id)))
           .set('members', new List(team.members.map(member => member.user.id)))
       )
     }
@@ -36,24 +34,13 @@ const teamsReducer = (state = initialState, action) => {
       return newState
     }
 
-    case teamActionTypes.CREATE_COLLECTION: {
-      const { collection } = action.payload
-      const newState = state.update(
-        collection.team.id,
-        currTeam => currTeam
-          .set('collections', currTeam.get('collections').push(collection.id))
-      )
-      return newState
-    }
-
     case teamActionTypes.SET_ACTIVE_TEAM: {
       const { teamId } = action.payload
 
       return state.update(teamId, (currTeam) =>
         currTeam
+          .delete('groups')
           .delete('members')
-          .delete('collections')
-          .delete('otherCollections')
       )
     }
 

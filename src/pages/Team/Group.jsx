@@ -5,10 +5,8 @@ import shortid from 'shortid'
 import { useDispatch, useSelector } from 'react-redux'
 
 import history from 'utils/history'
-import * as teamServices from 'services/team'
 import * as documentServices from 'services/document'
 import { documentActions, documentSelectors } from 'logic/document'
-import { teamSelectors } from 'logic/team'
 
 import Table from 'molecules/Table'
 import Toggle from 'molecules/Toggle'
@@ -18,20 +16,21 @@ const StyledToggle = styled(Toggle)`
   margin-bottom: 10px;
 `
 
-const Collection = ({ id }) => {
+const Group = ({ group }) => {
   const [loading, setLoading] = React.useState(true)
 
+  const documents = useSelector(documentSelectors.selectDocumentsByGroup(group.get('id')))
   const dispatch = useDispatch()
-  const documents = useSelector(documentSelectors.selectDocumentsByCollection(id))
-  const collectionName = useSelector(teamSelectors.selectCollectionProperty('name', id))
 
   React.useEffect(
     () => {
-      teamServices
-        .getCollection(id)
+      console.log('fetch documents !!')
+
+      documentServices
+        .getDocuments({ userId: group.get('id') })
         .then(response => {
-          const { data: { documents } } = response
-          dispatch(documentActions.putDocuments({ collectionId: id, documents }))
+          const { data } = response
+          dispatch(documentActions.putDocuments({ groupId: group.get('id'), documents: data }))
           setLoading(false)
         })
         .catch(() => setLoading(false))
@@ -41,10 +40,11 @@ const Collection = ({ id }) => {
 
   const createDocument = () => {
     const params = {
-      collectionId: id,
-      content: JSON.stringify([
-        { type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] },
-      ])
+      content: JSON.stringify([{
+        type: 'page',
+        id: shortid.generate(),
+        children: [{ type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] }]
+      }])
     }
 
     documentServices
@@ -60,7 +60,7 @@ const Collection = ({ id }) => {
   if (loading) return <div>Loading</div>
 
   return (
-    <StyledToggle title={collectionName}>
+    <StyledToggle title={group.get('fullName')}>
       <Table
         proportions="38px 405px 1fr 1fr 1fr 1fr"
         headerTabs={[
@@ -78,8 +78,8 @@ const Collection = ({ id }) => {
   )
 }
 
-Collection.propTypes = {
-  id: PropTypes.string,
+Group.propTypes = {
+  group: PropTypes.object,
 }
 
-export default Collection
+export default Group
