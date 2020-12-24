@@ -5,11 +5,12 @@ import { fromJS, OrderedMap } from 'immutable'
 import * as teamServices from 'services/team'
 import * as local from 'utils/local'
 import history from 'utils/history'
-import { authActions } from 'logic/auth'
+import { authActions, authSelectors } from 'logic/auth'
 import { teamSelectors, teamActions } from 'logic/team'
 
 const useTeam = () => {
   const activeTeamId = useSelector(teamSelectors.selectActiveTeamId)
+  const currUserId = useSelector(authSelectors.selectCurrUserProperty('id'))
   const dispatch = useDispatch()
 
   React.useEffect(
@@ -20,11 +21,17 @@ const useTeam = () => {
         .getTeam(activeTeamId)
         .then((response) => {
           const groupBy = local.getTeamGroupBy(activeTeamId)
-          const groups = response
+          const members = response
             .data
             .members
             .map(curr => curr.user)
-            .reduce((acc, curr) => acc.set(curr.id, fromJS(curr)), new OrderedMap())
+
+          const currMember = members.find(member => member.id === currUserId)
+          const initialValue = new OrderedMap({ [currUserId]: fromJS(currMember) })
+
+          const groups = members
+            .filter(curr => curr.id !== currUserId)
+            .reduce((acc, curr) => acc.set(curr.id, fromJS(curr)), initialValue)
 
           if (groupBy === 'tags') {
             // Do something here
