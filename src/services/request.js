@@ -3,6 +3,7 @@ import jwt_decode from 'jwt-decode'
 
 import { notificationActions } from 'logic/notification'
 import store from '../store'
+import Socket from '../socket'
 
 const checkStatus = (response) => {
   const { data, status } = response
@@ -57,7 +58,12 @@ const requestAccessToken = async () => {
     })
     const { data } = await api.get('/token', {}, { withCredentials: true })
     if (data.accessToken) {
+      const state = store.getState()
+      const activeCompany = state.getIn(['ui', 'activeCompany', 'id'])
+
       localStorage.setItem('token', data.accessToken)
+
+      Socket.connect(activeCompany, true)
       return data.accessToken
     }
   } catch (error) {

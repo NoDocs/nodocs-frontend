@@ -23,9 +23,7 @@ const Document = () => {
 
       fetchDocument()
 
-      // return () => {
-      //   documentActions
-      // }
+      return () => { dispatch(documentActions.clearDocument()) }
     },
     [params.documentId]
   )

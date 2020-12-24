@@ -13,22 +13,23 @@ import Button from 'atoms/Button'
 
 import mentionIcon from 'assets/mention.svg'
 import lockIcon from 'assets/lock.svg'
-import loginBackgroundIcon from 'assets/login-background.svg'
+import authBackground from 'assets/authBackground.svg'
+import gMailIcon from 'assets/gmail.svg'
+import noDocsIcon from 'assets/noDocs.svg'
 
 const StyledRegisterContainer = styled.div`
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #060D17;
+  background-color: #000;
   position: relative;
 `
 
 const StyledBackgroundImage = styled.img`
-  width: 100%;
   position: absolute;
-  left: 0px;
-  bottom: 0px;
+  ${({ left }) => left ? 'left: -370px' : 'right: -370px;'};
+  top: calc(50% - 270px);
 `
 
 const StyledContentContainer = styled.div`
@@ -39,25 +40,57 @@ const StyledContentContainer = styled.div`
   padding-bottom: 35px;
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
 `
 
 const StyledLabel = styled(Label)`
   font-size: 16px;
   width: 600px;
   line-height: 25px;
-  margin-bottom: 10px;
+  ${({ mr }) => mr && 'margin-top: 53px;'}
 `
 
 const StyledForm = styled.form`
   display: grid;
-  grid-row-gap: 10px;
+  grid-row-gap: 17px;
   width: 250px;
   margin: auto;
-  margin-top: 50px;
-  margin-bottom: 40px;
+  margin-top: 54px;
+  margin-bottom: 64px;
 `
 
 const RegisterLabel = styled(Label)`
+  cursor: pointer;
+  cursor: pointer;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.5);
+`
+
+const StyledGoogleContent = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  justify-content: center;
+`
+
+const StyledGoogleLabel = styled(Label)`
+  margin-left: 8px;
+  font-size: 13px;
+`
+const StyledLinksContainer = styled.div`
+  margin-bottom: 50px;
+`
+
+const StyledLinkRow = styled.div`
+/* display: inline-grid;
+grid-auto-flow: column;
+justify-items: center;
+align-items: center; */
+`
+
+const StyledUnderLine = styled.span`
+  text-decoration: underline;
   cursor: pointer;
 `
 
@@ -95,53 +128,69 @@ const Register = () => {
 
   return (
     <StyledRegisterContainer>
-      <StyledContentContainer>
-        <StyledLabel weight={700} color="black">✨ Welcome to the Memex for teams!</StyledLabel>
-        <StyledLabel color="black">“A place where individuals would compress and store all of their information”, "mechanized so that it may be consulted with exceeding speed and flexibility," Dr. Vannevar Bush writes in 1945, coining the term memex.</StyledLabel>
+      <div style={{ position: 'relative' }}>
+        <StyledContentContainer>
+          <img src={noDocsIcon} alt="NODOCS" />
+          <StyledLabel weight={700} color="black" mr>✨ Welcome to the Memex for teams!</StyledLabel>
+          <StyledLabel color="black">“A place where individuals would compress and store all of their information”, "mechanized so that it may be consulted with exceeding speed and flexibility," Dr. Vannevar Bush writes in 1945, coining the term memex.</StyledLabel>
 
-        <StyledForm name="authForm" onSubmit={handleRegister}>
-          <Input
-            icon={<img src={mentionIcon} alt="Full Name" />}
-            name="fullName"
-            placeholder="Full Name"
-          />
+          <StyledForm name="authForm" onSubmit={handleRegister}>
+            <Input
+              icon={<img src={mentionIcon} alt="Full Name" />}
+              name="fullName"
+              placeholder="Full Name"
+            />
 
-          <Input
-            icon={<img src={mentionIcon} alt="email" />}
-            name="email"
-            placeholder="email"
-          />
+            <Input
+              icon={<img src={mentionIcon} alt="email" />}
+              name="email"
+              placeholder="email"
+            />
 
-          <Input
-            icon={<img src={lockIcon} alt="password" />}
-            name="password"
-            type="password"
-            placeholder="password"
-          />
+            <Input
+              icon={<img src={lockIcon} alt="password" />}
+              name="password"
+              type="password"
+              placeholder="password"
+            />
 
-          <Input
-            icon={<img src={lockIcon} alt="Confirm Password" />}
-            name="confirmPassword"
-            type="password"
-            placeholder="Confirm Password"
-          />
+            <Input
+              icon={<img src={lockIcon} alt="Confirm Password" />}
+              name="confirmPassword"
+              type="password"
+              placeholder="Confirm Password"
+            />
 
-          <Button disabled={submitting}>Sign up</Button>
+            <Button disabled={submitting}>Sign up</Button>
 
-          <RegisterLabel
-            onClick={() => history.push('/login')}
-            color="black"
-          >
-            Or Login
-          </RegisterLabel>
-        </StyledForm>
+            <RegisterLabel
+              onClick={() => history.push('/login')}
+              color="black"
+            >
+              - or sign up with - 
+            </RegisterLabel>
+            <StyledGoogleContent style={{ display: 'flex' }}>
+              <img src={gMailIcon} alt="google" />
+              <StyledGoogleLabel color="#000000">Google</StyledGoogleLabel>
+            </StyledGoogleContent>
+          </StyledForm>
 
-        <Label color="black">Do not forget to follow us on Twitter</Label>
-        <Label color="black">Keep posted with our latest product updates</Label>
-        <Label color="black">Stay in touch with the coolest community ever</Label>
-      </StyledContentContainer>
-
-      <StyledBackgroundImage src={loginBackgroundIcon} />
+          <StyledLinksContainer>
+            <StyledLinkRow>
+              <Label color="#000000">Follow us on <StyledUnderLine>Twitter.</StyledUnderLine></Label>
+            </StyledLinkRow>
+            <StyledLinkRow>
+              <Label color="#000000"><StyledUnderLine>Product updates.</StyledUnderLine></Label>
+            </StyledLinkRow>
+            <StyledLinkRow>
+              <Label color="#000000"><StyledUnderLine>Community.</StyledUnderLine></Label>
+            </StyledLinkRow>
+          </StyledLinksContainer>
+          <Label color="#000000">Here are our <StyledUnderLine>terms and conditions</StyledUnderLine></Label>
+        </StyledContentContainer>
+        <StyledBackgroundImage src={authBackground} left />
+        <StyledBackgroundImage src={authBackground} />
+      </div>
     </StyledRegisterContainer>
   )
 }

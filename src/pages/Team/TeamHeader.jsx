@@ -1,11 +1,13 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { teamSelectors } from 'logic/team'
+import { teamSelectors, teamActions } from 'logic/team'
+import { setTeamGroupBy } from 'utils/local'
+import { PortalContext } from 'contexts'
 import Avatar from 'atoms/Avatar'
-import addCollectionIcon from 'assets/add-collection.svg'
+import Popup from 'molecules/Popup'
+import ListItem from 'molecules/ListItem'
 
 const StyledContainer = styled.div`
   display: grid;
@@ -23,6 +25,7 @@ const LeftContainer = styled.div`
 
 const StyledSection = styled.div`
   display: inline-grid;
+  align-items: center;
   grid-auto-flow: column;
   grid-column-gap: 10px;
   font-family: quicksand;
@@ -45,34 +48,25 @@ const StyledAvatar = styled(Avatar)`
   }
 `
 
-const StyledBtn = styled.button`
-  border: none;
-  background-color: #000000;
-  padding: 9px 13px;
-  border-radius: 80px;
-  cursor: pointer;
-  font-family: quicksand;
-
-  display: grid;
-  grid-auto-flow: column;
-  align-items: center;
-  grid-column-gap: 8.5px;
-`
-
-const StyledLabel = styled.span`
-  color: #FFFFFF;
-  font-weight: 500;
-  font-size: 14px;
-`
-
 const StyledText = styled.span`
   color: ${p => p.color ? p.color : '#000000'};
   font-size: 16px;
   font-weight: 500;
+  cursor: pointer;
 `
 
-const TeamHeader = ({ toggleNewCollection }) => {
+const TeamHeader = () => {
+  const { closePortal } = React.useContext(PortalContext)
   const members = useSelector(teamSelectors.selectTeamProperty('members'))
+  const activeTeamId = useSelector(teamSelectors.selectActiveTeamId)
+  const groupBy = useSelector(teamSelectors.selectActiveTeamGroupBy)
+  const dispatch = useDispatch()
+
+  const changeGroupBy = (value) => () => {
+    dispatch(teamActions.changeGroupBy(value))
+    setTeamGroupBy(activeTeamId, value)
+    closePortal('switch-group-by-popup')
+  }
 
   return (
     <StyledContainer>
@@ -89,19 +83,31 @@ const TeamHeader = ({ toggleNewCollection }) => {
 
         <StyledSection>
           <StyledText>Group by:</StyledText>
-          <StyledText color={'rgba(0,0,0,0.5)'}>Collections</StyledText>
+
+          <Popup
+            name="switch-group-by-popup"
+            fullWidth={false}
+            direction="RIGHT"
+            trigger={<StyledText color={'rgba(0,0,0,0.5)'}>{groupBy}</StyledText>}
+          >
+            <ListItem
+              active={groupBy === 'members'}
+              label="Members"
+              onClick={changeGroupBy('members')}
+              color="black"
+            />
+
+            <ListItem
+              active={groupBy === 'tags'}
+              label="Tags"
+              onClick={changeGroupBy('tags')}
+              color="black"
+            />
+          </Popup>
         </StyledSection>
       </LeftContainer>
-
-      <StyledBtn onClick={() => toggleNewCollection(true)}>
-        <img src={addCollectionIcon} />
-        <StyledLabel>Add Collection</StyledLabel>
-      </StyledBtn>
     </StyledContainer>
   )
 }
 
-TeamHeader.propTypes = {
-  toggleNewCollection: PropTypes.func
-}
 export default TeamHeader

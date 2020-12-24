@@ -8,7 +8,7 @@ import componentsReducer from './component/componentsReducer'
 import teamsReducer from './team/teamsReducer'
 import activeTeamReducer from './team/activeTeamReducer'
 import membersReducer from './team/membersReducer'
-import collectionsReducer from './team/collectionsReducer'
+import groupsReducer from './groups/groupsReducer'
 import notificationReducer from './notification/notificationReducer'
 import companiesReducer from './company/companiesReducer'
 import activeCompanyReducer from './company/activeCompanyReducer'
@@ -23,7 +23,7 @@ export default combineReducers({
     sections: sectionsReducer,
     teams: teamsReducer,
     members: membersReducer,
-    collections: collectionsReducer,
+    groups: groupsReducer,
   }),
   ui: combineReducers({
     activeDocument: activeDocumentReducer,

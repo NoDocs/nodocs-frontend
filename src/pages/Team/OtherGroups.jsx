@@ -4,14 +4,15 @@ import { useSelector } from 'react-redux'
 
 import { teamSelectors } from 'logic/team'
 import Toggle from 'molecules/Toggle'
-import Collection from './Collection'
+import Collection from './Group'
 
 const StyledInnerContainer = styled.div`
   margin: 20px 0px 0px 20px;
 `
 
-const OtherCollections = () => {
-  const otherCollections = useSelector(teamSelectors.selectTeamProperty('otherCollections'))
+const OtherGroups = () => {
+  return null
+  // const otherCollections = useSelector(teamSelectors.selectTeamProperty('otherCollections'))
 
   return (
     <Toggle defaultOpen={false} title="Other Collections">
@@ -22,4 +23,4 @@ const OtherCollections = () => {
   )
 }
 
-export default OtherCollections
+export default OtherGroups
