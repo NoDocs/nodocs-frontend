@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
+import { useSlate } from 'slate-react'
 
 import { documentSelectors, documentActions } from 'logic/document'
 import arrowRightIcon from 'assets/arrow-right.svg'
@@ -9,7 +10,7 @@ import Label from 'atoms/Label'
 import IconButton from 'atoms/IconButton'
 import HoverableContainer from 'atoms/HoverableContainer'
 import ContentToggler from 'atoms/ContentToggler'
-// import PageMenuItem from './PageMenuItem'
+import PageMenuItem from './PageMenuItem'
 import CreatePage from './CreatePage'
 
 const StyledSectionContainer = styled(HoverableContainer)`
@@ -22,6 +23,7 @@ const StyledSectionContainer = styled(HoverableContainer)`
 
 const Section = ({ id }) => {
   const dispatch = useDispatch()
+  const editor = useSlate()
   const activeSectionId = useSelector(documentSelectors.selectActiveSectionId)
   const title = useSelector(documentSelectors.selectSectionProperty('title', () => id))
   const pages = useSelector(documentSelectors.selectSectionProperty('pages', () => id))
@@ -50,7 +52,9 @@ const Section = ({ id }) => {
         </StyledSectionContainer>
       )}
     >
-      {/* {pages.map(pageId => <PageMenuItem key={pageId} id={pageId} />)} */}
+      {editor
+        .children
+        .map(page => <PageMenuItem key={page.id} page={page} />)}
       <CreatePage />
     </ContentToggler>
   )
