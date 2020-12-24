@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { Slate, Editable } from 'slate-react'
 
 import useDocument from './hooks/useDocument'
-// import useCollaborative from './hooks/useCollaborative'
 import DocumentPanel from './DocumentPanel'
 import Page from './Page'
 import DocumentLeftPanel from './DocumentLeftPanel'
