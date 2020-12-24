@@ -17,7 +17,7 @@ const activeDocumentReducer = (state = initialState, action) => {
       return state
         .set('id', document.id)
         .set('activeSectionId', sections[0].id)
-        .update('openedDocumentIds', ids => ids.push(document.id))
+        .update('openedDocumentIds', ids => ids.includes(document.id) ? ids : ids.push(document.id))
     }
 
     case documentActionTypes.SWITCH_SECTION: {
@@ -25,6 +25,12 @@ const activeDocumentReducer = (state = initialState, action) => {
         .set('activeSectionId', action.payload.sectionId)
         .set('activePageId', action.payload.pageId)
     }
+
+    case documentActionTypes.CLEAR_DOCUMENT:
+      return state
+        .set('id', '')
+        .set('activeSectionId', '')
+        .set('activePageId', '')
 
     default:
       return state

@@ -9,6 +9,14 @@ const activeTeamReducer = (state = initialState, action) => {
       return state.set('id', action.payload.teamId)
     }
 
+    case teamActionTypes.INITIALIZE_TEAM: {
+      return state.set('groupBy', action.payload.team.groupBy)
+    }
+
+    case teamActionTypes.CHANGE_GROUP_BY: {
+      return state.set('groupBy', action.payload.groupBy)
+    }
+
     default:
       return state
   }
