@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import { withReact } from 'slate-react'
-import { createEditor, Path, Text, Range } from 'slate'
+import { createEditor } from 'slate'
 import Websocket from 'reconnecting-websocket'
 import flow from 'lodash/flow'
 import { withPaging } from 'slate-paged'
@@ -11,12 +11,6 @@ import shortid from 'shortid'
 
 const token = localStorage.getItem('token') || ''
 const parsedToken = token.startsWith('Bearer') ? token.slice(7) : token
-
-const ws_client = new Websocket('ws://localhost:8000/doc/c19e60d9-222a-49f9-bb8e-169c2a7dcd8f', parsedToken) // sectionId
-
-const connection = new sharedb.Connection(ws_client)
-
-const doc = connection.get('sections', 'c19e60d9-222a-49f9-bb8e-169c2a7dcd8f') // sectionId
 
 import { authSelectors } from 'logic/auth'
 import {documentSelectors } from 'logic/document'
@@ -41,13 +35,25 @@ const useDocument = () => {
 
   const userId = useSelector(authSelectors.selectCurrUserProperty('id'))
   const name = useSelector(authSelectors.selectCurrUserProperty('fullName'))
-  const activeSectionId = useSelector(documentSelectors.selectSectionProperty('sectionId'))
+  const activeSectionId = useSelector(documentSelectors.selectSectionProperty('id'))
+
+  const doc = React.useMemo(
+    () => {
+      if (!activeSectionId) return
+
+      const ws_client = new Websocket(`ws://localhost:8000/doc/${activeSectionId}`, parsedToken) // sectionId
+      const connection = new sharedb.Connection(ws_client)
+
+      return connection.get('sections', activeSectionId) // sectionId
+    },
+    [activeSectionId]
+  )
 
   const { decorate, setSelections } = useCursors({ userId })
 
   const oldSelection = React.useRef([{
     id: userId,
-    selection: { anchor: { path: [0, 0], offset: 0 }, focus: { path: [0, 0], offset: 0 } } 
+    selection: { anchor: { path: [0, 0], offset: 0 }, focus: { path: [0, 0], offset: 0 } }
   }])
 
   const editor = React.useMemo(
@@ -66,7 +72,7 @@ const useDocument = () => {
   )
 
   const sendOp = (...args) => {
-    return new Promise((resolve, _reject) => {
+    return new Promise((resolve) => {
       doc.submitOp(...args, resolve)
     })
   }
@@ -89,26 +95,23 @@ const useDocument = () => {
       if (mySelection) editor.selection = mySelection.selection
 
       setSelections(otherSelections)
-      
+
       updateEditorState(doc.data.children)
       syncMutex.current = false
     })
-  }, [setSelections])
+  }, [setSelections, doc])
 
   const onEditorStateChange = (newValue) => {
     oldValue.current = { selections: oldSelection.current, children: editorState }
-    
+
     const selections = oldSelection.current.map((selection) => {
       if (selection.id === userId) return { id: userId, selection: editor.selection, name }
       return selection
     })
 
-    const diff = jsondiff(oldValue, {
-      selections,
-      children: newValue
-    })
+    const diff = jsondiff(oldValue, { selections, children: newValue })
     oldSelection.current = selections
-    
+
     if (!syncMutex.current) {
       if (Array.isArray(diff) && diff.length) {
         sendOp(diff)

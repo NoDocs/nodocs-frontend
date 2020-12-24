@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Slate, Editable } from 'slate-react'
-import { useCursor } from '@slate-collaborative/client'
 
 import useDocument from './hooks/useDocument'
 // import useCollaborative from './hooks/useCollaborative'
