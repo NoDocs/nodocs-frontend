@@ -12,15 +12,16 @@ import subscribersIcon from 'assets/eyeopen.svg'
 import IconButton from 'atoms/IconButton'
 
 import CreateComponent from './components/CreateComponent'
+import CreateTag from './components/CreateTag'
 
 const StyledDocumentPanelContainer = styled.div`
-  height: 45px;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 1px solid #CFD8DC;
   grid-area: document-panel;
 `
+
 
 const StyledSeparator = styled.div`
   width: 1px;
@@ -67,6 +68,8 @@ const DocumentPanel = () => {
       <IconButton variant="white">
         <img src={subscribersIcon} />
       </IconButton>
+
+      <CreateTag />
     </StyledDocumentPanelContainer>
   )
 }

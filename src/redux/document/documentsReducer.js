@@ -47,6 +47,15 @@ const documentsReducer = (state = initialState, action) => {
       )
     }
 
+    case documentActionTypes.ATTACH_TAG: {
+      const { tag, documentId } = action.payload
+
+      return state.updateIn(
+        [documentId, 'tags'],
+        tags => tags.push(tag)
+      )
+    }
+
     default:
       return state
   }

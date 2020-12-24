@@ -20,6 +20,14 @@ export const initializeDocument = (document) => ({
   },
 })
 
+export const attachTag = ({ tag, documentId }) => ({
+  type: documentActionTypes.ATTACH_TAG,
+  payload: {
+    tag,
+    documentId
+  },
+})
+
 export const createSection = section => ({
   type: documentActionTypes.CREATE_SECTION,
   payload: {
