@@ -1,9 +1,22 @@
-import React from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { withReact } from 'slate-react'
-import { createEditor } from 'slate'
-import { withIOCollaboration } from '@slate-collaborative/client'
+import { createEditor, Path, Text, Range } from 'slate'
+import Websocket from 'reconnecting-websocket'
+import flow from 'lodash/flow'
+import { withPaging } from 'slate-paged'
+import * as sharedb from 'sharedb/lib/client'
+import * as jsondiff from 'json0-ot-diff'
+import shortid from 'shortid'
+
+const token = localStorage.getItem('token') || ''
+const parsedToken = token.startsWith('Bearer') ? token.slice(7) : token
+
+const ws_client = new Websocket('ws://localhost:8000/doc/c19e60d9-222a-49f9-bb8e-169c2a7dcd8f', parsedToken) // sectionId
+
+const connection = new sharedb.Connection(ws_client)
+
+const doc = connection.get('sections', 'c19e60d9-222a-49f9-bb8e-169c2a7dcd8f') // sectionId
 
 import { authSelectors } from 'logic/auth'
 import {documentSelectors } from 'logic/document'
@@ -11,82 +24,104 @@ import {documentSelectors } from 'logic/document'
 import withEditableComponentVoid from '../plugins/withEditableComponentVoid'
 import withRectangleSelect from '../plugins/withRectangleSelect'
 import withDetectComponentInsert from '../plugins/withDetectComponentInsert'
-import withPagination from '../plugins/withPagination'
 import withNodeId from '../plugins/withNodeId'
+import { withHistory } from 'slate-history'
+
+import useCursors from './useCursors'
 
 const useDocument = () => {
-  const content = useSelector(documentSelectors.selectSectionProperty('content'))
-  const [editorState, updateEditorState] = React.useState(
-    content
-      ? JSON.parse(content)
-      : null
-  )
+  const syncMutex = React.useRef()
+  const oldValue = React.useRef()
 
+  const [editorState, updateEditorState] = React.useState([{
+    type: 'page',
+    id: shortid.generate(),
+    children: [{ type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] }]
+  }])
+
+  const userId = useSelector(authSelectors.selectCurrUserProperty('id'))
   const name = useSelector(authSelectors.selectCurrUserProperty('fullName'))
-  const color = useSelector(authSelectors.selectCurrUserProperty('color')) || '#ffffff'
   const activeSectionId = useSelector(documentSelectors.selectSectionProperty('sectionId'))
 
-  React.useEffect(
-    () => {
-      const parsed = JSON.parse(content)
-      updateEditorState(parsed)
-    },
-    [content]
-  )
+  const { decorate, setSelections } = useCursors({ userId })
+
+  const oldSelection = React.useRef([{
+    id: userId,
+    selection: { anchor: { path: [0, 0], offset: 0 }, focus: { path: [0, 0], offset: 0 } } 
+  }])
 
   const editor = React.useMemo(
     () => {
-      const withPlugins = withEditableComponentVoid(
-        withRectangleSelect(
-          withDetectComponentInsert(
-            withPagination(
-              withReact(
-                createEditor()
-              )
-            )
-          )
-        )
-      )
-
-      const origin = process.env.NODE_ENV === 'production'
-        ? process.env.BASE_API_URL
-        : 'http://localhost:8000'
-
-      const options = {
-        docId: `/${activeSectionId}`,
-        cursorData: {
-          name,
-          color,
-          alphaColor: color.slice(0, -2) + '0.2)'
-        },
-        url: `${origin}/${activeSectionId}`,
-        connectOpts: {
-          query: {
-            name,
-            token: 'id',
-            type: 'document',
-            slug: activeSectionId,
-          }
-        },
-      }
-
-      return withNodeId(withIOCollaboration(withPlugins, options))
+      return flow(
+        withEditableComponentVoid,
+        withRectangleSelect,
+        withDetectComponentInsert,
+        withPaging,
+        withNodeId,
+        withHistory,
+        withReact,
+      )(createEditor())
     },
     []
   )
 
-  React.useEffect(
-    () => {
-      editor.connect()
-      return editor.destroy
-    },
-    [editor]
-  )
+  const sendOp = (...args) => {
+    return new Promise((resolve, _reject) => {
+      doc.submitOp(...args, resolve)
+    })
+  }
+
+  React.useEffect(() => {
+    doc.subscribe(() => {
+      syncMutex.current = true
+      updateEditorState(doc.data.children)
+      syncMutex.current = false
+    })
+
+    doc.on('op', () => {
+      syncMutex.current = true
+
+      const { mySelection, otherSelections } = doc.data.selections.reduce((acc, curr) => {
+        if (curr.id === userId) return { ...acc, mySelection: curr }
+        return { ...acc, otherSelections: [...acc.otherSelections, curr] }
+      }, { mySelection, otherSelections: [] })
+
+      if (mySelection) editor.selection = mySelection.selection
+
+      setSelections(otherSelections)
+      
+      updateEditorState(doc.data.children)
+      syncMutex.current = false
+    })
+  }, [setSelections])
+
+  const onEditorStateChange = (newValue) => {
+    oldValue.current = { selections: oldSelection.current, children: editorState }
+    
+    const selections = oldSelection.current.map((selection) => {
+      if (selection.id === userId) return { id: userId, selection: editor.selection, name }
+      return selection
+    })
+
+    const diff = jsondiff(oldValue, {
+      selections,
+      children: newValue
+    })
+    oldSelection.current = selections
+    
+    if (!syncMutex.current) {
+      if (Array.isArray(diff) && diff.length) {
+        sendOp(diff)
+      }
+    }
+  }
 
   return {
     editor,
     editorState,
-    updateEditorState,
+    onEditorStateChange,
+    activeSectionId,
+    decorate
   }
 }
 
