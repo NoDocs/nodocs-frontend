@@ -11,6 +11,7 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, e
   const oldValue = React.useRef()
   const token = useSelector(authSelectors.selectCurrUserProperty('token'))
   const userId = useSelector(authSelectors.selectCurrUserProperty('id'))
+  const userColor = useSelector(authSelectors.selectCurrUserProperty('color'))
   const userName = useSelector(authSelectors.selectCurrUserProperty('fullName'))
   const { decorate, setSelections } = useCursors({ userId })
 
@@ -69,7 +70,7 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, e
     const selections = oldSelection
       .current
       .map(selection => selection.id === userId
-        ? { id: userId, selection: editor.selection, name: userName }
+        ? { id: userId, selection: editor.selection, color: userColor, name: userName }
         : selection)
 
     const diff = jsondiff(oldValue, { selections, children: newValue })
