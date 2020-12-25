@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
-
 import { Path, Text, Range } from 'slate'
+
+import { hexToRgba } from 'utils/color'
 
 const useCursors = ({ userId }) => {
   const [selections, setSelections] = React.useState([])
@@ -9,37 +10,41 @@ const useCursors = ({ userId }) => {
     const ranges = []
 
     if (Text.isText(node) && selections.length) {
-      selections.forEach(({ id, selection, name }) => {
-        if (id === userId) return
-        if (Range.includes(selection, path)) {
-          const { focus, anchor, isForward } = selection
+      selections
+        .filter(({ selection }) => Boolean(selection))
+        .filter(({ id }) => id !== userId)
+        .forEach(({ selection, color, name }) => {
+          if (Range.includes(selection, path)) {
+            const { focus, anchor, isForward } = selection
 
-          const isFocusNode = Path.equals(focus.path, path)
-          const isAnchorNode = Path.equals(anchor.path, path)
+            const isFocusNode = Path.equals(focus.path, path)
+            const isAnchorNode = Path.equals(anchor.path, path)
 
-          ranges.push({
-            ...selection,
-            name,
-            isCaret: isFocusNode,
-            anchor: {
-              path,
-              offset: isAnchorNode
-                ? anchor.offset
-                : isForward
-                  ? 0
-                  : node.text.length
-            },
-            focus: {
-              path,
-              offset: isFocusNode
-                ? focus.offset
-                : isForward
-                  ? node.text.length
-                  : 0
-            }
-          })
-        }
-      })
+            ranges.push({
+              ...selection,
+              name,
+              color,
+              alphaColor: hexToRgba(color, 0.6),
+              isCaret: isFocusNode,
+              anchor: {
+                path,
+                offset: isAnchorNode
+                  ? anchor.offset
+                  : isForward
+                    ? 0
+                    : node.text.length
+              },
+              focus: {
+                path,
+                offset: isFocusNode
+                  ? focus.offset
+                  : isForward
+                    ? node.text.length
+                    : 0
+              }
+            })
+          }
+        })
     }
 
     return ranges

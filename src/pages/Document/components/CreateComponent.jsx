@@ -23,8 +23,8 @@ const CreateComponent = () => {
       return
     }
 
-    const { content, start, end } = getSelectedRange({ editor })
-    selectRange({ editor, start, end })
+    const { content, pageIndex, start, end } = getSelectedRange({ editor })
+    selectRange({ editor, pageIndex, start, end })
 
     const componentId = shortid.generate()
     const shouldInsertNewLine = end === editor.children.length - 1
@@ -62,7 +62,7 @@ const CreateComponent = () => {
   }
 
   return (
-    <IconButton onClick={handleCreateComponent}>
+    <IconButton variant="white" onClick={handleCreateComponent}>
       <img src={componentIcon} />
     </IconButton>
   )

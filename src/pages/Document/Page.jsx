@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 const StyledEditorContainer = styled.div`
   background: #FFFFFF;
-  height: 54px;
+  height: 108px;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
   border-radius: 10px;
   margin-top: 25px;
