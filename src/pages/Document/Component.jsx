@@ -5,6 +5,7 @@ import { Editable, Slate } from 'slate-react'
 
 import history from 'utils/history'
 import useComponent from './hooks/useComponent'
+import Leaf from './components/Leaf'
 
 const StyledComponentContainer = styled.div`
   background: ${({ isImported }) => isImported
@@ -41,10 +42,16 @@ const Component = ({ id: componentId }) => {
   const {
     editorState,
     onEditorStateChange,
+    decorate,
     isImported,
     editor,
     rootDocumentId
   } = useComponent({ componentId })
+
+  const renderLeaf = React.useCallback(
+    (props) => <Leaf {...props} />,
+    [decorate]
+  )
 
   if (!editorState) return <div>Getting a component...</div>
 
@@ -55,12 +62,10 @@ const Component = ({ id: componentId }) => {
       data-component-id={componentId}
     >
       <Slate editor={editor} value={editorState} onChange={onEditorStateChange}>
-        <Editable autoFocus />
+        <Editable renderLeaf={renderLeaf} decorate={decorate} />
       </Slate>
 
-      {isImported && (
-        <StyledIcon onClick={() => history.push(`/d/${rootDocumentId}`)} />
-      )}
+      {isImported && <StyledIcon onClick={() => history.push(`/d/${rootDocumentId}`)} />}
     </StyledComponentContainer>
   )
 }

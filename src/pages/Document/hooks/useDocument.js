@@ -86,26 +86,34 @@ const useDocument = () => {
 
     doc.on('op', () => {
       syncMutex.current = true
-
-      const { mySelection, otherSelections } = doc.data.selections.reduce((acc, curr) => {
-        if (curr.id === userId) return { ...acc, mySelection: curr }
-        return { ...acc, otherSelections: [...acc.otherSelections, curr] }
-      }, { mySelection, otherSelections: [] })
+      const mySelection = doc
+        .data
+        .selections
+        .find(currSelection => currSelection.id === userId)
+      const otherSelections = doc
+        .data
+        .selections
+        .filter(currSelection => currSelection.id !== userId)
 
       if (mySelection) editor.selection = mySelection.selection
 
       setSelections(otherSelections)
-
       updateEditorState(doc.data.children)
       syncMutex.current = false
     })
   }, [setSelections, doc])
 
   const onEditorStateChange = (newValue) => {
+    if (!editor.selection) {
+      return
+    }
+
     oldValue.current = { selections: oldSelection.current, children: editorState }
 
     const selections = oldSelection.current.map((selection) => {
-      if (selection.id === userId) return { id: userId, selection: editor.selection, name }
+      if (selection.id === userId) {
+        return { id: userId, selection: editor.selection, name }
+      }
       return selection
     })
 

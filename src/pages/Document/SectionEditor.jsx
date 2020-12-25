@@ -29,7 +29,7 @@ const SectionEditor = () => {
       }
 
       if (element.type === 'component') {
-        return <Component id={element.id} />
+        return <Component id={element.id} attributes={attributes} />
       }
 
       return (

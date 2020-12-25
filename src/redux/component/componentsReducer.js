@@ -7,6 +7,8 @@ const componentsReducer = (state = initialState, action) => {
   switch (action.type) {
     case componentActionTypes.PUT_COMPONENT:
     case componentActionTypes.CREATE_COMPONENT: {
+      console.log(action)
+
       return state.set(
         action.payload.componentId,
         new Map({
