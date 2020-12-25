@@ -24,6 +24,7 @@ const documentsReducer = (state = initialState, action) => {
         document.id,
         doc => doc
           .set('sections', new List(document.sections.map(curr => curr.id)))
+          .set('tags', new List(document.tags.map(curr => curr.id)))
       )
     }
 
@@ -52,7 +53,7 @@ const documentsReducer = (state = initialState, action) => {
 
       return state.updateIn(
         [documentId, 'tags'],
-        tags => tags.push(tag)
+        tags => tags.push(tag.id)
       )
     }
 

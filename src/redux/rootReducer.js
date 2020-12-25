@@ -3,6 +3,7 @@ import { combineReducers } from 'redux-immutable'
 import authReducer from './auth/authReducer'
 import documentsReducer from './document/documentsReducer'
 import sectionsReducer from './document/sectionsReducer'
+import tagsReducer from './document/tagsReducer'
 import activeDocumentReducer from './document/activeDocumentReducer'
 import componentsReducer from './component/componentsReducer'
 import teamsReducer from './team/teamsReducer'
@@ -21,6 +22,7 @@ export default combineReducers({
   entities: combineReducers({
     documents: documentsReducer,
     sections: sectionsReducer,
+    tags: tagsReducer,
     teams: teamsReducer,
     members: membersReducer,
     groups: groupsReducer,
