@@ -33,7 +33,11 @@ const SectionEditor = () => {
       }
 
       return (
-        <p style={{ position: 'relative', margin: 0 }} {...attributes}>
+        <p
+          data-node-id={element.id}
+          style={{ position: 'relative', margin: 0 }}
+          {...attributes}
+        >
           {children}
         </p>
       )
@@ -47,7 +51,7 @@ const SectionEditor = () => {
   )
 
   return (
-    <StyledDocumentContainer data-start="selection">
+    <StyledDocumentContainer>
       <Slate
         editor={editor}
         value={editorState}

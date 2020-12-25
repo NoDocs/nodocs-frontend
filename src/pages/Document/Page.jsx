@@ -13,11 +13,13 @@ const StyledEditorContainer = styled.div`
   margin-bottom: 30px;
   padding: 20px;
   overflow: hidden;
+  border-left: 0px;
 `
 
 const Page = React.forwardRef(({ attributes, id, content }, ref) => {
   return (
     <StyledEditorContainer
+      data-start="selection"
       ref={ref}
       data-page-id={id}
       {...attributes}

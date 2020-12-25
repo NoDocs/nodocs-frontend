@@ -5951,10 +5951,10 @@ slate-history@^0.59.0:
     immer "^5.0.0"
     is-plain-object "^3.0.0"
 
-slate-paged@0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/slate-paged/-/slate-paged-0.1.2.tgz#48ef40e141e48ef4cbb397eac4a42a8778aec5dc"
-  integrity sha512-wvHisECSmoVaMEKnWvFtjkbsL6OQsfNxt9KkOnoqhSyYoay45Q9U4/UgRyCI+J5n4qtb1G96597VnEEGw+QK8Q==
+slate-paged@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/slate-paged/-/slate-paged-0.3.0.tgz#a0011937240458f2c221486040489b40bbba182e"
+  integrity sha512-UTFA3ACP4Uv31wCKPX6F6I/QnYEb/eHR6WVbw3mP8P0oh0JoxWoLhv0PpE3mbSbVcbTsOBuPHT7+kJAhSdDKNQ==
   dependencies:
     shortid "2.2.16"
 

@@ -62,7 +62,7 @@ const useDocument = () => {
         withEditableComponentVoid,
         withRectangleSelect,
         withDetectComponentInsert,
-        withPaging,
+        withPaging({}),
         withNodeId,
         withHistory,
         withReact,
