@@ -7,7 +7,7 @@ import HoverableContainer from 'atoms/HoverableContainer'
 const PageMenuItem = ({ page }) => {
   return (
     <HoverableContainer>
-      <Label color="black">{page.name}</Label>
+      <Label color="black">{page.name || 'Untitled'}</Label>
     </HoverableContainer>
   )
 }

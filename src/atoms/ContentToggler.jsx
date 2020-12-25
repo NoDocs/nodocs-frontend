@@ -33,9 +33,10 @@ const ContentToggler = ({ trigger, children, displayTrigger = false, onToggled, 
 
 ContentToggler.propTypes = {
   trigger: PropTypes.element,
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
+  children: PropTypes.any,
   toggled: PropTypes.bool,
   displayTrigger: PropTypes.bool,
   onToggled: PropTypes.func,
 }
+
 export default ContentToggler
