@@ -6,6 +6,7 @@ import { Editable, Slate } from 'slate-react'
 import history from 'utils/history'
 import useComponent from './hooks/useComponent'
 import Leaf from './components/Leaf'
+import useCollaborative from './hooks/useCollaborative'
 
 const StyledComponentContainer = styled.div`
   background: ${({ isImported }) => isImported
@@ -41,12 +42,19 @@ const StyledIcon = styled.div`
 const Component = ({ id: componentId }) => {
   const {
     editorState,
-    onEditorStateChange,
-    decorate,
+    updateEditorState,
     isImported,
     editor,
     rootDocumentId
   } = useComponent({ componentId })
+  const { onEditorStateChange, decorate } = useCollaborative({
+    namespace: 'components',
+    endPoint: `component/${componentId}`,
+    docId: componentId,
+    updateEditorState,
+    editor,
+    editorState,
+  })
 
   const renderLeaf = React.useCallback(
     (props) => <Leaf {...props} />,

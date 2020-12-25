@@ -8,6 +8,7 @@ import Page from './Page'
 import DocumentLeftPanel from './DocumentLeftPanel'
 import Component from './Component'
 import Leaf from './components/Leaf'
+import useCollaborative from './hooks/useCollaborative'
 
 const StyledDocumentContainer = styled.div`
   display: grid;
@@ -20,7 +21,15 @@ const StyledDocumentContainer = styled.div`
 `
 
 const SectionEditor = () => {
-  const { editor, editorState, onEditorStateChange, decorate } = useDocument()
+  const { editor, editorState, updateEditorState, activeSectionId } = useDocument()
+  const { onEditorStateChange, decorate } = useCollaborative({
+    namespace: 'sections',
+    endPoint: `doc/${activeSectionId}`,
+    docId: activeSectionId,
+    updateEditorState,
+    editor,
+    editorState,
+  })
 
   const renderElement = React.useCallback(
     ({ attributes, element, children }) => {
