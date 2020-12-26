@@ -18,14 +18,17 @@ const StyledToggle = styled(Toggle)`
 
 const Group = ({ group }) => {
   const [loading, setLoading] = React.useState(true)
-
+  const groupBy = useSelector(state => state.getIn(['ui', 'activeTeam', 'groupBy']))
+  
   const documents = useSelector(documentSelectors.selectDocumentsByGroup(group.get('id')))
   const dispatch = useDispatch()
-
+  
   React.useEffect(
     () => {
+      let params = groupBy === 'tags' ? { tagId: group.get('id') } : { userId: group.get('id') }
+
       documentServices
-        .getDocuments({ userId: group.get('id') })
+        .getDocuments(params)
         .then(response => {
           const { data } = response
           dispatch(documentActions.putDocuments({ groupId: group.get('id'), documents: data }))
