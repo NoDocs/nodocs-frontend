@@ -6,7 +6,9 @@ import * as jsondiff from 'json0-ot-diff'
 import { authSelectors } from 'logic/auth'
 import useCursors from './useCursors'
 
-const useCollaborative = ({ namespace, editor, editorState, updateEditorState, endPoint, docId }) => {
+const ws_client = new WebSocket(`${process.env.BASE_SHAREDB_WS}`)
+
+const useCollaborative = ({ namespace, editor, editorState, updateEditorState, docId }) => {
   const syncMutex = React.useRef()
   const oldValue = React.useRef()
   const userId = useSelector(authSelectors.selectCurrUserProperty('id'))
@@ -21,7 +23,6 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, e
 
   const doc = React.useMemo(
     () => {
-      const ws_client = new WebSocket(`ws://localhost:8000/${endPoint}`)
       const connection = new sharedb.Connection(ws_client)
 
       return connection.get(namespace, docId)
