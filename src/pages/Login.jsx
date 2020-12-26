@@ -10,7 +10,6 @@ import Label from 'atoms/Label'
 import Input from 'atoms/Input'
 import Button from 'atoms/Button'
 
-import gMailIcon from 'assets/gmail.svg'
 import mentionIcon from 'assets/mention.svg'
 import lockIcon from 'assets/lock.svg'
 import authBackground from 'assets/authBackground.svg'
@@ -25,38 +24,32 @@ const StyledLoginContainer = styled.div`
   position: relative;
 `
 
-const StyledBackgroundImage = styled.img`
-  position: absolute;
-  ${({ left }) => left ? 'left: -370px' : 'right: -370px;'};
-  top: calc(50% - 270px);
-`
-
 const StyledContentContainer = styled.div`
   background: #FFFFFF;
   box-shadow: 0px 4px 15px rgba(255, 255, 255, 0.8);
   border-radius: 10px;
   padding: 50px;
-  padding-bottom: 35px;
+  padding-top: 35px;
+  padding-bottom: 20px;
   position: relative;
   z-index: 1;
   display: flex;
   flex-direction: column;
+  min-width: 450px;
 `
 
 const StyledLabel = styled(Label)`
-  font-size: 16px;
-  width: 600px;
   line-height: 25px;
-  margin-top: 53px;
+  margin-top: 30px;
 `
 
 const StyledForm = styled.form`
   display: grid;
-  grid-row-gap: 17px;
+  grid-row-gap: 8px;
   width: 250px;
   margin: auto;
-  margin-top: 88px;
-  margin-bottom: 156px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 `
 
 const StyledRegisterLabel = styled(Label)`
@@ -64,39 +57,27 @@ const StyledRegisterLabel = styled(Label)`
   text-align: center;
   color: rgba(0, 0, 0, 0.5);
 `
-const StyledMailsContainer = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-`
 
-const StyledMailLabel = styled(Label)`
-  cursor: pointer;
-`
-const StyledGoogleContent = styled.div`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-`
-
-const StyledGoogleLabel = styled(Label)`
-  margin-left: 8px;
-  font-size: 13px;
+const StyledBackgroundImage = styled.img`
+  position: absolute;
+  height: 400px;
+  ${({ left }) => left ? 'left: -300px' : 'right: -300px;'};
+  top: calc(50% - 220px);
 `
 
 const StyledLinksContainer = styled.div`
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 `
 
-const StyledLinkRow = styled.div`
-  /* display: inline-grid;
-  grid-auto-flow: column;
-  justify-items: center;
-  align-items: center; */
-`
+const StyledLinkRow = styled.div``
 
 const StyledUnderLine = styled.span`
   text-decoration: underline;
   cursor: pointer;
+`
+
+const StyledNoDocsImage = styled.img`
+  height: 35px;
 `
 
 const Login = () => {
@@ -128,7 +109,7 @@ const Login = () => {
     <StyledLoginContainer>
       <div style={{ position: 'relative' }}>
         <StyledContentContainer>
-          <img src={noDocsIcon} alt="NODOCS" />
+          <StyledNoDocsImage src={noDocsIcon} alt="NODOCS" />
           <StyledLabel weight={700} color="black">✨ Welcome back!</StyledLabel>
 
           <StyledForm name="authForm" onSubmit={handleSignIn}>
@@ -151,24 +132,19 @@ const Login = () => {
               onClick={() => history.push('/register')}
               color="black"
             >
-              - or sign up with - 
+              - or sign up -
             </StyledRegisterLabel>
-            <StyledMailsContainer>
-              <StyledMailLabel color="#000000">Email</StyledMailLabel>
-              <StyledGoogleContent style={{ display: 'flex' }}>
-                <img src={gMailIcon} alt="google" />
-                <StyledGoogleLabel color="#000000">Google</StyledGoogleLabel>
-              </StyledGoogleContent>
-            </StyledMailsContainer>
           </StyledForm>
 
           <StyledLinksContainer>
             <StyledLinkRow>
               <Label color="#000000">Follow us on <StyledUnderLine>Twitter.</StyledUnderLine></Label>
             </StyledLinkRow>
+
             <StyledLinkRow>
               <Label color="#000000"><StyledUnderLine>Product updates.</StyledUnderLine></Label>
             </StyledLinkRow>
+
             <StyledLinkRow>
               <Label color="#000000"><StyledUnderLine>Community.</StyledUnderLine></Label>
             </StyledLinkRow>
