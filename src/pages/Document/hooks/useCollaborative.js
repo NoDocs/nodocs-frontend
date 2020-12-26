@@ -22,7 +22,9 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, e
 
   const doc = React.useMemo(
     () => {
-      const ws_client = new WebSocket(`ws://localhost:8000/${endPoint}`, token)
+      const ws_client = new WebSocket(`ws://localhost:8000/${endPoint}`, token.includes('Bearer')
+        ? token.slice(7)
+        : token)
       const connection = new sharedb.Connection(ws_client)
 
       return connection.get(namespace, docId)
@@ -66,6 +68,8 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, e
 
   const onEditorStateChange = (newValue) => {
     oldValue.current = { selections: oldSelection.current, children: editorState }
+
+    if (!editor.selection) return
 
     const selections = oldSelection
       .current
