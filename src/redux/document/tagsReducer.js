@@ -1,21 +1,11 @@
 import { Map } from 'immutable'
 import * as documentActionTypes from './documentActionTypes'
+import * as teamActionTypes from '../team/teamActionTypes'
 
 const initialState = new Map()
 
 const tagsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case documentActionTypes.INITIALIZE_DOCUMENT: {
-      return action
-        .payload
-        .document
-        .tags
-        .reduce(
-          (res, curr) => res.set(curr.id, new Map(curr)),
-          new Map()
-        )
-    }
-
     case documentActionTypes.ATTACH_TAG: {
       const { tag } = action.payload
 
@@ -28,6 +18,13 @@ const tagsReducer = (state = initialState, action) => {
           createdAt: tag.createdAt,
         })
       )
+    }
+
+    case teamActionTypes.INITIALIZE_TEAM: {
+      return action
+        .payload
+        .team
+        .tags
     }
 
     default:
