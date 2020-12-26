@@ -28,9 +28,10 @@ const CreateSection = ({ onDone }) => {
           title,
           sectionId: shortid.generate(),
           content: JSON.stringify([{
-            type: 'paragraph',
+            type: 'page',
+            name: 'Untitled',
             id: shortid.generate(),
-            children: [{ text: '' }]
+            children: [{ type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] }]
           }])
         })
         .then(({ data }) => {

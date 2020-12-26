@@ -3,12 +3,12 @@ import styled from 'styled-components'
 import { Slate, Editable } from 'slate-react'
 
 import useDocument from './hooks/useDocument'
-// import useCollaborative from './hooks/useCollaborative'
 import DocumentPanel from './DocumentPanel'
 import Page from './Page'
 import DocumentLeftPanel from './DocumentLeftPanel'
 import Component from './Component'
 import Leaf from './components/Leaf'
+import useCollaborative from './hooks/useCollaborative'
 
 const StyledDocumentContainer = styled.div`
   display: grid;
@@ -21,7 +21,15 @@ const StyledDocumentContainer = styled.div`
 `
 
 const SectionEditor = () => {
-  const { editor, editorState, onEditorStateChange, decorate } = useDocument()
+  const { editor, editorState, updateEditorState, activeSectionId } = useDocument()
+  const { onEditorStateChange, decorate } = useCollaborative({
+    namespace: 'sections',
+    endPoint: `doc/${activeSectionId}`,
+    docId: activeSectionId,
+    updateEditorState,
+    editor,
+    editorState,
+  })
 
   const renderElement = React.useCallback(
     ({ attributes, element, children }) => {
@@ -30,11 +38,15 @@ const SectionEditor = () => {
       }
 
       if (element.type === 'component') {
-        return <Component id={element.id} />
+        return <Component id={element.id} attributes={attributes} />
       }
 
       return (
-        <p style={{ position: 'relative', margin: 0 }} {...attributes}>
+        <p
+          data-node-id={element.id}
+          style={{ position: 'relative', margin: 0 }}
+          {...attributes}
+        >
           {children}
         </p>
       )
@@ -48,7 +60,7 @@ const SectionEditor = () => {
   )
 
   return (
-    <StyledDocumentContainer data-start="selection">
+    <StyledDocumentContainer>
       <Slate
         editor={editor}
         value={editorState}

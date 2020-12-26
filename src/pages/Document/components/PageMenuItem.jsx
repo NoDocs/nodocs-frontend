@@ -1,23 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
 
-import { documentSelectors } from 'logic/document'
 import Label from 'atoms/Label'
 import HoverableContainer from 'atoms/HoverableContainer'
 
-const PageMenuItem = ({ id }) => {
-  const title = useSelector(documentSelectors.selectPageProperty('title'), () => id)
-
+const PageMenuItem = ({ page }) => {
   return (
     <HoverableContainer>
-      <Label color="black">{title}</Label>
+      <Label color="black">{page.name || 'Untitled'}</Label>
     </HoverableContainer>
   )
 }
 
 PageMenuItem.propTypes = {
-  id: PropTypes.string,
+  page: PropTypes.object,
 }
 
 export default PageMenuItem

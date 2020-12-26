@@ -1,22 +1,48 @@
 import React from 'react'
-import shortid from 'shortid'
-import { useSelector } from 'react-redux'
+import { useSlate, ReactEditor } from 'slate-react'
+import { Transforms } from 'slate'
 
-import * as documentServices from 'services/document'
-import { documentSelectors } from 'logic/document'
 import Label from 'atoms/Label'
+import shortid from 'shortid'
 
 const CreatePage = () => {
-  const activeSectionId = useSelector(documentSelectors.selectActiveSectionId)
+  const editor = useSlate()
 
   const onCreate = () => {
-    documentServices
-      .createPage({
-        content: JSON.stringify([{ type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] }]),
-        pageId: shortid.generate(),
-        sectionId: activeSectionId,
-        title: 'Untitled !'
-      })
+    const lastPageIndex = editor.children.length - 1
+    const lastLineIndex = editor
+      .children[lastPageIndex]
+      .children
+      .length - 1
+
+    Transforms.insertNodes(editor, {
+      type: 'page',
+      name: 'Untitled',
+      id: shortid.generate(),
+      children: [{
+        type: 'paragraph',
+        id: shortid.generate(),
+        children: [{ text: '' }],
+      }]
+    }, { at: [lastPageIndex, lastLineIndex] })
+
+    Transforms.liftNodes(editor, { at: [lastPageIndex, lastLineIndex] })
+
+    const location = {
+      path: [lastPageIndex + 1, 0, 0],
+      offset: 0,
+    }
+
+    ReactEditor.focus(editor)
+
+    editor.apply({
+      type: 'set_selection',
+      properties: { anchor: { path: [0, 0, 0], offset: 0 } },
+      newProperties: {
+        focus: location,
+        anchor: location,
+      },
+    })
   }
 
   return (

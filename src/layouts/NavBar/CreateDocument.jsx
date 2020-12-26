@@ -18,6 +18,7 @@ const CreateDocument = () => {
       collectionId: firstCollectionId,
       content: JSON.stringify([{
         type: 'page',
+        name: 'Untitled',
         id: shortid.generate(),
         children: [{ type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] }]
       }])
