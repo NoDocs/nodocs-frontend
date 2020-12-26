@@ -9,7 +9,6 @@ import useCursors from './useCursors'
 const useCollaborative = ({ namespace, editor, editorState, updateEditorState, endPoint, docId }) => {
   const syncMutex = React.useRef()
   const oldValue = React.useRef()
-  const token = useSelector(authSelectors.selectCurrUserProperty('token'))
   const userId = useSelector(authSelectors.selectCurrUserProperty('id'))
   const userColor = useSelector(authSelectors.selectCurrUserProperty('color'))
   const userName = useSelector(authSelectors.selectCurrUserProperty('fullName'))
@@ -22,7 +21,7 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, e
 
   const doc = React.useMemo(
     () => {
-      const ws_client = new WebSocket(`ws://localhost:8000/${endPoint}`, token)
+      const ws_client = new WebSocket(`ws://localhost:8000/${endPoint}`)
       const connection = new sharedb.Connection(ws_client)
 
       return connection.get(namespace, docId)
