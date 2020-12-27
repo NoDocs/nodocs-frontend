@@ -4,6 +4,11 @@ import styled from 'styled-components'
 import { Editable, Slate } from 'slate-react'
 
 import history from 'utils/history'
+import deleteIcon from 'assets/delete.svg'
+import undoIcon from 'assets/undo.svg'
+import redoIcon from 'assets/redo.svg'
+import IconButton from 'atoms/IconButton'
+import Popup from 'molecules/Popup'
 import useComponent from './hooks/useComponent'
 import Leaf from './components/Leaf'
 import useCollaborative from './hooks/useCollaborative'
@@ -64,17 +69,38 @@ const Component = ({ id: componentId }) => {
   if (!editorState) return <div>Getting a component...</div>
 
   return (
-    <StyledComponentContainer
-      isImported={isImported}
-      contentEditable={false}
-      data-component-id={componentId}
-    >
-      <Slate editor={editor} value={editorState} onChange={onEditorStateChange}>
-        <Editable renderLeaf={renderLeaf} decorate={decorate} />
-      </Slate>
+    <Popup
+      on="hover"
+      name={`component-${componentId}-options`}
+      style={{ padding: 0, borderRadius: '5px 10px' }}
+      fullWidth={false}
+      direction="TOP_RIGHT_INNER"
+      trigger={(
+        <StyledComponentContainer
+          isImported={isImported}
+          contentEditable={false}
+          data-component-id={componentId}
+        >
+          <Slate editor={editor} value={editorState} onChange={onEditorStateChange}>
+            <Editable renderLeaf={renderLeaf} decorate={decorate} />
+          </Slate>
 
-      {isImported && <StyledIcon onClick={() => history.push(`/d/${rootDocumentId}`)} />}
-    </StyledComponentContainer>
+          {isImported && <StyledIcon onClick={() => history.push(`/d/${rootDocumentId}`)} />}
+        </StyledComponentContainer>
+      )}
+    >
+      <IconButton title="Add empty line before" variant="white">
+        <img height={14} src={undoIcon} alt="add empty line before" />
+      </IconButton>
+
+      <IconButton title="Add empty line after" variant="white">
+        <img height={14} src={redoIcon} alt="add empty line after" />
+      </IconButton>
+
+      <IconButton variant="white">
+        <img height={14} src={deleteIcon} alt="delete component" />
+      </IconButton>
+    </Popup>
   )
 }
 

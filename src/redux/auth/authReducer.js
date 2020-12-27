@@ -6,7 +6,7 @@ const initialState = new Map()
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case authActionTypes.SIGN_IN:
+    case authActionTypes.SIGN_IN: {
       return state
         .set('id', action.payload.id)
         .set('fullName', action.payload.fullName)
@@ -15,6 +15,7 @@ const authReducer = (state = initialState, action) => {
         .set('color', action.payload.color)
         .set('currentTeamId', action.payload.currentTeam.id)
         .set('currentCompanyId', action.payload.currentCompany.id)
+    }
 
     case authActionTypes.REGISTER:
       return state

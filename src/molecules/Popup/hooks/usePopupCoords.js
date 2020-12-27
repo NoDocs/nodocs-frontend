@@ -22,6 +22,12 @@ export default ({ direction, fullWidth, triggerRef }) => {
             break
           }
 
+          case Positions.topRightInner: {
+            finalCoords.top = triggerCoords.top - (content.height / 2)
+            finalCoords.left = triggerCoords.right - content.width
+            break
+          }
+
           case Positions.right: {
             finalCoords.top = triggerCoords.bottom + 10
             finalCoords.left = triggerCoords.left
