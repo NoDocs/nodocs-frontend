@@ -5,10 +5,11 @@ export const putComponent = (component) => ({
   payload: component
 })
 
-export const createComponent = ({ componentId, content }) => ({
+export const createComponent = ({ componentId, content, sectionId }) => ({
   type: componentActionTypes.CREATE_COMPONENT,
   payload: {
     componentId,
     content,
+    sectionId
   },
 })

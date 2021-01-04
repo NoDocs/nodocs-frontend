@@ -42,18 +42,21 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
 
       const onOperation = () => {
         syncMutex.current = true
-        const mySelection = doc
-          .data
-          .selections
-          .find(currSelection => currSelection.id === userId)
-        const otherSelections = doc
-          .data
-          .selections
-          .filter(currSelection => currSelection.id !== userId)
 
-        if (mySelection) editor.selection = mySelection.selection
+        if(doc.data.selections) {
+          const mySelection = doc
+            .data
+            .selections
+            .find(currSelection => currSelection.id === userId)
+          const otherSelections = doc
+            .data
+            .selections
+            .filter(currSelection => currSelection.id !== userId)
+          
+          if (mySelection) editor.selection = mySelection.selection
+          setSelections(otherSelections)
+        }
 
-        setSelections(otherSelections)
         updateEditorState(doc.data.children)
         syncMutex.current = false
       }
