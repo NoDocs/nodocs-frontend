@@ -2,9 +2,10 @@ import React from 'react'
 import shortid from 'shortid'
 import { useEditor } from 'slate-react'
 import { Transforms } from 'slate'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
+import { documentSelectors } from 'logic/document'
 import componentIcon from 'assets/component.svg'
 import copyToClipboard from 'utils/copyToClipboard'
 import { getSelectedRange, selectRange } from 'utils/editor'
@@ -13,11 +14,12 @@ import { componentActions } from 'logic/component'
 import IconButton from 'atoms/IconButton'
 
 const CreateComponent = () => {
+  const sectionId = useSelector(documentSelectors.selectSectionProperty('id'))
   const editor = useEditor()
   const dispatch = useDispatch()
   const params = useParams()
 
-  const handleCreateComponent = () => {
+  const handleCreateComponent = async () => {
     if (!editor.selectedNodeIds) {
       alert('You have not selected shit man')
       return
@@ -29,16 +31,18 @@ const CreateComponent = () => {
     const componentId = shortid.generate()
     const shouldInsertNewLine = end === editor.children.length - 1
 
-    dispatch(componentActions.createComponent({
-      componentId,
-      content: JSON.stringify(content)
-    }))
-
-    componentServices.createComponent({
+    await componentServices.createComponent({
       componentId,
       documentId: params.documentId,
-      content: JSON.stringify(content)
+      content: JSON.stringify(content),
+      sectionId
     })
+
+    dispatch(componentActions.createComponent({
+      componentId,
+      content: JSON.stringify(content),
+      sectionId
+    }))
 
     Transforms.delete(editor, { at: editor.selection })
     Transforms.insertNodes(
