@@ -32,6 +32,13 @@ class Socket {
         handleSocketEvents(socketEvents.TeamCreated, data)
       })
 
+      socket.on(socketEvents.TagCreated, (data) => {
+        handleSocketEvents(socketEvents.TagCreated, data)
+      })
+      socket.on(socketEvents.AttachTagToDocument, (data) => {
+        handleSocketEvents(socketEvents.AttachTagToDocument, data)
+      })
+
       socket.on(socketEvents.TeamMemberAdded, (data) => {
         handleSocketEvents(socketEvents.TeamMemberAdded, data)
       })
