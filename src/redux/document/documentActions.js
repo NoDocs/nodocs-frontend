@@ -28,6 +28,13 @@ export const attachTag = ({ tag, documentId }) => ({
   },
 })
 
+export const createTag = ({ tag }) => ({
+  type: documentActionTypes.CREATE_TAG,
+  payload: {
+    tag,
+  },
+})
+
 export const createSection = section => ({
   type: documentActionTypes.CREATE_SECTION,
   payload: {
