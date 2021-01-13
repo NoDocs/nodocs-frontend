@@ -8,6 +8,8 @@ import LeftMenu from './LeftMenu'
 import usePageLoadFlow from './hooks/usePageLoadFlow'
 import useCompany from './hooks/useCompany'
 import useTeam from './hooks/useTeam'
+import InviteTeamMembersModal from 'modals/InviteTeamMembersModal'
+import CreateTeamModal from 'modals/CreateTeamModal'
 
 const StyledContainer = styled.div`
   display: grid;
@@ -49,6 +51,8 @@ const MainLayout = ({ children, isTeamError }) => {
       </StyledContainer>
 
       <GlobalStyles />
+      <InviteTeamMembersModal />
+      <CreateTeamModal />
     </React.Fragment>
   )
 }

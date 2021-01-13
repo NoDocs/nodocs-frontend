@@ -4,8 +4,6 @@ import { useSelector } from 'react-redux'
 
 import { groupSelectors } from 'logic/groups'
 import { PortalContext } from 'contexts'
-import InviteTeamMembersModal from 'modals/InviteTeamMembersModal'
-import CreateTeamModal from 'modals/CreateTeamModal'
 import Shortcut from 'atoms/Shortcut'
 
 import TeamDescription from './TeamDescription'
@@ -31,9 +29,6 @@ const Team = () => {
           .map(group => <Group key={group.get('id')} group={group} />)
           .toList()}
       </StyledContentContainer>
-
-      <InviteTeamMembersModal />
-      <CreateTeamModal />
 
       <Shortcut
         name="open-team-invitation"
