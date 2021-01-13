@@ -19,7 +19,7 @@ const ContentToggler = ({ trigger, children, displayTrigger = false, onToggled, 
     toggle(flag => !flag)
   }
 
-  const clonedTrigger = React.cloneElement(trigger, { onClick: toggleContent, active: isToggled })
+  const clonedTrigger = React.cloneElement(trigger, { onClick: toggleContent, isToggled })
 
   if (!isToggled) return clonedTrigger
 

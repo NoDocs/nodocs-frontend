@@ -21,28 +21,41 @@ const StyledSectionContainer = styled(HoverableContainer)`
   align-items: center;
 `
 
+const StyledPagesContainer = styled.div`
+  margin-left: 25px;
+  margin-top: 5px;
+  padding-left: 10px;
+  display: grid;
+  grid-row-gap: 5px;
+  border-left: 2px solid lightgray;
+
+  &:hover {
+    border-left: 1px solid black;
+  }
+`
+
 const Section = ({ id }) => {
   const dispatch = useDispatch()
   const editor = useSlate()
   const activeSectionId = useSelector(documentSelectors.selectActiveSectionId)
   const title = useSelector(documentSelectors.selectSectionProperty('title', () => id))
-  const pages = useSelector(documentSelectors.selectSectionProperty('pages', () => id))
+  const pages = JSON.parse(useSelector(documentSelectors.selectSectionProperty('content', () => id)))
 
   const onSectionClick = () => {
     dispatch(documentActions.switchSection({
       sectionId: id,
-      pageId: pages.first(),
+      pageId: pages[0].pageId,
     }))
   }
 
   return (
     <ContentToggler
       displayTrigger
+      onToggled={onSectionClick}
       trigger={(
         <StyledSectionContainer
           variant="inverted"
           active={activeSectionId === id}
-          onClick={onSectionClick}
         >
           <IconButton>
             <img src={arrowRightIcon} />
@@ -52,9 +65,12 @@ const Section = ({ id }) => {
         </StyledSectionContainer>
       )}
     >
-      {editor
-        .children
-        .map(page => <PageMenuItem key={page.id} page={page} />)}
+      <StyledPagesContainer>
+        {editor
+          .children
+          .map(page => <PageMenuItem key={page.id} page={page} />)}
+      </StyledPagesContainer>
+
       <CreatePage />
     </ContentToggler>
   )

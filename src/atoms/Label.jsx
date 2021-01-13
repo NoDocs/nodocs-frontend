@@ -13,6 +13,14 @@ const Label = styled.p`
   text-align: ${({ textAlign = 'left' }) => textAlign};
   line-height: 17px;
   font-size: 14px;
+
+  ${props => props.hoverable && `
+    cursor: pointer;
+
+    &:hover {
+      font-weight: 400;
+    }
+  `}
 `
 
 export default Label
