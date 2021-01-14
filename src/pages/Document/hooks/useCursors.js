@@ -24,7 +24,7 @@ const useCursors = ({ userId }) => {
               ...selection,
               name,
               color,
-              alphaColor: hexToRgba(color, 0.6),
+              alphaColor: hexToRgba('#ffffff', 0.6),
               isCaret: isFocusNode,
               anchor: {
                 path,

@@ -24,7 +24,6 @@ const SectionEditor = () => {
   const { editor, editorState, updateEditorState, activeSectionId } = useDocument()
   const { onEditorStateChange, decorate } = useCollaborative({
     namespace: 'sections',
-    endPoint: `doc/${activeSectionId}`,
     docId: activeSectionId,
     updateEditorState,
     editor,
@@ -38,7 +37,7 @@ const SectionEditor = () => {
       }
 
       if (element.type === 'component') {
-        return <Component id={element.id} attributes={attributes} />
+        return <Component id={element.id} componentId={element.componentId} attributes={attributes} />
       }
 
       return (

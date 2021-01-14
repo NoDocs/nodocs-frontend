@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Editable, Slate } from 'slate-react'
 
 import history from 'utils/history'
 import deleteIcon from 'assets/delete.svg'
@@ -10,8 +9,6 @@ import redoIcon from 'assets/redo.svg'
 import IconButton from 'atoms/IconButton'
 import Popup from 'molecules/Popup'
 import useComponent from './hooks/useComponent'
-import Leaf from './components/Leaf'
-import useCollaborative from './hooks/useCollaborative'
 
 const StyledComponentContainer = styled.div`
   background: ${({ isImported }) => isImported
@@ -26,7 +23,8 @@ const StyledComponentContainer = styled.div`
 
   &:hover{
     background: ${({ isImported }) => isImported
-    ? 'none' : 'rgb(250 235 215 / 0.6)'};
+    ? 'none'
+    : 'rgb(250 235 215 / 0.6)'};
     border: ${({ isImported }) => isImported
     ? '2px solid rgb(123 97 255 / 50%)'
     : 'none'};
@@ -44,47 +42,24 @@ const StyledIcon = styled.div`
   background-repeat: no-repeat;
 `
 
-const Component = ({ id: componentId }) => {
-  const {
-    editorState,
-    updateEditorState,
-    isImported,
-    editor,
-    rootDocumentId
-  } = useComponent({ componentId })
-  const { onEditorStateChange, decorate } = useCollaborative({
-    namespace: 'components',
-    endPoint: `component/${componentId}`,
-    docId: componentId,
-    updateEditorState,
-    editor,
-    editorState,
-  })
-
-  const renderLeaf = React.useCallback(
-    (props) => <Leaf {...props} />,
-    [decorate]
-  )
-
-  if (!editorState) return <div>Getting a component...</div>
+const Component = React.forwardRef(({ attributes, id, content }, ref) => {
+  const { isImported, rootDocumentId } = useComponent({ componentId: id })
 
   return (
     <Popup
       on="hover"
-      name={`component-${componentId}-options`}
+      name={`component-${id}-options`}
       style={{ padding: 0, borderRadius: '5px 10px' }}
       fullWidth={false}
       direction="TOP_RIGHT_INNER"
       trigger={(
         <StyledComponentContainer
           isImported={isImported}
-          contentEditable={false}
-          data-component-id={componentId}
+          ref={ref}
+          data-component-id={id}
+          {...attributes}
         >
-          <Slate editor={editor} value={editorState} onChange={onEditorStateChange}>
-            <Editable renderLeaf={renderLeaf} decorate={decorate} />
-          </Slate>
-
+          {content}
           {isImported && <StyledIcon onClick={() => history.push(`/d/${rootDocumentId}`)} />}
         </StyledComponentContainer>
       )}
@@ -102,10 +77,13 @@ const Component = ({ id: componentId }) => {
       </IconButton>
     </Popup>
   )
-}
+})
 
+Component.displayName = 'Component'
 Component.propTypes = {
   id: PropTypes.string,
+  attributes: PropTypes.object,
+  content: PropTypes.object,
 }
 
 export default Component

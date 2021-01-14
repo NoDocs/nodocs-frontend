@@ -19,44 +19,54 @@ const CreateComponent = () => {
 
   const handleCreateComponent = () => {
     if (!editor.selectedNodeIds) {
-      alert('You have not selected shit man')
+      alert('You do not have component selected')
       return
     }
 
-    const { content, pageIndex, start, end } = getSelectedRange({ editor })
-    selectRange({ editor, pageIndex, start, end })
-
+    const { selectedNodeIds } = editor
     const componentId = shortid.generate()
-    const shouldInsertNewLine = end === editor.children.length - 1
+
+    const component = {
+      type: 'component',
+      id: componentId,
+      componentId,
+      children: []
+    }
+
+    selectedNodeIds.forEach(page => {
+      const { content, pageIndex, start, end } = getSelectedRange({
+        editor,
+        pageId: page.get('id'),
+        nodeIds: page.get('nodeIds').toJS()
+      })
+
+      selectRange({ editor, pageIndex, start, end })
+
+      Transforms.wrapNodes(editor, {
+        type: 'component',
+        id: componentId,
+        componentId: componentId,
+        children: content,
+      })
+
+      component.children = [...component.children, ...content]
+    })
 
     dispatch(componentActions.createComponent({
       componentId,
-      content: JSON.stringify(content)
+      content: JSON.stringify(component)
     }))
 
     componentServices.createComponent({
       componentId,
       documentId: params.documentId,
-      content: JSON.stringify(content)
+      content: JSON.stringify(component)
     })
 
-    Transforms.delete(editor, { at: editor.selection })
     Transforms.insertNodes(
       editor,
-      {
-        type: 'component',
-        id: componentId,
-        rootComponentId: params.documentId,
-        children: [{ text: '' }],
-      }
+      { type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] }
     )
-
-    if (shouldInsertNewLine) {
-      Transforms.insertNodes(
-        editor,
-        { type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] }
-      )
-    }
 
     copyToClipboard(`[[component=${componentId}]]`)
   }
