@@ -7,7 +7,6 @@ import shortid from 'shortid'
 
 import {documentSelectors } from 'logic/document'
 
-import withEditableComponentVoid from '../plugins/withEditableComponentVoid'
 import withRectangleSelect from '../plugins/withRectangleSelect'
 import withDetectComponentInsert from '../plugins/withDetectComponentInsert'
 import withNodeId from '../plugins/withNodeId'
@@ -26,7 +25,6 @@ const useDocument = () => {
   const editor = React.useMemo(
     () => {
       return flow(
-        withEditableComponentVoid,
         withRectangleSelect,
         withDetectComponentInsert,
         withPaging(),

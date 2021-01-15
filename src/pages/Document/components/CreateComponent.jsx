@@ -2,7 +2,7 @@ import React from 'react'
 import shortid from 'shortid'
 import { useEditor } from 'slate-react'
 import { Transforms } from 'slate'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 import componentIcon from 'assets/component.svg'
@@ -10,11 +10,13 @@ import copyToClipboard from 'utils/copyToClipboard'
 import { getSelectedRange, selectRange } from 'utils/editor'
 import * as componentServices from 'services/component'
 import { componentActions } from 'logic/component'
+import { documentSelectors } from 'logic/document'
 import IconButton from 'atoms/IconButton'
 
 const CreateComponent = () => {
   const editor = useEditor()
   const dispatch = useDispatch()
+  const activeSectionId = useSelector(documentSelectors.selectActiveSectionId)
   const params = useParams()
 
   const handleCreateComponent = () => {
@@ -42,32 +44,30 @@ const CreateComponent = () => {
 
       selectRange({ editor, pageIndex, start, end })
 
-      Transforms.wrapNodes(editor, {
-        type: 'component',
-        id: componentId,
-        componentId: componentId,
-        children: content,
-      })
+      Transforms.wrapNodes(
+        editor,
+        { type: 'component', id: componentId, componentId }
+      )
 
-      component.children = [...component.children, ...content]
+      component.children.push(content)
     })
+
+    console.log(editor.children)
 
     dispatch(componentActions.createComponent({
       componentId,
-      content: JSON.stringify(component)
+      content: JSON.stringify(component.children)
     }))
 
     componentServices.createComponent({
       componentId,
+      sectionId: activeSectionId,
       documentId: params.documentId,
-      content: JSON.stringify(component)
+      content: JSON.stringify(component.children)
     })
 
-    Transforms.insertNodes(
-      editor,
-      { type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] }
-    )
-
+    editor.selectedNodeIds = undefined
+    editor.selectedPageId = undefined
     copyToClipboard(`[[component=${componentId}]]`)
   }
 

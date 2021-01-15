@@ -31,20 +31,36 @@ const SectionEditor = () => {
   })
 
   const renderElement = React.useCallback(
-    ({ attributes, element, children }) => {
+    ({ attributes: { ref, ...otherAttributes }, element, children }) => {
       if (element.type === 'page') {
-        return <Page id={element.id} content={children} attributes={attributes} />
+        return (
+          <Page
+            id={element.id}
+            content={children}
+            attributes={otherAttributes}
+            ref={ref}
+          />
+        )
       }
 
       if (element.type === 'component') {
-        return <Component id={element.id} componentId={element.componentId} attributes={attributes} />
+        return (
+          <Component
+            id={element.id}
+            componentId={element.componentId}
+            content={children}
+            attributes={otherAttributes}
+            ref={ref}
+          />
+        )
       }
 
       return (
         <p
           data-node-id={element.id}
           style={{ position: 'relative', margin: 0 }}
-          {...attributes}
+          ref={ref}
+          {...otherAttributes}
         >
           {children}
         </p>

@@ -1,11 +1,11 @@
-export const getSelectedRange = ({ editor }) => {
+export const getSelectedRange = ({ editor, pageId, nodeIds }) => {
   const pageIndex = editor
     .children
-    .findIndex(curr => curr.id === editor.selectedPageId)
+    .findIndex(curr => curr.id === pageId)
   const blocks = editor
     .children[pageIndex]
     .children
-    .filter(curr => editor.selectedNodeIds.indexOf(curr.id) !== -1)
+    .filter(curr => nodeIds.indexOf(curr.id) !== -1)
 
   const startingNodeId = blocks[0].id
   const endingNodeId = blocks[blocks.length - 1].id

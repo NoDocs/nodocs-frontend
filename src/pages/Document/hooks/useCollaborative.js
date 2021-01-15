@@ -21,7 +21,10 @@ const isComponentUpdate = (editor) => {
   return false
 }
 
-const wsClient = new WebSocket('ws://localhost:8000', localStorage.getItem('accessToken'))
+const wsClient = new WebSocket(
+  'ws://localhost:8000',
+  localStorage.getItem('accessToken')
+)
 
 const useCollaborative = ({ namespace, editor, editorState, updateEditorState, docId }) => {
   const oldValue = React.useRef()
@@ -31,7 +34,6 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
     selection: { anchor: { path: [0, 0], offset: 0 }, focus: { path: [0, 0], offset: 0 } }
   }])
 
-  const token = useSelector(authSelectors.selectCurrUserProperty('token'))
   const userId = useSelector(authSelectors.selectCurrUserProperty('id'))
   const color = useSelector(authSelectors.selectCurrUserProperty('color'))
   const userName = useSelector(authSelectors.selectCurrUserProperty('fullName'))
@@ -45,8 +47,6 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
     },
     []
   )
-
-  console.log(doc)
 
   React.useEffect(
     () => {
@@ -87,6 +87,26 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
 
   const sendOp = args => new Promise(resolve => doc.submitOp(args, resolve))
 
+  React.useEffect(
+    () => {
+      componentIds
+        .map(curr => curr.get('componentId'))
+        .filter(componentId => !editor.connectedComponentIds.includes(componentId))
+        .forEach((componentId) => {
+          const getComponentConnection = ({ componentId }) => {
+            const connection = new sharedb.Connection(wsClient)
+            return connection.get('components', componentId)
+          }
+
+          const onComponentSubscribe = () => {}
+          const onComponentOperation = () => {}
+
+          editor.connectedComponentIds.push(componentId)
+        })
+    },
+    [componentIds]
+  )
+
   const handleSectionStateChange = (newValue) => {
     oldValue.current = { selections: oldSelection.current, children: editorState }
 
@@ -106,33 +126,14 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
     }
   }
 
-  React.useEffect(
-    () => {
-      componentIds
-        .filter(componentId => !editor.connectedComponentIds.includes(componentId))
-        .forEach((componentId) => {
-          const getComponentConnection = ({ componentId }) => {
-            const connection = new sharedb.Connection(wsClient)
-            return connection.get('components', componentId)
-          }
-
-          const onComponentSubscribe = () => {}
-          const onComponentOperation = () => {}
-
-          editor.connectedComponentIds.push(componentId)
-        })
-    },
-    [componentIds]
-  )
-
   const onEditorStateChange = (newValue) => {
     const isComponent = isComponentUpdate(editor)
 
     if (isComponent) {
-      return handleComponentStateChange(newValue)
+      handleComponentStateChange(newValue)
     }
 
-    return handleSectionStateChange(newValue)
+    handleSectionStateChange(newValue)
   }
 
   return {
