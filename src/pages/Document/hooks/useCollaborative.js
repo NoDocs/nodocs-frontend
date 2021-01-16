@@ -5,6 +5,7 @@ import * as jsondiff from 'json0-ot-diff'
 
 import { authSelectors } from 'logic/auth'
 import { documentSelectors } from 'logic/document'
+
 import useCursors from './useCursors'
 
 const isComponentUpdate = (editor) => {
@@ -14,17 +15,77 @@ const isComponentUpdate = (editor) => {
       .children[path[0]]
       .children[path[1]]
 
-    if (node.type === 'component') return true
-    return false
+    return node.type === 'component'
   }
 
   return false
+}
+
+const getUpdatedComponentState = ({ componentId, editor, connectedComponent }) => {
+  const { pageIndex, componentIndex, newEditorState } = editor.children.reduce((acc, page, pageI) => {
+    let pageIndex = acc.pageIndex
+    let componentIndex = acc.componentIndex
+
+    const filteredChildren = page.children.filter((node, componentI) => {
+      if (
+        node.type !== 'component' ||
+        node.id !== componentId
+      ) return true
+
+      if (!pageIndex) {
+        pageIndex = pageI
+        componentIndex = componentI
+      }
+
+      return false
+    })
+
+    const newPage = {
+      ...page,
+      children: filteredChildren
+    }
+
+    return {
+      pageIndex,
+      componentIndex,
+      newEditorState: [...acc.newEditorState, newPage]
+    }
+  }, { newEditorState: [], pageIndex, componentIndex })
+
+  const editorPage = newEditorState[pageIndex]
+  if(!editorPage) return
+
+  newEditorState[pageIndex] = {
+    ...editorPage,
+    children: [
+      ...(editorPage.children.slice(0, componentIndex) || []),
+      {
+        type: 'component',
+        id: componentId,
+        children: connectedComponent.data.children
+      },
+      ...(editorPage.children.slice(componentIndex) || [])
+    ]
+  }
+
+  return newEditorState
+}
+
+const getCurrentComponentId = (editor) => {
+  const { focus: { path } } = editor.selection
+  const node = editor
+    .children[path[0]]
+    .children[path[1]]
+
+  return node.id
 }
 
 const wsClient = new WebSocket(
   'ws://localhost:8000',
   localStorage.getItem('accessToken')
 )
+
+const connection = new sharedb.Connection(wsClient)
 
 const useCollaborative = ({ namespace, editor, editorState, updateEditorState, docId }) => {
   const oldValue = React.useRef()
@@ -41,7 +102,7 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
   const { decorate, setSelections } = useCursors({ userId })
 
   const doc = React.useMemo(
-    () => new sharedb.Connection(wsClient).get(namespace, docId),
+    () => connection.get(namespace, docId),
     []
   )
 
@@ -81,25 +142,55 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
     [setSelections, doc]
   )
 
-  const handleComponentStateChange = () => {}
+  const handleComponentStateChange = ({ newEditorState, connectedComponent, currentComponentId }) => {
+    const component = newEditorState.reduce((acc, page) => {
+      const pageComponent = page.children.find(node => node.id === currentComponentId)
+      return [...acc, ...pageComponent.children]
+    }, [])
+
+    const diff = jsondiff(
+      { current: connectedComponent.data.children },
+      { children: component, selection: connectedComponent.data.children.selection }
+    )
+
+    if (Array.isArray(diff) && diff.length) {
+      connectedComponent.submitOp(diff, console.log)
+    }
+  }
 
   const sendOp = args => new Promise(resolve => doc.submitOp(args, resolve))
 
   React.useEffect(
     () => {
       componentIds
-        .map(curr => curr.get('componentId'))
-        .filter(componentId => !editor.connectedComponentIds.includes(componentId))
+        .map(curr => curr.componentId)
+        .filter(componentId => !(editor.connectedComponents && editor.connectedComponents[componentId]))
         .forEach((componentId) => {
-          const getComponentConnection = ({ componentId }) => {
-            const connection = new sharedb.Connection(wsClient)
-            return connection.get('components', componentId)
+          const component = connection.get('components', componentId)
+
+          const onComponentSubscribe = ({ componentId }) =>  () => {
+            const connectedComponent = editor.connectedComponents[componentId]
+
+            const newEditorState = getUpdatedComponentState({ componentId, editor, connectedComponent })
+
+            if(newEditorState) updateEditorState(newEditorState)
+          }
+          const onComponentOperation = ({ componentId }) =>  () => {
+            const connectedComponent = editor.connectedComponents[componentId]
+
+            const newEditorState = getUpdatedComponentState({ componentId, editor, connectedComponent })
+
+            if(newEditorState) updateEditorState(newEditorState)
           }
 
-          const onComponentSubscribe = () => {}
-          const onComponentOperation = () => {}
+          if(!editor.connectedComponents) {
+            editor.connectedComponents = { [componentId]: component }
+          } else {
+            editor.connectedComponents[componentId] = component
+          }
 
-          editor.connectedComponentIds.push(componentId)
+          component.subscribe(onComponentSubscribe({ componentId }))
+          component.on('op', onComponentOperation({ componentId }))
         })
     },
     [componentIds]
@@ -127,8 +218,13 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
   const onEditorStateChange = (newValue) => {
     const isComponent = isComponentUpdate(editor)
 
-    if (isComponent) {
-      handleComponentStateChange(newValue)
+
+    if (isComponent && editor.connectedComponents) {
+      const currentComponentId = getCurrentComponentId(editor)
+      if(currentComponentId) {
+        const connectedComponent = editor.connectedComponents[currentComponentId]
+        return handleComponentStateChange({ newEditorState: newValue, connectedComponent, currentComponentId })
+      }
     }
 
     handleSectionStateChange(newValue)
