@@ -6,6 +6,7 @@ export const Positions = {
   center: 'CENTER',
   rightCenter: 'RIGHT_CENTER',
   centerInner: 'CENTER_INNER',
+  topRightInner: 'TOP_RIGHT_INNER',
   topLeft: 'TOP_LEFT',
   topRight: 'TOP_RIGHT',
   bottomCenter: 'BOTTOM_CENTER',

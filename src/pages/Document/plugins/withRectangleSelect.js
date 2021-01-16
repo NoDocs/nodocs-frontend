@@ -1,7 +1,5 @@
 import Selection from '@simonwep/selection-js'
-
-import { notificationActions } from 'logic/notification'
-import store from 'store'
+import { List, OrderedMap, Map } from 'immutable'
 
 const withSelectRectangle = (editor) => {
   const onBeforeStart = ({ oe }) => oe.target.getAttribute('data-start') === 'selection'
@@ -10,6 +8,7 @@ const withSelectRectangle = (editor) => {
     if (editor.selectedNodeIds) {
       editor
         .selectedNodeIds
+        .toJS()
         .map(nodeId => document.querySelector(`[data-node-id="${nodeId}"]`))
         .forEach(element => element.classList.remove('selected'))
       document
@@ -28,31 +27,26 @@ const withSelectRectangle = (editor) => {
   }
 
   const onStop = ({ selected }) => {
-    const nodeIds = Array.from(selected)
+    const selectedNodes = Array.from(selected)
       .map(node => node.getAttribute('data-page-id')
         ? { pageId: node.getAttribute('data-page-id') }
         : { nodeId: node.getAttribute('data-node-id') })
 
-    const containsMoreThenTwoPages = nodeIds
-      .filter(curr => curr.pageId !== undefined)
-      .length > 1
+    let ranges = new OrderedMap()
 
-    if (containsMoreThenTwoPages) {
-      for (const el of selected) el.classList.remove('selected')
+    selectedNodes.forEach(selectedNode => {
+      if (selectedNode.pageId) {
+        ranges = ranges.set(
+          selectedNode.pageId,
+          new Map({ id: selectedNode.pageId, nodeIds: new List() })
+        )
+        return
+      }
 
-      store.dispatch(notificationActions.notify({
-        type: 'error',
-        message: 'You can not create components from two different pages',
-      }))
-      return
-    }
+      ranges = ranges.updateIn([ranges.last().get('id'), 'nodeIds'], nodeIds => nodeIds.push(selectedNode.nodeId))
+    })
 
-    editor.selectedNodeIds = nodeIds
-      .filter(curr => curr.nodeId)
-      .map(curr => curr.nodeId)
-    editor.selectedPageId = nodeIds
-      .find(curr => curr.pageId)
-      .pageId
+    editor.selectedNodeIds = ranges
   }
 
   Selection.create({

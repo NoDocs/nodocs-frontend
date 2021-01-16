@@ -4,33 +4,46 @@ import * as sharedb from 'sharedb/lib/client'
 import * as jsondiff from 'json0-ot-diff'
 
 import { authSelectors } from 'logic/auth'
+import { documentSelectors } from 'logic/document'
 import useCursors from './useCursors'
 
-const ws_client = new WebSocket(`${process.env.BASE_SHAREDB_WS}`)
+const isComponentUpdate = (editor) => {
+  if (editor.selection) {
+    const { focus: { path } } = editor.selection
+    const node = editor
+      .children[path[0]]
+      .children[path[1]]
+
+    if (node.type === 'component') return true
+    return false
+  }
+
+  return false
+}
+
+const wsClient = new WebSocket(
+  'ws://localhost:8000',
+  localStorage.getItem('accessToken')
+)
 
 const useCollaborative = ({ namespace, editor, editorState, updateEditorState, docId }) => {
-  const syncMutex = React.useRef()
   const oldValue = React.useRef()
-  const userId = useSelector(authSelectors.selectCurrUserProperty('id'))
-  const userColor = useSelector(authSelectors.selectCurrUserProperty('color'))
-  const userName = useSelector(authSelectors.selectCurrUserProperty('fullName'))
-  const { decorate, setSelections } = useCursors({ userId })
-
+  const syncMutex = React.useRef()
   const oldSelection = React.useRef([{
-    id: userId,
+    id: 'test',
     selection: { anchor: { path: [0, 0], offset: 0 }, focus: { path: [0, 0], offset: 0 } }
   }])
 
-  const doc = React.useMemo(
-    () => {
-      const connection = new sharedb.Connection(ws_client)
+  const userId = useSelector(authSelectors.selectCurrUserProperty('id'))
+  const color = useSelector(authSelectors.selectCurrUserProperty('color'))
+  const userName = useSelector(authSelectors.selectCurrUserProperty('fullName'))
+  const componentIds = useSelector(documentSelectors.selectSectionProperty('components'))
+  const { decorate, setSelections } = useCursors({ userId })
 
-      return connection.get(namespace, docId)
-    },
+  const doc = React.useMemo(
+    () => new sharedb.Connection(wsClient).get(namespace, docId),
     []
   )
-
-  const sendOp = args => new Promise(resolve => doc.submitOp(args, resolve))
 
   React.useEffect(
     () => {
@@ -43,7 +56,7 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
       const onOperation = () => {
         syncMutex.current = true
 
-        if(doc.data.selections) {
+        if (doc.data.selections) {
           const mySelection = doc
             .data
             .selections
@@ -52,8 +65,9 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
             .data
             .selections
             .filter(currSelection => currSelection.id !== userId)
-          
+
           if (mySelection) editor.selection = mySelection.selection
+
           setSelections(otherSelections)
         }
 
@@ -67,13 +81,37 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
     [setSelections, doc]
   )
 
-  const onEditorStateChange = (newValue) => {
+  const handleComponentStateChange = () => {}
+
+  const sendOp = args => new Promise(resolve => doc.submitOp(args, resolve))
+
+  React.useEffect(
+    () => {
+      componentIds
+        .map(curr => curr.get('componentId'))
+        .filter(componentId => !editor.connectedComponentIds.includes(componentId))
+        .forEach((componentId) => {
+          const getComponentConnection = ({ componentId }) => {
+            const connection = new sharedb.Connection(wsClient)
+            return connection.get('components', componentId)
+          }
+
+          const onComponentSubscribe = () => {}
+          const onComponentOperation = () => {}
+
+          editor.connectedComponentIds.push(componentId)
+        })
+    },
+    [componentIds]
+  )
+
+  const handleSectionStateChange = (newValue) => {
     oldValue.current = { selections: oldSelection.current, children: editorState }
 
     const selections = oldSelection
       .current
       .map(selection => selection.id === userId
-        ? { id: userId, selection: editor.selection, color: userColor, name: userName }
+        ? { id: userId, selection: editor.selection, color, name: userName }
         : selection)
 
     const diff = jsondiff(oldValue, { selections, children: newValue })
@@ -84,6 +122,16 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
         sendOp(diff)
       }
     }
+  }
+
+  const onEditorStateChange = (newValue) => {
+    const isComponent = isComponentUpdate(editor)
+
+    if (isComponent) {
+      handleComponentStateChange(newValue)
+    }
+
+    handleSectionStateChange(newValue)
   }
 
   return {

@@ -13,7 +13,7 @@
   "dependencies": {
     "@simonwep/selection-js": "^1.7.1",
     "@slate-collaborative/client": "^0.7.0",
-    "apisauce": "^2.0.0",
+    "apisauce": "^2.0.1",
     "babel-polyfill": "^6.26.0",
     "cross-env": "^7.0.2",
     "history": "^4.10.1",
