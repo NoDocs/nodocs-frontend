@@ -1,7 +1,12 @@
 import apisauce from 'apisauce'
+import jwt_decode from 'jwt-decode'
+
+import { notificationActions } from 'logic/notification'
+import store from '../store'
+import Socket from '../socket'
 
 const checkStatus = (response) => {
-  const { data, error, status } = response
+  const { data, status } = response
 
   if (status >= 200 && status < 300) {
     return Promise.resolve({
@@ -14,7 +19,10 @@ const checkStatus = (response) => {
     return Promise.reject({ message: 'NotAuthorized' })
   }
 
-  return Promise.reject(error)
+  const { errors } = data
+  store.dispatch(notificationActions.notify({ type: 'error', message: errors[0].message }))
+
+  return Promise.reject(errors)
 }
 
 const serialize = (obj, prefix) => {
@@ -40,21 +48,54 @@ const urlWithParams = (urlString, params = {}) => {
   return `${url}?${query}`
 }
 
-const getHeaders = () => {
+const requestAccessToken = async () => {
+  try {
+    const api = apisauce.create({
+      baseURL: `${process.env.BASE_API_URL}/auth`,
+      headers: {
+        'Content-type': 'application/json',
+      },
+    })
+    const { data } = await api.get('/token', {}, { withCredentials: true })
+    if (data.accessToken) {
+      const state = store.getState()
+      const activeCompany = state.getIn(['ui', 'activeCompany', 'id'])
+
+      localStorage.setItem('token', data.accessToken)
+
+      Socket.connect(activeCompany, true)
+      return data.accessToken
+    }
+  } catch (error) {
+    localStorage.removeItem('token')
+  }
+  return false
+}
+
+const getAccessToken = async () => {
   const token = localStorage.getItem('token')
+  if (token) {
+    const data = jwt_decode(token, { headers: true })
+    const isValid = new Date(data.exp * 1000) > new Date()
+
+    if (!isValid) return await requestAccessToken()
+    return token
+  }
+}
+
+const getHeaders = async () => {
   const socketId = localStorage.getItem('client-socket-id')
 
   const headers = {
     'Content-type': 'application/json',
   }
 
-  if (token) headers['Authorization'] = token
   if (socketId) headers['x-socket-client-id'] = socketId
 
   return headers
 }
 
-export default (parentUrl = '') => {
+const request = (parentUrl = '') => {
   const api = apisauce.create({
     baseURL: `${process.env.BASE_API_URL}/${parentUrl}`,
     headers: {
@@ -62,11 +103,17 @@ export default (parentUrl = '') => {
     },
   })
 
+  api.axiosInstance.interceptors.request.use(async (config) => {
+    const token = await getAccessToken(config.headers)
+    if(token) config.headers['Authorization'] = token
+    return config
+  })
+
   const get = (url, params = {}) => {
     api.setHeaders(getHeaders())
 
     return api
-      .get(urlWithParams(url, params))
+      .get(urlWithParams(url, params), {}, { withCredentials: true })
       .then(checkStatus)
   }
 
@@ -74,7 +121,7 @@ export default (parentUrl = '') => {
     api.setHeaders(getHeaders())
 
     return api
-      .post(url, data)
+      .post(url, data, { withCredentials: true })
       .then(checkStatus)
   }
 
@@ -82,7 +129,7 @@ export default (parentUrl = '') => {
     api.setHeaders(getHeaders())
 
     return api
-      .delete(url, params)
+      .delete(url, params, { withCredentials: true })
       .then(checkStatus)
   }
 
@@ -90,7 +137,7 @@ export default (parentUrl = '') => {
     api.setHeaders(getHeaders())
 
     return api
-      .put(url, data)
+      .put(url, data, { withCredentials: true })
       .then(checkStatus)
   }
 
@@ -101,3 +148,5 @@ export default (parentUrl = '') => {
     put,
   }
 }
+
+export default request

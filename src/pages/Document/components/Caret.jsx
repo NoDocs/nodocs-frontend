@@ -8,8 +8,9 @@ const cursorStyleBase = {
   userSelect: 'none',
   transform: 'translateY(-100%)',
   fontSize: 10,
+  padding: '3px 10px',
+  borderRadius: '10px 5px',
   color: 'white',
-  background: 'palevioletred',
   whiteSpace: 'nowrap'
 }
 
@@ -19,20 +20,19 @@ const caretStyleBase = {
   userSelect: 'none',
   height: '1.2em',
   width: 2,
-  background: 'palevioletred'
 }
 
-const Caret = ({ color, isForward, name }) => {
+const Caret = ({ alphaColor, isForward, name }) => {
   const cursorStyles = {
     ...cursorStyleBase,
-    background: color,
+    background: alphaColor,
     left: isForward ? '100%' : '0%',
   }
 
   const caretStyles = {
     ...caretStyleBase,
     ...(isForward ? { bottom: 0 } : { top: 0 }),
-    background: color,
+    background: alphaColor,
     left: isForward ? '100%' : '0%'
   }
 
@@ -49,6 +49,7 @@ const Caret = ({ color, isForward, name }) => {
 
 Caret.propTypes = {
   color: PropTypes.string,
+  alphaColor: PropTypes.string,
   isForward: PropTypes.bool,
   name: PropTypes.string,
 }

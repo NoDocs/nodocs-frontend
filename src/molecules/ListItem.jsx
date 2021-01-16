@@ -8,9 +8,11 @@ import Label from 'atoms/Label'
 const StyledHoverableContainer = styled(HoverableContainer)`
   display: grid;
   grid-auto-flow: column;
-  grid-template-columns: 22px auto;
+  grid-template-columns: ${({ proportions, iconExists }) => proportions
+    ? proportions
+    : iconExists ? '22px auto' : 'auto'};
   align-items: center;
-  grid-column-gap: 15px;
+  grid-column-gap: 10px;
   position: relative;
   z-index: 2;
 `
@@ -27,15 +29,34 @@ const StyledUnderline = styled.span`
   border-bottom-left-radius: 15px;
 `
 
+const StyledLabel = styled(Label)`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
+
 const ListItem = ({
   active,
   icon,
   showUnderline,
   label,
+  color = 'active',
+  onClick,
+  proportions,
+  className,
 }) => (
-  <StyledHoverableContainer active={active}>
-    <img src={icon} height={24} alt={label} />
-    <Label color="active">{label}</Label>
+  <StyledHoverableContainer
+    className={className}
+    proportions={proportions}
+    iconExists={Boolean(icon)}
+    active={active}
+    onClick={onClick}
+  >
+    {icon && typeof icon === 'string'
+      ? <img src={icon} height={24} alt={label} />
+      : icon}
+
+    <StyledLabel color={color}>{label}</StyledLabel>
 
     {active && showUnderline && <StyledUnderline />}
   </StyledHoverableContainer>
@@ -44,8 +65,13 @@ const ListItem = ({
 ListItem.propTypes = {
   active: PropTypes.bool,
   showUnderline: PropTypes.bool,
-  icon: PropTypes.string,
+  icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  className: PropTypes.string,
   label: PropTypes.string,
+  color: PropTypes.string,
+  onClick: PropTypes.func,
+  proportions: PropTypes.string,
+  renderAdditionalButtons: PropTypes.func,
 }
 
 export default ListItem

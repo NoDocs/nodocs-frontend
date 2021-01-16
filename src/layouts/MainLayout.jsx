@@ -1,16 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { createGlobalStyle } from 'styled-components'
-import { useSelector, useDispatch } from 'react-redux'
+import styled from 'styled-components'
 
-import * as authServices from 'services/auth'
-import * as documentServices from 'services/document'
-import { authActions } from 'logic/auth'
-import { documentActions } from 'logic/document'
-import history from 'utils/history'
-
+import GlobalStyles from './GlobalStyles'
 import NavBar from './NavBar'
 import LeftMenu from './LeftMenu'
+import usePageLoadFlow from './hooks/usePageLoadFlow'
+import useCompany from './hooks/useCompany'
+import useTeam from './hooks/useTeam'
+import InviteTeamMembersModal from 'modals/InviteTeamMembersModal'
+import CreateTeamModal from 'modals/CreateTeamModal'
 
 const StyledContainer = styled.div`
   display: grid;
@@ -29,62 +28,14 @@ const StyledContainer = styled.div`
   height: 100vh;
 `
 
-const GlobalStyles = createGlobalStyle`
-  *, body {
-    margin: 0px;
-    padding: 0px;
-  }
-
-  body {
-    background-color: #F9F9F9;
-  }
-
-  .selection-area {
-    background-color: rgba(0, 0, 0, 0.2);
-  }
-
-  .selected {
-    background: rgba(211,218,225,0.5);
-    padding: 0 5px;
-    border-left: 2px solid black;
-  }
-`
-
-const MainLayout = ({ children }) => {
+const MainLayout = ({ children, isTeamError }) => {
   const [navbarToggled, toggleNavbar] = React.useState(false)
 
-  const userId = useSelector(state => state.getIn(['auth', 'id']))
-  const dispatch = useDispatch()
+  const { userId, isTeamLoaded } = usePageLoadFlow()
+  useCompany()
+  useTeam()
 
-  React.useEffect(
-    () => {
-      if (userId) return
-      if (!localStorage.getItem('token')) return
-
-      const handleThen = (response) => {
-        dispatch(authActions.signIn(response.data))
-      }
-
-      const handleCatch = (error) => {
-        if (error.message === 'NotAuthorized') {
-          localStorage.clear()
-          history.push('/login')
-        }
-      }
-
-      authServices
-        .me()
-        .then(handleThen)
-        .catch(handleCatch)
-
-      documentServices
-        .getDocuments()
-        .then(response => { dispatch(documentActions.putDocuments(response.data)) })
-    },
-    []
-  )
-
-  if (!userId) return <div>Loading...</div>
+  if (!userId) return <div>Fetching user...</div>
 
   return (
     <React.Fragment>
@@ -96,16 +47,19 @@ const MainLayout = ({ children }) => {
           navbarToggled={navbarToggled}
         />
 
-        <div>{children}</div>
+        {(isTeamError || isTeamLoaded) && <div>{children}</div>}
       </StyledContainer>
 
       <GlobalStyles />
+      <InviteTeamMembersModal />
+      <CreateTeamModal />
     </React.Fragment>
   )
 }
 
 MainLayout.propTypes = {
   children: PropTypes.any,
+  isTeamError: PropTypes.bool
 }
 
 export default MainLayout

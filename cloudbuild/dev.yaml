@@ -4,3 +4,10 @@ steps:
     name: node:12.19.0
     entrypoint: yarn
     args: ["install"]
+  - id: "build"
+    name: 'gcr.io/cloud-builders/yarn'
+    args: ['build-develop']
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['-m', 'rsync', '-d', '-r', 'dist/','gs://dev.nodocs.app']
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['setmeta', '-h', 'Cache-Control: no-cache', 'gs://dev.nodocs.app/index.html']

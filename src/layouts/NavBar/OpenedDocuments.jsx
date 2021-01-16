@@ -1,6 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useSelector } from 'react-redux'
 
+import history from 'utils/history'
+import { documentSelectors } from 'logic/document'
 import Label from 'atoms/Label'
 import HoverableContainer from 'atoms/HoverableContainer'
 
@@ -11,28 +14,23 @@ const StyledContainer = styled.div`
   grid-column-gap: 5px;
 `
 
-const OpenedDocuments = () => (
-  <StyledContainer>
-    <HoverableContainer>
-      <Label>Product KPIs</Label>
-    </HoverableContainer>
+const OpenedDocuments = () => {
+  const openedDocumentIds = useSelector(documentSelectors.selectOpenedDocuments)
+  const activeDocumentId = useSelector(documentSelectors.selectActiveDocumentId)
 
-    <HoverableContainer>
-      <Label>Investment</Label>
-    </HoverableContainer>
-
-    <HoverableContainer>
-      <Label>Product</Label>
-    </HoverableContainer>
-
-    <HoverableContainer>
-      <Label>Growth Strategy</Label>
-    </HoverableContainer>
-
-    <HoverableContainer>
-      <Label>Sales</Label>
-    </HoverableContainer>
-  </StyledContainer>
-)
+  return (
+    <StyledContainer>
+      {openedDocumentIds.map(document => (
+        <HoverableContainer
+          key={document.get('id')}
+          active={activeDocumentId === document.get('id')}
+          onClick={() => history.push(`/d/${document.get('id')}`)}
+        >
+          <Label>{document.get('title')}</Label>
+        </HoverableContainer>
+      ))}
+    </StyledContainer>
+  )
+}
 
 export default OpenedDocuments

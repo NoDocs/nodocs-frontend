@@ -1,4 +1,4 @@
-const withEditableVoid = (editor) => {
+const withEditablePageVoid = (editor) => {
   const { isVoid } = editor
 
   editor.isVoid = element => element.type === 'page'
@@ -8,4 +8,4 @@ const withEditableVoid = (editor) => {
   return editor
 }
 
-export default withEditableVoid
+export default withEditablePageVoid

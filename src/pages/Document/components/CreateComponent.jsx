@@ -2,9 +2,10 @@ import React from 'react'
 import shortid from 'shortid'
 import { useEditor } from 'slate-react'
 import { Transforms } from 'slate'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
+import { documentSelectors } from 'logic/document'
 import componentIcon from 'assets/component.svg'
 import copyToClipboard from 'utils/copyToClipboard'
 import { getSelectedRange, selectRange } from 'utils/editor'
@@ -12,60 +13,67 @@ import * as componentServices from 'services/component'
 import { componentActions } from 'logic/component'
 import IconButton from 'atoms/IconButton'
 
-const CreateComponentButton = () => {
+const CreateComponent = () => {
   const editor = useEditor()
   const dispatch = useDispatch()
+  const activeSectionId = useSelector(documentSelectors.selectActiveSectionId)
   const params = useParams()
 
-  const handleCreateComponent = () => {
+  const handleCreateComponent = async () => {
     if (!editor.selectedNodeIds) {
-      alert('You have not selected shit man')
+      alert('You do not have component selected')
       return
     }
 
-    const { content, start, end } = getSelectedRange({ editor })
-    selectRange({ editor, start, end })
-
+    const { selectedNodeIds } = editor
     const componentId = shortid.generate()
-    const shouldInsertNewLine = end === editor.children.length - 1
+
+    const component = {
+      type: 'component',
+      id: componentId,
+      componentId,
+      children: []
+    }
+
+    selectedNodeIds.forEach(page => {
+      const { content, pageIndex, start, end } = getSelectedRange({
+        editor,
+        pageId: page.get('id'),
+        nodeIds: page.get('nodeIds').toJS()
+      })
+
+      selectRange({ editor, pageIndex, start, end })
+
+      Transforms.wrapNodes(
+        editor,
+        { type: 'component', id: componentId, componentId }
+      )
+
+      component.children.push(content)
+    })
 
     dispatch(componentActions.createComponent({
       componentId,
-      content: JSON.stringify(content)
+      content: JSON.stringify(component.children)
     }))
 
     componentServices.createComponent({
       componentId,
+      sectionId: activeSectionId,
       documentId: params.documentId,
-      content: JSON.stringify(content)
+      content: JSON.stringify(component.children)
     })
 
-    Transforms.delete(editor, { at: editor.selection })
-    Transforms.insertNodes(
-      editor,
-      {
-        type: 'component',
-        id: componentId,
-        rootComponentId: params.documentId,
-        children: [{ text: '' }],
-      }
-    )
-
-    if (shouldInsertNewLine) {
-      Transforms.insertNodes(
-        editor,
-        { type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] }
-      )
-    }
-
+    editor.selectedNodeIds = undefined
+    editor.selectedPageId = undefined
     copyToClipboard(`[[component=${componentId}]]`)
   }
 
   return (
-    <IconButton onClick={handleCreateComponent}>
+    <IconButton variant="white" onClick={handleCreateComponent}>
       <img src={componentIcon} />
     </IconButton>
   )
 }
 
-export default CreateComponentButton
+export default CreateComponent

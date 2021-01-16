@@ -1,23 +1,29 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
-const ArrowDownIcon = (props) => {
+const ArrowDownIcon = ({ size, fill, ...rest }) => {
   return (
     <svg
-      width={9}
-      height={5}
+      width={size}
+      height={size}
       viewBox="0 0 9 5"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <path
         d="M.75.625l3.75 3.75L8.25.625"
-        stroke="#000"
+        stroke={fill}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
     </svg>
   )
+}
+
+ArrowDownIcon.propTypes = {
+  size: PropTypes.number,
+  fill: PropTypes.string,
 }
 
 export default ArrowDownIcon

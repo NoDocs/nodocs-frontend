@@ -1,6 +1,6 @@
 const path = require('path')
-const HtmlWebPackPlugin = require('html-webpack-plugin')
 const dotenv = require('dotenv')
+const HtmlWebPackPlugin = require('html-webpack-plugin')
 const { DefinePlugin } = require('webpack')
 
 const config = dotenv.config({ path: path.resolve(__dirname, `env/${process.env.APP_ENV}.env`) })
@@ -11,7 +11,7 @@ module.exports = {
   entry: ['babel-polyfill', './index.js'],
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].[contenthash].js',
     publicPath: '/'
   },
   mode: isLocal ? 'development' : 'production',
@@ -21,7 +21,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: require.resolve('babel-loader'),
           options: {
             presets: ['@babel/preset-env', '@babel/preset-react'],
             plugins: [
@@ -57,18 +57,7 @@ module.exports = {
         exclude: /\.module\.css$/
       },
       {
-        test: /\.svg$/,
-        use: [
-          {
-            loader: 'svg-url-loader',
-            options: {
-              limit: false,
-            },
-          },
-        ],
-      },
-      {
-        test: /\.(png|jpg|gif)$/i,
+        test: /\.(svg|png|jpg|gif)$/i,
         use: {
           loader: 'url-loader',
           options: {
@@ -92,14 +81,17 @@ module.exports = {
       assets: path.resolve(__dirname, 'src/assets'),
       hooks: path.resolve(__dirname, 'src/hooks'),
       utils: path.resolve(__dirname, 'src/utils'),
+      store: path.resolve(__dirname, 'src/store'),
       atoms: path.resolve(__dirname, 'src/atoms'),
       molecules: path.resolve(__dirname, 'src/molecules'),
       services: path.resolve(__dirname, 'src/services'),
       logic: path.resolve(__dirname, 'src/redux'),
       socket: path.resolve(__dirname, 'src/socket'),
+      contexts: path.resolve(__dirname, 'src/contexts'),
+      modals: path.resolve(__dirname, 'src/modals'),
     }
   },
-  devServer: {
-    historyApiFallback: true,
-  }
+  ...(isLocal
+    ? { devServer: { historyApiFallback: true } }
+    : {}),
 }

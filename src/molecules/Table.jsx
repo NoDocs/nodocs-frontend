@@ -14,8 +14,7 @@ import SubMenuIcon from 'assets/components/SubMenuIcon'
 
 const StyledTable = styled.div`
   padding: 18px 0;
-  margin: auto;
-  margin-bottom: 50px;
+  margin: 13px auto 50px auto;
   box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.15);
   border-radius: 8px;
 `
@@ -95,7 +94,7 @@ const NewAvatar = styled(Avatar)`
   }
 `
 
-const Table = ({ headerTabs, proportions, data }) => {
+const Table = ({ headerTabs, proportions, data, createDocument }) => {
   return (
     <StyledTable>
       <StyledTableHeader proportions={proportions}>
@@ -103,8 +102,8 @@ const Table = ({ headerTabs, proportions, data }) => {
           ? <Label key={index} weight={500} textAlign={curr.position} color="black">{curr.content}</Label>
           : <StyledHeaderCell key={index}>{curr.content}</StyledHeaderCell>)}
       </StyledTableHeader>
-      {data.map((documentId, index) => (
-        <StyledTableRow key={documentId} proportions={proportions} onClick={() => history.push(`/d/${documentId}`)}>
+      {data.map((document) => (
+        <StyledTableRow key={document.get('id')} proportions={proportions} onClick={() => history.push(`/d/${document.get('id')}`)}>
           <StyledCell jc="start">
             <SelectedNeon selected={true} />
             <StyledHiddenSection>
@@ -115,20 +114,20 @@ const Table = ({ headerTabs, proportions, data }) => {
             </StyledHiddenSection>
           </StyledCell>
           <StyledCell jc="start">
-            Document N{index}
+            {document.get('title')}
           </StyledCell>
           <StyledCell>14</StyledCell>
           <StyledCell>19</StyledCell>
           <StyledCell>31</StyledCell>
           <StyledCell jc="space-evenly">
-            <NewAvatar src={'../../src/assets/photo.png'} />
+            <NewAvatar userId={document.get('creatorId')} />
             <SubMenuIcon />
             <MoreIcon />
           </StyledCell>
         </StyledTableRow>
       )).toList()}
-      <StyledAddDocument>
-        <AddIcon width={14} height={14} />
+      <StyledAddDocument onClick={createDocument}>
+        <AddIcon fill="#000" width={14} height={14} />
         <StyledAddText>Add a document</StyledAddText>
       </StyledAddDocument>
     </StyledTable>
@@ -138,7 +137,8 @@ const Table = ({ headerTabs, proportions, data }) => {
 Table.propTypes = {
   headerTabs: PropTypes.array,
   proportions: PropTypes.string,
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
+  createDocument: PropTypes.func,
 }
 
 export default Table

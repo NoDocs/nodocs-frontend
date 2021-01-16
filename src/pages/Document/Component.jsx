@@ -1,16 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Editable, Slate } from 'slate-react'
 
 import history from 'utils/history'
+import deleteIcon from 'assets/delete.svg'
+import undoIcon from 'assets/undo.svg'
+import redoIcon from 'assets/redo.svg'
+import IconButton from 'atoms/IconButton'
+import Popup from 'molecules/Popup'
 import useComponent from './hooks/useComponent'
 
 const StyledComponentContainer = styled.div`
   background: ${({ isImported }) => isImported
     ? 'none' : '#F2F3F4'};
   padding: 2px;
-  display: flex;
   border-radius: 0 5px 5px 0;
 
   & div:first-child {
@@ -19,7 +22,8 @@ const StyledComponentContainer = styled.div`
 
   &:hover{
     background: ${({ isImported }) => isImported
-    ? 'none' : 'rgb(250 235 215 / 0.6)'};
+    ? 'none'
+    : 'rgb(250 235 215 / 0.6)'};
     border: ${({ isImported }) => isImported
     ? '2px solid rgb(123 97 255 / 50%)'
     : 'none'};
@@ -37,36 +41,48 @@ const StyledIcon = styled.div`
   background-repeat: no-repeat;
 `
 
-const Component = ({ id: componentId }) => {
-  const {
-    editorState,
-    onEditorStateChange,
-    isImported,
-    editor,
-    rootDocumentId
-  } = useComponent({ componentId })
-
-  if (!editorState) return <div>Getting a component...</div>
+const Component = React.forwardRef(({ attributes, id, content }, ref) => {
+  const { isImported, rootDocumentId } = useComponent({ componentId: id })
 
   return (
-    <StyledComponentContainer
-      isImported={isImported}
-      contentEditable={false}
-      data-component-id={componentId}
-    >
-      <Slate editor={editor} value={editorState} onChange={onEditorStateChange}>
-        <Editable autoFocus />
-      </Slate>
-
-      {isImported && (
-        <StyledIcon onClick={() => history.push(`/d/${rootDocumentId}`)} />
+    <Popup
+      on="hover"
+      name={`component-${id}-options`}
+      style={{ padding: 0, borderRadius: '5px 10px' }}
+      fullWidth={false}
+      direction="TOP_RIGHT_INNER"
+      trigger={(
+        <StyledComponentContainer
+          isImported={isImported}
+          ref={ref}
+          data-component-id={id}
+          {...attributes}
+        >
+          {content}
+          {isImported && <StyledIcon onClick={() => history.push(`/d/${rootDocumentId}`)} />}
+        </StyledComponentContainer>
       )}
-    </StyledComponentContainer>
-  )
-}
+    >
+      <IconButton title="Add empty line before" variant="white">
+        <img height={14} src={undoIcon} alt="add empty line before" />
+      </IconButton>
 
+      <IconButton title="Add empty line after" variant="white">
+        <img height={14} src={redoIcon} alt="add empty line after" />
+      </IconButton>
+
+      <IconButton variant="white">
+        <img height={14} src={deleteIcon} alt="delete component" />
+      </IconButton>
+    </Popup>
+  )
+})
+
+Component.displayName = 'Component'
 Component.propTypes = {
   id: PropTypes.string,
+  attributes: PropTypes.object,
+  content: PropTypes.object,
 }
 
 export default Component
