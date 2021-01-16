@@ -5,12 +5,12 @@ import { Transforms } from 'slate'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
+import { documentSelectors } from 'logic/document'
 import componentIcon from 'assets/component.svg'
 import copyToClipboard from 'utils/copyToClipboard'
 import { getSelectedRange, selectRange } from 'utils/editor'
 import * as componentServices from 'services/component'
 import { componentActions } from 'logic/component'
-import { documentSelectors } from 'logic/document'
 import IconButton from 'atoms/IconButton'
 
 const CreateComponent = () => {
@@ -19,7 +19,7 @@ const CreateComponent = () => {
   const activeSectionId = useSelector(documentSelectors.selectActiveSectionId)
   const params = useParams()
 
-  const handleCreateComponent = () => {
+  const handleCreateComponent = async () => {
     if (!editor.selectedNodeIds) {
       alert('You do not have component selected')
       return
@@ -51,8 +51,6 @@ const CreateComponent = () => {
 
       component.children.push(content)
     })
-
-    console.log(editor.children)
 
     dispatch(componentActions.createComponent({
       componentId,

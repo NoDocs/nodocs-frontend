@@ -41,10 +41,7 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
   const { decorate, setSelections } = useCursors({ userId })
 
   const doc = React.useMemo(
-    () => {
-      const connection = new sharedb.Connection(wsClient)
-      return connection.get(namespace, docId)
-    },
+    () => new sharedb.Connection(wsClient).get(namespace, docId),
     []
   )
 
@@ -70,6 +67,7 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
             .filter(currSelection => currSelection.id !== userId)
 
           if (mySelection) editor.selection = mySelection.selection
+
           setSelections(otherSelections)
         }
 

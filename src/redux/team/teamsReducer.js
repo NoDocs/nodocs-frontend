@@ -23,7 +23,7 @@ const teamsReducer = (state = initialState, action) => {
       return state.update(
         team.id,
         currTeam => currTeam
-          .set('members', new List(team.members.map(member => member.user.id)))
+          .set('members', team.members.toList().map(member => member.get('id')))
       )
     }
 

@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { teamSelectors, teamActions } from 'logic/team'
-import { setTeamGroupBy } from 'utils/local'
 import { PortalContext } from 'contexts'
 import Avatar from 'atoms/Avatar'
 import Popup from 'molecules/Popup'
@@ -58,13 +57,11 @@ const StyledText = styled.span`
 const TeamHeader = () => {
   const { closePortal } = React.useContext(PortalContext)
   const members = useSelector(teamSelectors.selectTeamProperty('members'))
-  const activeTeamId = useSelector(teamSelectors.selectActiveTeamId)
   const groupBy = useSelector(teamSelectors.selectActiveTeamGroupBy)
   const dispatch = useDispatch()
 
   const changeGroupBy = (value) => () => {
     dispatch(teamActions.changeGroupBy(value))
-    setTeamGroupBy(activeTeamId, value)
     closePortal('switch-group-by-popup')
   }
 
