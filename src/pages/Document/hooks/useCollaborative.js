@@ -26,19 +26,23 @@ const getUpdatedComponentState = ({ componentId, editor, connectedComponent }) =
     let pageIndex = acc.pageIndex
     let componentIndex = acc.componentIndex
 
+    const filteredChildren = page.children.filter((node, componentI) => {
+      if (
+        node.type !== 'component' ||
+        node.id !== componentId
+      ) return true
+
+      if (!pageIndex) {
+        pageIndex = pageI
+        componentIndex = componentI
+      }
+
+      return false
+    })
+
     const newPage = {
       ...page,
-      children: page.children.filter((node, componentI) => {
-        if (node.type !== 'component') return true
-        if (node.id !== componentId) return true
-
-        if (!pageIndex) {
-          pageIndex = pageI
-          componentIndex = componentI
-        }
-
-        return false
-      })
+      children: filteredChildren
     }
 
     return {
@@ -169,14 +173,14 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
 
             const newEditorState = getUpdatedComponentState({ componentId, editor, connectedComponent })
 
-            updateEditorState(newEditorState)
+            if(newEditorState) updateEditorState(newEditorState)
           }
           const onComponentOperation = ({ componentId }) =>  () => {
             const connectedComponent = editor.connectedComponents[componentId]
 
             const newEditorState = getUpdatedComponentState({ componentId, editor, connectedComponent })
 
-            updateEditorState(newEditorState)
+            if(newEditorState) updateEditorState(newEditorState)
           }
 
           if(!editor.connectedComponents) {
