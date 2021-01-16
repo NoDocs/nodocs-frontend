@@ -49,7 +49,7 @@ const CreateComponent = () => {
         { type: 'component', id: componentId, componentId }
       )
 
-      component.children.push(content)
+      component.children = [...component.children, ...content]
     })
 
     dispatch(componentActions.createComponent({

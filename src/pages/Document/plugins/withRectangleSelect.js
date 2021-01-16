@@ -8,7 +8,6 @@ const withSelectRectangle = (editor) => {
     if (editor.selectedNodeIds) {
       editor
         .selectedNodeIds
-        .toJS()
         .map(nodeId => document.querySelector(`[data-node-id="${nodeId}"]`))
         .forEach(element => element.classList.remove('selected'))
       document
