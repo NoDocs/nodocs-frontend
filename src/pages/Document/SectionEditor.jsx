@@ -8,6 +8,7 @@ import Page from './Page'
 import DocumentLeftPanel from './DocumentLeftPanel'
 import Component from './Component'
 import Leaf from './components/Leaf'
+import InlineToolbar from './components/InlineToolbar'
 import useCollaborative from './hooks/useCollaborative'
 
 const StyledDocumentContainer = styled.div`
@@ -89,6 +90,8 @@ const SectionEditor = () => {
           renderLeaf={renderLeaf}
           decorate={decorate}
         />
+
+        <InlineToolbar />
       </Slate>
     </StyledDocumentContainer>
   )
