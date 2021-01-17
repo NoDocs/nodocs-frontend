@@ -52,17 +52,13 @@ const CreateComponent = () => {
       component.children = [...component.children, ...content]
     })
 
-    dispatch(componentActions.createComponent({
-      componentId,
-      content: JSON.stringify(component.children)
-    }))
-
-    componentServices.createComponent({
+    const { data } = await componentServices.createComponent({
       componentId,
       sectionId: activeSectionId,
       documentId: params.documentId,
       content: JSON.stringify(component.children)
     })
+    dispatch(componentActions.putComponent(data))
 
     editor.selectedNodeIds = undefined
     editor.selectedPageId = undefined

@@ -80,12 +80,9 @@ const getCurrentComponentId = (editor) => {
   return node.id
 }
 
-const wsClient = new WebSocket(
-  'ws://localhost:8000',
-  localStorage.getItem('accessToken')
-)
+const wsClient = token => new WebSocket('ws://localhost:8000', token)
 
-const connection = new sharedb.Connection(wsClient)
+const connection = token => new sharedb.Connection(wsClient(token))
 
 const useCollaborative = ({ namespace, editor, editorState, updateEditorState, docId }) => {
   const oldValue = React.useRef()
@@ -102,7 +99,7 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
   const { decorate, setSelections } = useCursors({ userId })
 
   const doc = React.useMemo(
-    () => connection.get(namespace, docId),
+    () => connection(localStorage.getItem('accessToken')).get(namespace, docId),
     []
   )
 
@@ -168,11 +165,11 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
 
   React.useEffect(
     () => {
-      componentIds
+      (componentIds || [])
         .map(curr => curr.componentId)
         .filter(componentId => !(editor.connectedComponents && editor.connectedComponents[componentId]))
         .forEach((componentId) => {
-          const component = connection.get('components', componentId)
+          const component = connection(localStorage.getItem('accessToken')).get('components', componentId)
 
           const onComponentSubscribe = ({ componentId }) =>  () => {
             const connectedComponent = editor.connectedComponents[componentId]

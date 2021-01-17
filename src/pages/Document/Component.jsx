@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import history from 'utils/history'
+import copyToClipboard from 'utils/copyToClipboard'
+import componentIcon from 'assets/component.svg'
 import deleteIcon from 'assets/delete.svg'
 import undoIcon from 'assets/undo.svg'
 import redoIcon from 'assets/redo.svg'
@@ -44,6 +46,10 @@ const StyledIcon = styled.div`
 const Component = React.forwardRef(({ attributes, id, content }, ref) => {
   const { isImported, rootDocumentId } = useComponent({ componentId: id })
 
+  const copyComponent = () => {
+    copyToClipboard(`[[component=${id}]]`)
+  }
+
   return (
     <Popup
       on="hover"
@@ -65,6 +71,10 @@ const Component = React.forwardRef(({ attributes, id, content }, ref) => {
     >
       <IconButton title="Add empty line before" variant="white">
         <img height={14} src={undoIcon} alt="add empty line before" />
+      </IconButton>
+
+      <IconButton onClick={copyComponent} title="Copy component" variant="white">
+        <img height={14} src={componentIcon} alt="copy component" />
       </IconButton>
 
       <IconButton title="Add empty line after" variant="white">
