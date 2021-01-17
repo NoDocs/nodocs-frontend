@@ -136,7 +136,7 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
   const handleComponentStateChange = async ({ newEditorState, connectedComponent, currentComponentId }) => {
     const component = newEditorState.reduce((acc, page) => {
       const pageComponent = page.children.find(node => node.id === currentComponentId)
-      return [...acc, ...pageComponent.children]
+      return [...acc, ...(pageComponent.children || [])]
     }, [])
 
     const diff = jsondiff(
