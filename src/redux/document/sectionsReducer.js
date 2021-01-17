@@ -1,5 +1,7 @@
-import { Map } from 'immutable'
+import { Map, List } from 'immutable'
 import * as documentActionTypes from './documentActionTypes'
+
+import * as componentActionTypes from '../component/componentActionTypes'
 
 const initialState = new Map()
 
@@ -11,7 +13,13 @@ const sectionsReducer = (state = initialState, action) => {
         .document
         .sections
         .reduce(
-          (res, curr) => res.set(curr.id, new Map(curr)),
+          (res, curr) => res
+            .set(
+              curr.id,
+              new Map(curr)
+                .delete('components')
+                .set('componentIds', curr.components.map(component => component.componentId))
+            ),
           new Map()
         )
     }
@@ -36,8 +44,18 @@ const sectionsReducer = (state = initialState, action) => {
           title: section.title,
           sectionId: section.sectionId,
           content: section.content,
+          componentIds: new List()
         })
       )
+    }
+
+    case componentActionTypes.CREATE_COMPONENT:
+    case componentActionTypes.PUT_COMPONENT: {
+      const { componentId, sectionId } = action.payload
+
+      return state.updateIn(
+        [sectionId, 'components'],
+        (componentIds = new List()) => componentIds.push(componentId))
     }
 
     case documentActionTypes.CLEAR_DOCUMENT:

@@ -1,10 +1,29 @@
 import { Map } from 'immutable'
+
 import * as componentActionTypes from './componentActionTypes'
+import * as documentActionTypes from '../document/documentActionTypes'
 
 const initialState = new Map()
 
 const componentsReducer = (state = initialState, action) => {
   switch (action.type) {
+    case documentActionTypes.INITIALIZE_DOCUMENT:
+      return action
+        .payload
+        .document
+        .sections
+        .reduce(
+          (acc, section) => {
+            const { components } = section
+
+            return components.reduce(
+              (acc, component) => acc.set(component.componentId, component),
+              acc
+            )
+          },
+          new Map()
+        )
+
     case componentActionTypes.PUT_COMPONENT:
     case componentActionTypes.CREATE_COMPONENT: {
       return state.set(
