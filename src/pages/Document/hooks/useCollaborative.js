@@ -80,8 +80,7 @@ const getCurrentComponentId = (editor) => {
   return node.id
 }
 
-const wsClient = token => new WebSocket('ws://localhost:8000', token)
-
+const wsClient = token => new WebSocket(process.env.BASE_SHAREDB_WS, token)
 const connection = token => new sharedb.Connection(wsClient(token))
 
 const useCollaborative = ({ namespace, editor, editorState, updateEditorState, docId }) => {
