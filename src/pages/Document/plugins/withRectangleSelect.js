@@ -1,6 +1,10 @@
 import Selection from '@simonwep/selection-js'
 import { List, OrderedMap, Map } from 'immutable'
 
+const queryElement = ({ id, nodeIds }) => id
+  ? document.querySelector(`[data-page-id="${id}"]`)
+  : nodeIds.map(nodeId => `[data-node-id="${nodeId}"]`)
+
 const withSelectRectangle = (editor) => {
   const onBeforeStart = ({ oe }) => oe.target.getAttribute('data-start') === 'selection'
 
@@ -8,12 +12,11 @@ const withSelectRectangle = (editor) => {
     if (editor.selectedNodeIds) {
       editor
         .selectedNodeIds
-        .map(nodeId => document.querySelector(`[data-node-id="${nodeId}"]`))
+        .reduce((acc, page) => [
+          ...acc,
+          ...queryElement({ nodeIds: page.get('nodeIds') }),
+          queryElement({ id: page.get('id') })], [])
         .forEach(element => element.classList.remove('selected'))
-      document
-        .querySelector(`[data-page-id="${editor.selectedPageId}"]`)
-        .classList
-        .remove('selected')
 
       editor.selectedNodeIds = undefined
       editor.selectedPageId = undefined
