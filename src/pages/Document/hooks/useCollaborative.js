@@ -32,7 +32,7 @@ const getUpdatedComponentState = ({ componentId, editor, connectedComponent }) =
         node.id !== componentId
       ) return true
 
-      if (pageIndex !== null) {
+      if (pageIndex === null) {
         pageIndex = pageI
         componentIndex = componentI
       }
@@ -194,8 +194,6 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
           component.subscribe(onComponentSubscribe({ componentId }))
           component.on('op', onComponentOperation({ componentId }))
         })
-
-      console.log(editor.connectedComponents)
     },
     [componentIds]
   )
