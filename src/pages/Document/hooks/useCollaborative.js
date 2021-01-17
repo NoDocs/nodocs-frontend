@@ -82,6 +82,7 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
 
   const oldValue = React.useRef()
   const syncMutex = React.useRef()
+  const syncComponentMutex = React.useRef()
   const oldSelection = React.useRef([{
     id: userId,
     selection: { anchor: { path: [0, 0], offset: 0 }, focus: { path: [0, 0], offset: 0 } }
@@ -144,7 +145,7 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
       { children: component, selection: connectedComponent.data.children.selection }
     )
 
-    if (!syncMutex.current) {
+    if (!syncComponentMutex.current) {
       if (Array.isArray(diff) && diff.length) {
         await new Promise((resolve, reject) => {
           try {
@@ -156,7 +157,6 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
       }
     }
   }
-
 
   const sendOp = args => new Promise(resolve => doc.submitOp(args, resolve))
 
@@ -170,22 +170,18 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
           const onComponentSubscribe = ({ componentId }) =>  () => {
             const connectedComponent = editor.connectedComponents[componentId]
 
-            syncMutex.current = true
-
+            syncComponentMutex.current = true
             const newEditorState = getUpdatedComponentState({ componentId, editor, connectedComponent })
-
-            syncMutex.current = false
+            syncComponentMutex.current = false
 
             if(newEditorState) updateEditorState(newEditorState)
           }
           const onComponentOperation = ({ componentId }) =>  () => {
             const connectedComponent = editor.connectedComponents[componentId]
-            syncMutex.current = true
-
+            syncComponentMutex.current = true
             const newEditorState = getUpdatedComponentState({ componentId, editor, connectedComponent })
             if(newEditorState) updateEditorState(newEditorState)
-
-            syncMutex.current = false
+            syncComponentMutex.current = false
           }
 
           if(!editor.connectedComponents) {
