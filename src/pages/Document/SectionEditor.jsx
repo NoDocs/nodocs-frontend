@@ -18,6 +18,15 @@ const StyledDocumentContainer = styled.div`
   ;
   grid-template-rows: 45px;
   grid-template-columns: 250px auto;
+  grid-row-gap: 25px;
+  grid-column-gap: 25px;
+`
+
+const StyledEditable = styled(Editable)`
+  display: grid;
+  grid-row-gap: 20px;
+  grid-area: document-content;
+  margin-right: 20px;
 `
 
 const SectionEditor = () => {
@@ -84,7 +93,7 @@ const SectionEditor = () => {
         <DocumentPanel />
         <DocumentLeftPanel />
 
-        <Editable
+        <StyledEditable
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           decorate={decorate}
