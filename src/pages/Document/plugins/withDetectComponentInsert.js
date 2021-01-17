@@ -1,4 +1,3 @@
-import shortid from 'shortid'
 import { Transforms } from 'slate'
 
 import store from 'store'
@@ -27,7 +26,6 @@ const withDetectComponent = (editor) => {
         store.dispatch(componentActions.putComponent({ ...data, sectionId }))
 
         Transforms.insertNodes(editor, { type: 'component', id, children: JSON.parse(data.content) })
-        Transforms.insertNodes(editor, { type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] })
         return
       }
     }
