@@ -78,14 +78,15 @@ const wsClient = token => new WebSocket(process.env.BASE_SHAREDB_WS, token)
 const connection = token => new sharedb.Connection(wsClient(token))
 
 const useCollaborative = ({ namespace, editor, editorState, updateEditorState, docId }) => {
+  const userId = useSelector(authSelectors.selectCurrUserProperty('id'))
+
   const oldValue = React.useRef()
   const syncMutex = React.useRef()
   const oldSelection = React.useRef([{
-    id: 'test',
+    id: userId,
     selection: { anchor: { path: [0, 0], offset: 0 }, focus: { path: [0, 0], offset: 0 } }
   }])
 
-  const userId = useSelector(authSelectors.selectCurrUserProperty('id'))
   const color = useSelector(authSelectors.selectCurrUserProperty('color'))
   const userName = useSelector(authSelectors.selectCurrUserProperty('fullName'))
   const componentIds = useSelector(documentSelectors.selectSectionProperty('componentIds'))
@@ -143,16 +144,19 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
       { children: component, selection: connectedComponent.data.children.selection }
     )
 
-    if (Array.isArray(diff) && diff.length) {
-      await new Promise((resolve, reject) => {
-        try {
-          connectedComponent.submitOp(diff, resolve)
-        } catch (err) {
-          reject(err)
-        }
-      })
+    if (!syncMutex.current) {
+      if (Array.isArray(diff) && diff.length) {
+        await new Promise((resolve, reject) => {
+          try {
+            connectedComponent.submitOp(diff, resolve)
+          } catch (err) {
+            reject(err)
+          }
+        })
+      }
     }
   }
+
 
   const sendOp = args => new Promise(resolve => doc.submitOp(args, resolve))
 
@@ -166,16 +170,22 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
           const onComponentSubscribe = ({ componentId }) =>  () => {
             const connectedComponent = editor.connectedComponents[componentId]
 
+            syncMutex.current = true
+
             const newEditorState = getUpdatedComponentState({ componentId, editor, connectedComponent })
+
+            syncMutex.current = false
 
             if(newEditorState) updateEditorState(newEditorState)
           }
           const onComponentOperation = ({ componentId }) =>  () => {
             const connectedComponent = editor.connectedComponents[componentId]
+            syncMutex.current = true
 
             const newEditorState = getUpdatedComponentState({ componentId, editor, connectedComponent })
-
             if(newEditorState) updateEditorState(newEditorState)
+
+            syncMutex.current = false
           }
 
           if(!editor.connectedComponents) {
