@@ -24,7 +24,7 @@ const useDocument = () => {
 
   const editor = React.useMemo(
     () => {
-      return flow(
+      const enhancedEditor = flow(
         withRectangleSelect,
         withDetectComponentInsert,
         withPaging(),
@@ -32,6 +32,10 @@ const useDocument = () => {
         withHistory,
         withReact,
       )(createEditor())
+
+      enhancedEditor.connectedComponents = {}
+
+      return enhancedEditor
     },
     []
   )

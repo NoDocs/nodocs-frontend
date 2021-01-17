@@ -58,7 +58,7 @@ const CreateComponent = () => {
       documentId: params.documentId,
       content: JSON.stringify(component.children)
     })
-    dispatch(componentActions.putComponent(data))
+    dispatch(componentActions.putComponent({ ...data, sectionId: activeSectionId }))
 
     editor.selectedNodeIds = undefined
     editor.selectedPageId = undefined

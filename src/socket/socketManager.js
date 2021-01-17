@@ -7,6 +7,7 @@ import { documentActions } from 'logic/document'
 import { notificationActions } from 'logic/notification'
 
 const onComponentUpdated = (dispatch) => (payload) => {
+  console.log('on component updated', payload)
   dispatch(componentActions.putComponent(payload))
 }
 

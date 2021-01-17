@@ -32,7 +32,7 @@ const getUpdatedComponentState = ({ componentId, editor, connectedComponent }) =
         node.id !== componentId
       ) return true
 
-      if (!pageIndex) {
+      if (pageIndex !== null) {
         pageIndex = pageI
         componentIndex = componentI
       }
@@ -50,7 +50,7 @@ const getUpdatedComponentState = ({ componentId, editor, connectedComponent }) =
       componentIndex,
       newEditorState: [...acc.newEditorState, newPage]
     }
-  }, { newEditorState: [], pageIndex, componentIndex })
+  }, { newEditorState: [], pageIndex: null, componentIndex: null })
 
   const editorPage = newEditorState[pageIndex]
   if(!editorPage) return
@@ -95,7 +95,7 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
   const userId = useSelector(authSelectors.selectCurrUserProperty('id'))
   const color = useSelector(authSelectors.selectCurrUserProperty('color'))
   const userName = useSelector(authSelectors.selectCurrUserProperty('fullName'))
-  const componentIds = useSelector(documentSelectors.selectSectionProperty('components'))
+  const componentIds = useSelector(documentSelectors.selectSectionProperty('componentIds'))
   const { decorate, setSelections } = useCursors({ userId })
 
   const doc = React.useMemo(
@@ -166,7 +166,7 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
   React.useEffect(
     () => {
       (componentIds || [])
-        .filter(componentId => !(editor.connectedComponents && editor.connectedComponents[componentId]))
+        .filter(componentId => !editor.connectedComponents[componentId])
         .forEach((componentId) => {
           const component = connection(localStorage.getItem('accessToken')).get('components', componentId)
 
@@ -194,6 +194,8 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
           component.subscribe(onComponentSubscribe({ componentId }))
           component.on('op', onComponentOperation({ componentId }))
         })
+
+      console.log(editor.connectedComponents)
     },
     [componentIds]
   )

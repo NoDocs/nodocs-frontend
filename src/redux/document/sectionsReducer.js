@@ -18,7 +18,7 @@ const sectionsReducer = (state = initialState, action) => {
               curr.id,
               new Map(curr)
                 .delete('components')
-                .set('componentIds', curr.components.map(component => component.componentId))
+                .set('componentIds', new List(curr.components.map(component => component.componentId)))
             ),
           new Map()
         )
@@ -54,7 +54,7 @@ const sectionsReducer = (state = initialState, action) => {
       const { componentId, sectionId } = action.payload
 
       return state.updateIn(
-        [sectionId, 'components'],
+        [sectionId, 'componentIds'],
         (componentIds = new List()) => componentIds.push(componentId))
     }
 
