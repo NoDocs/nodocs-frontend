@@ -166,7 +166,6 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
   React.useEffect(
     () => {
       (componentIds || [])
-        .map(curr => curr.componentId)
         .filter(componentId => !(editor.connectedComponents && editor.connectedComponents[componentId]))
         .forEach((componentId) => {
           const component = connection(localStorage.getItem('accessToken')).get('components', componentId)
