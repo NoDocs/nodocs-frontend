@@ -200,6 +200,8 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
   const handleSectionStateChange = (newValue) => {
     oldValue.current = { selections: oldSelection.current, children: editorState }
 
+    if (!editor.selection) return
+
     const selections = oldSelection
       .current
       .map(selection => selection.id === userId
