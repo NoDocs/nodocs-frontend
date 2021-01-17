@@ -23,18 +23,13 @@ const isComponentUpdate = (editor) => {
 
 const getUpdatedComponentState = ({ componentId, editor, connectedComponent }) => {
   const { pageIndex, componentIndex, newEditorState } = editor.children.reduce((acc, page, pageI) => {
-    let pageIndex = acc.pageIndex
-    let componentIndex = acc.componentIndex
 
     const filteredChildren = page.children.filter((node, componentI) => {
-      if (
-        node.type !== 'component' ||
-        node.id !== componentId
-      ) return true
+      if (node.id !== componentId) return true
 
-      if (pageIndex === null) {
-        pageIndex = pageI
-        componentIndex = componentI
+      if (acc.pageIndex === null) {
+        acc.pageIndex = pageI
+        acc.componentIndex = componentI
       }
 
       return false
@@ -46,8 +41,7 @@ const getUpdatedComponentState = ({ componentId, editor, connectedComponent }) =
     }
 
     return {
-      pageIndex,
-      componentIndex,
+      ...acc,
       newEditorState: [...acc.newEditorState, newPage]
     }
   }, { newEditorState: [], pageIndex: null, componentIndex: null })
