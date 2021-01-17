@@ -142,7 +142,7 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
     [setSelections, doc]
   )
 
-  const handleComponentStateChange = ({ newEditorState, connectedComponent, currentComponentId }) => {
+  const handleComponentStateChange = async ({ newEditorState, connectedComponent, currentComponentId }) => {
     const component = newEditorState.reduce((acc, page) => {
       const pageComponent = page.children.find(node => node.id === currentComponentId)
       return [...acc, ...pageComponent.children]
@@ -154,7 +154,13 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
     )
 
     if (Array.isArray(diff) && diff.length) {
-      connectedComponent.submitOp(diff, console.log)
+      await new Promise((resolve, reject) => {
+        try {
+          connectedComponent.submitOp(diff, resolve)
+        } catch (err) {
+          reject(err)
+        }
+      })
     }
   }
 
@@ -218,12 +224,11 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
   const onEditorStateChange = (newValue) => {
     const isComponent = isComponentUpdate(editor)
 
-
     if (isComponent && editor.connectedComponents) {
       const currentComponentId = getCurrentComponentId(editor)
       if(currentComponentId) {
         const connectedComponent = editor.connectedComponents[currentComponentId]
-        return handleComponentStateChange({ newEditorState: newValue, connectedComponent, currentComponentId })
+        if(connectedComponent) return handleComponentStateChange({ newEditorState: newValue, connectedComponent, currentComponentId })
       }
     }
 
