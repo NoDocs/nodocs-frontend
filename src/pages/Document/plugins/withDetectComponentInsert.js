@@ -1,4 +1,3 @@
-import shortid from 'shortid'
 import { Transforms } from 'slate'
 
 import store from 'store'
