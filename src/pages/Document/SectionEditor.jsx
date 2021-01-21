@@ -31,13 +31,13 @@ const StyledEditable = styled(Editable)`
 
 const SectionEditor = () => {
   const { editor, editorState, updateEditorState, activeSectionId } = useDocument()
-  const { onEditorStateChange, decorate } = useCollaborative({
-    namespace: 'sections',
-    docId: activeSectionId,
-    updateEditorState,
-    editor,
-    editorState,
-  })
+  // const { onEditorStateChange, decorate } = useCollaborative({
+  //   namespace: 'sections',
+  //   docId: activeSectionId,
+  //   updateEditorState,
+  //   editor,
+  //   editorState,
+  // })
 
   const renderElement = React.useCallback(
     ({ attributes: { ref, ...otherAttributes }, element, children }) => {
@@ -80,7 +80,7 @@ const SectionEditor = () => {
 
   const renderLeaf = React.useCallback(
     (props) => <Leaf {...props} />,
-    [decorate]
+    []
   )
 
   return (
@@ -88,7 +88,7 @@ const SectionEditor = () => {
       <Slate
         editor={editor}
         value={editorState}
-        onChange={onEditorStateChange}
+        onChange={updateEditorState}
       >
         <DocumentPanel />
         <DocumentLeftPanel />
@@ -96,7 +96,7 @@ const SectionEditor = () => {
         <StyledEditable
           renderElement={renderElement}
           renderLeaf={renderLeaf}
-          decorate={decorate}
+          // decorate={decorate}
         />
       </Slate>
     </StyledDocumentContainer>

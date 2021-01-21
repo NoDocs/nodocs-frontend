@@ -72,9 +72,9 @@ const TeamHeader = () => {
           <StyledMembersTitle>Members:</StyledMembersTitle>
 
           <StyledMemberImages>
-            {members
+            {/* {members
               .map(memberId => <StyledAvatar size={23} key={memberId} userId={memberId} />)
-              .toList()}
+              .toList()} */}
           </StyledMemberImages>
         </StyledSection>
 

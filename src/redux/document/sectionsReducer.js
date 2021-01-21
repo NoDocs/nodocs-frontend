@@ -18,7 +18,7 @@ const sectionsReducer = (state = initialState, action) => {
               curr.id,
               new Map(curr)
                 .delete('components')
-                .set('componentIds', new List(curr.components.map(component => component.componentId)))
+                // .set('componentIds', new List(curr.components.map(component => component.componentId)))
             ),
           new Map()
         )

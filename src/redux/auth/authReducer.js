@@ -13,8 +13,8 @@ const authReducer = (state = initialState, action) => {
         .set('email', action.payload.email)
         .set('token', action.payload.token)
         .set('color', action.payload.color)
-        .set('currentTeamId', action.payload.currentTeam.id)
-        .set('currentCompanyId', action.payload.currentCompany.id)
+        // .set('currentTeamId', action.payload.currentTeam.id)
+        // .set('currentCompanyId', action.payload.currentCompany.id)
     }
 
     case authActionTypes.REGISTER:

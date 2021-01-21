@@ -47,7 +47,7 @@ const MainLayout = ({ children, isTeamError }) => {
           navbarToggled={navbarToggled}
         />
 
-        {(isTeamError || isTeamLoaded) && <div>{children}</div>}
+        {<div>{children}</div>}
       </StyledContainer>
 
       <GlobalStyles />

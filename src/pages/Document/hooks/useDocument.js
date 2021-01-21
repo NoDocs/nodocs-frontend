@@ -4,14 +4,15 @@ import { withReact } from 'slate-react'
 import { createEditor } from 'slate'
 import flow from 'lodash/flow'
 import shortid from 'shortid'
+import { withHistory } from 'slate-history'
+import { withIOCollaboration } from '@slate-collaborative/client'
 
-import {documentSelectors } from 'logic/document'
+import { documentSelectors } from 'logic/document'
 
 import withRectangleSelect from '../plugins/withRectangleSelect'
 import withDetectComponentInsert from '../plugins/withDetectComponentInsert'
 import withNodeId from '../plugins/withNodeId'
 import withPaging from '../plugins/paging/withPaging'
-import { withHistory } from 'slate-history'
 
 const useDocument = () => {
   const [editorState, updateEditorState] = React.useState([{
@@ -28,16 +29,46 @@ const useDocument = () => {
         withRectangleSelect,
         withDetectComponentInsert,
         withPaging(),
-        withNodeId,
+        // withNodeId,
         withHistory,
         withReact,
       )(createEditor())
 
-      enhancedEditor.connectedComponents = {}
+      const origin = process.env.NODE_ENV === 'production'
+        ? process.env.BASE_API_URL
+        : 'http://localhost:8000'
 
-      return enhancedEditor
+      const options = {
+        docId: `/${activeSectionId}`,
+        cursorData: {
+          name: 'Guka',
+          color: 'black',
+          alphaColor: 'black'.slice(0, -2) + '0.2)'
+        },
+        url: `${origin}/${activeSectionId}`,
+        connectOpts: {
+          query: {
+            name: 'Guka',
+            token: 'id',
+            type: 'document',
+            slug: activeSectionId,
+          }
+        },
+      }
+
+      return withIOCollaboration(enhancedEditor, options)
     },
     []
+  )
+
+  React.useEffect(
+    () => {
+      if (!editor.connect) return
+
+      editor.connect()
+      return editor.destroy
+    },
+    [editor]
   )
 
   return {

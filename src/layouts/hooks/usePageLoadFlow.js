@@ -21,9 +21,13 @@ const usePageLoadFlow = () => {
       const handleThen = (response) => {
         const { data } = response
 
-        dispatch(authActions.signIn(data))
-        dispatch(companyActions.setCompanies([data.currentCompany]))
-        dispatch(companyActions.setActiveCompany(data.currentCompany.id))
+        try {
+          dispatch(authActions.signIn(data))
+          dispatch(companyActions.setCompanies([data.currentCompany]))
+          dispatch(companyActions.setActiveCompany(data.currentCompany.id))
+        } catch (error) {
+          console.log(error)
+        }
       }
 
       const handleCatch = (error) => {
