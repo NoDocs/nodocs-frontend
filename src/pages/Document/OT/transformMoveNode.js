@@ -1,6 +1,6 @@
 import { Path } from 'slate'
 
-import { xTransformMxN } from './SlateType'
+import { xTransformMxN } from './slateType'
 
 export const transMoveNode = (leftOp, rightOp, side) => {
   if (Path.equals(leftOp.path, leftOp.newPath)) {
