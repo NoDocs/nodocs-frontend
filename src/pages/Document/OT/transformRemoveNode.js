@@ -1,6 +1,6 @@
 import { Path } from 'slate'
 
-import { xTransformMxN } from './SlateType'
+import { xTransformMxN } from './slateType'
 import { decomposeMove } from './transformMoveNode'
 import { pathTransform } from './OT'
 
