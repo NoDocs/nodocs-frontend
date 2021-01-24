@@ -96,7 +96,7 @@ const SectionEditor = () => {
         <StyledEditable
           renderElement={renderElement}
           renderLeaf={renderLeaf}
-          decorate={decorate}
+          // decorate={decorate}
         />
       </Slate>
     </StyledDocumentContainer>
