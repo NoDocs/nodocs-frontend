@@ -1,13 +1,13 @@
 import { Path } from 'slate'
 
-import { transInsertText } from './transInsertText'
-import { transRemoveText } from './transRemoveText'
-import { transInsertNode } from './transInsertNode'
-import { transRemoveNode } from './transRemoveNode'
-import { transSplitNode } from './transSplitNode'
-import { transMergeNode } from './transMergeNode'
-import { transMoveNode } from './transMoveNode'
-import { transSetNode } from './transSetNode'
+import { transInsertText } from './transformInsertText'
+import { transRemoveText } from './transformRemoveText'
+import { transInsertNode } from './transformInsertNode'
+import { transRemoveNode } from './transformRemoveNode'
+import { transSplitNode } from './transformSplitNode'
+import { transMergeNode } from './transformMergeNode'
+import { transMoveNode } from './transformMoveNode'
+import { transSetNode } from './transformSetNode'
 
 export const OT = {
   transInsertText,

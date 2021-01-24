@@ -1,7 +1,7 @@
 import { Path, Text } from 'slate'
 
-import { xTransformMxN } from './SlateType'
-import { decomposeMove } from './transMoveNode'
+import { xTransformMxN } from './slateType'
+import { decomposeMove } from './transformMoveNode'
 import { pathTransform } from './OT'
 
 export const transInsertNode = (leftOp, rightOp, side) => {

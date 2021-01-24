@@ -1,97 +1,21 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { Transforms } from 'slate'
 import * as sharedb from 'sharedb/lib/client'
-import * as jsondiff from 'json0-ot-diff'
 
 import { authSelectors } from 'logic/auth'
 import { documentSelectors } from 'logic/document'
-
-import useCursors from './useCursors'
-
-const isComponentUpdate = (editor) => {
-  if (editor.selection) {
-    const { focus: { path } } = editor.selection
-    const node = editor
-      .children[path[0]]
-      .children[path[1]]
-
-    return node.type === 'component'
-  }
-
-  return false
-}
-
-const getUpdatedComponentState = ({ componentId, editor, connectedComponent }) => {
-  const { pageIndex, componentIndex, newEditorState } = editor.children.reduce((acc, page, pageI) => {
-
-    const filteredChildren = page.children.filter((node, componentI) => {
-      if (node.id !== componentId) return true
-
-      if (acc.pageIndex === null) {
-        acc.pageIndex = pageI
-        acc.componentIndex = componentI
-      }
-
-      return false
-    })
-
-    const newPage = {
-      ...page,
-      children: filteredChildren
-    }
-
-    return {
-      ...acc,
-      newEditorState: [...acc.newEditorState, newPage]
-    }
-  }, { newEditorState: [], pageIndex: null, componentIndex: null })
-
-  const editorPage = newEditorState[pageIndex]
-  if(!editorPage) return
-
-  newEditorState[pageIndex] = {
-    ...editorPage,
-    children: [
-      ...(editorPage.children.slice(0, componentIndex) || []),
-      {
-        type: 'component',
-        id: componentId,
-        children: connectedComponent.data.children
-      },
-      ...(editorPage.children.slice(componentIndex) || [])
-    ]
-  }
-
-  return newEditorState
-}
-
-const getCurrentComponentId = (editor) => {
-  const { focus: { path } } = editor.selection
-  const node = editor
-    .children[path[0]]
-    .children[path[1]]
-
-  return node.id
-}
+import { slateType } from '../OT/slateType'
 
 const wsClient = token => new WebSocket(process.env.BASE_SHAREDB_WS, token)
 const connection = token => new sharedb.Connection(wsClient(token))
+sharedb.types.register(slateType)
 
 const useCollaborative = ({ namespace, editor, editorState, updateEditorState, docId }) => {
   const userId = useSelector(authSelectors.selectCurrUserProperty('id'))
-
-  const oldValue = React.useRef()
-  const syncMutex = React.useRef()
-  const syncComponentMutex = React.useRef()
-  const oldSelection = React.useRef([{
-    id: userId,
-    selection: { anchor: { path: [0, 0], offset: 0 }, focus: { path: [0, 0], offset: 0 } }
-  }])
-
   const color = useSelector(authSelectors.selectCurrUserProperty('color'))
   const userName = useSelector(authSelectors.selectCurrUserProperty('fullName'))
   const componentIds = useSelector(documentSelectors.selectSectionProperty('componentIds'))
-  const { decorate, setSelections } = useCursors({ userId })
 
   const doc = React.useMemo(
     () => connection(localStorage.getItem('accessToken')).get(namespace, docId),
@@ -101,64 +25,31 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
   React.useEffect(
     () => {
       const onSubscribe = () => {
-        syncMutex.current = true
+        console.log('subscribed to document !!', doc.data)
         updateEditorState(doc.data.children)
-        syncMutex.current = false
       }
 
-      const onOperation = () => {
-        syncMutex.current = true
+      const onOperation = (operation, source) => {
+        if (source === userId) return
 
-        if (doc.data.selections) {
-          const mySelection = doc
-            .data
-            .selections
-            .find(currSelection => currSelection.id === userId)
-          const otherSelections = doc
-            .data
-            .selections
-            .filter(currSelection => currSelection.id !== userId)
-
-          if (mySelection) editor.selection = mySelection.selection
-
-          setSelections(otherSelections)
-        }
-
+        console.log(doc.data.children)
         updateEditorState(doc.data.children)
-        syncMutex.current = false
+
+        const operations = Array.isArray(operation)
+          ? operation
+          : [operation]
+
+        for (const op of operations) {
+          console.log('apply -> ', op)
+          Transforms.transform(editor, op)
+        }
       }
 
       doc.subscribe(onSubscribe)
       doc.on('op', onOperation)
     },
-    [setSelections, doc]
+    []
   )
-
-  const handleComponentStateChange = async ({ newEditorState, connectedComponent, currentComponentId }) => {
-    const component = newEditorState.reduce((acc, page) => {
-      const pageComponent = page.children.find(node => node.id === currentComponentId)
-      return [...acc, ...(pageComponent.children || [])]
-    }, [])
-
-    const diff = jsondiff(
-      { current: connectedComponent.data.children },
-      { children: component, selection: connectedComponent.data.children.selection }
-    )
-
-    if (!syncComponentMutex.current) {
-      if (Array.isArray(diff) && diff.length) {
-        await new Promise((resolve, reject) => {
-          try {
-            connectedComponent.submitOp(diff, resolve)
-          } catch (err) {
-            reject(err)
-          }
-        })
-      }
-    }
-  }
-
-  const sendOp = args => new Promise(resolve => doc.submitOp(args, resolve))
 
   React.useEffect(
     () => {
@@ -167,28 +58,10 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
         .forEach((componentId) => {
           const component = connection(localStorage.getItem('accessToken')).get('components', componentId)
 
-          const onComponentSubscribe = ({ componentId }) =>  () => {
-            const connectedComponent = editor.connectedComponents[componentId]
+          const onComponentSubscribe = () => {}
+          const onComponentOperation = () => {}
 
-            syncComponentMutex.current = true
-            const newEditorState = getUpdatedComponentState({ componentId, editor, connectedComponent })
-            syncComponentMutex.current = false
-
-            if(newEditorState) updateEditorState(newEditorState)
-          }
-          const onComponentOperation = ({ componentId }) =>  () => {
-            const connectedComponent = editor.connectedComponents[componentId]
-            syncComponentMutex.current = true
-            const newEditorState = getUpdatedComponentState({ componentId, editor, connectedComponent })
-            if(newEditorState) updateEditorState(newEditorState)
-            syncComponentMutex.current = false
-          }
-
-          if(!editor.connectedComponents) {
-            editor.connectedComponents = { [componentId]: component }
-          } else {
-            editor.connectedComponents[componentId] = component
-          }
+          editor.connectedComponents[componentId] = component
 
           component.subscribe(onComponentSubscribe({ componentId }))
           component.on('op', onComponentOperation({ componentId }))
@@ -197,43 +70,16 @@ const useCollaborative = ({ namespace, editor, editorState, updateEditorState, d
     [componentIds]
   )
 
-  const handleSectionStateChange = (newValue) => {
-    oldValue.current = { selections: oldSelection.current, children: editorState }
-
-    if (!editor.selection) return
-
-    const selections = oldSelection
-      .current
-      .map(selection => selection.id === userId
-        ? { id: userId, selection: editor.selection, color, name: userName }
-        : selection)
-
-    const diff = jsondiff(oldValue, { selections, children: newValue })
-    oldSelection.current = selections
-
-    if (!syncMutex.current) {
-      if (Array.isArray(diff) && diff.length) {
-        sendOp(diff)
-      }
-    }
-  }
-
   const onEditorStateChange = (newValue) => {
-    const isComponent = isComponentUpdate(editor)
+    updateEditorState(newValue)
 
-    if (isComponent && editor.connectedComponents) {
-      const currentComponentId = getCurrentComponentId(editor)
-      if(currentComponentId) {
-        const connectedComponent = editor.connectedComponents[currentComponentId]
-        if(connectedComponent) return handleComponentStateChange({ newEditorState: newValue, connectedComponent, currentComponentId })
-      }
-    }
-
-    handleSectionStateChange(newValue)
+    editor
+      .operations
+      .filter(operation => operation.type !== 'set_selection')
+      .forEach(operation => doc.submitOp(operation, { source: userId }))
   }
 
   return {
-    decorate,
     onEditorStateChange,
   }
 }

@@ -1,7 +1,7 @@
 import { Path } from 'slate'
 
 import { xTransformMxN } from './SlateType'
-import { decomposeMove } from './transMoveNode'
+import { decomposeMove } from './transformMoveNode'
 import { pathTransform } from './OT'
 
 export const transRemoveNode = (leftOp, rightOp, side) => {

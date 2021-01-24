@@ -99,6 +99,7 @@ const xTransform1x1 = (leftOp, rightOp, side) => {
 }
 
 const doTransform = (leftOp, rightOp, side) => {
+  console.log('doTransform !!')
   switch (leftOp.type) {
     case 'insert_text':
       return OT.transInsertText(leftOp, rightOp, side)
