@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "baseUrl": "./src",
+    "paths": {
+      "assets/*": ["./assets/*"],
+      "hooks/*": ["./hooks/*"],
+      "utils/*": ["./utils/*"],
+      "store": ["./store/*"],
+      "atoms/*": ["./atoms/*"],
+      "molecules/*": ["./molecules/*"],
+      "services": ["./services/*"],
+      "logic/*": ["./redux/*"],
+      "socket": ["./socket/*"],
+      "contexts": ["./contexts/*"],
+      "modals/*": ["./modals/*"],
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*"
+  ]
+}

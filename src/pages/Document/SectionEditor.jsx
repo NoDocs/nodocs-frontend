@@ -4,11 +4,9 @@ import { Slate, Editable } from 'slate-react'
 
 import useDocument from './hooks/useDocument'
 import DocumentPanel from './DocumentPanel'
-import Page from './Page'
 import DocumentLeftPanel from './DocumentLeftPanel'
 import Component from './Component'
 import Leaf from './components/Leaf'
-import useCollaborative from './hooks/useCollaborative'
 
 const StyledDocumentContainer = styled.div`
   display: grid;
@@ -23,35 +21,21 @@ const StyledDocumentContainer = styled.div`
 `
 
 const StyledEditable = styled(Editable)`
-  display: grid;
-  grid-row-gap: 20px;
   grid-area: document-content;
   margin-right: 20px;
+  background: #FFFFFF;
+  min-height: 540px;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  padding: 20px;
+  border-left: 0px;
 `
 
 const SectionEditor = () => {
-  const { editor, editorState, updateEditorState, activeSectionId } = useDocument()
-  const { onEditorStateChange, decorate } = useCollaborative({
-    namespace: 'sections',
-    docId: activeSectionId,
-    updateEditorState,
-    editor,
-    editorState,
-  })
+  const { editor, editorState, updateEditorState } = useDocument()
 
   const renderElement = React.useCallback(
     ({ attributes: { ref, ...otherAttributes }, element, children }) => {
-      if (element.type === 'page') {
-        return (
-          <Page
-            id={element.id}
-            content={children}
-            attributes={otherAttributes}
-            ref={ref}
-          />
-        )
-      }
-
       if (element.type === 'component') {
         return (
           <Component
@@ -80,7 +64,7 @@ const SectionEditor = () => {
 
   const renderLeaf = React.useCallback(
     (props) => <Leaf {...props} />,
-    [decorate]
+    []
   )
 
   return (
@@ -88,7 +72,7 @@ const SectionEditor = () => {
       <Slate
         editor={editor}
         value={editorState}
-        onChange={onEditorStateChange}
+        onChange={updateEditorState}
       >
         <DocumentPanel />
         <DocumentLeftPanel />
@@ -96,7 +80,6 @@ const SectionEditor = () => {
         <StyledEditable
           renderElement={renderElement}
           renderLeaf={renderLeaf}
-          // decorate={decorate}
         />
       </Slate>
     </StyledDocumentContainer>

@@ -2,16 +2,16 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { withReact } from 'slate-react'
 import { createEditor } from 'slate'
+import { withHistory } from 'slate-history'
+import { withIOCollaboration } from '@slate-collaborative/client'
 import flow from 'lodash/flow'
 import shortid from 'shortid'
 
-import {documentSelectors } from 'logic/document'
-
+import { authSelectors } from 'logic/auth'
+import { documentSelectors } from 'logic/document'
 import withRectangleSelect from '../plugins/withRectangleSelect'
 import withDetectComponentInsert from '../plugins/withDetectComponentInsert'
 import withNodeId from '../plugins/withNodeId'
-import withPaging from '../plugins/paging/withPaging'
-import { withHistory } from 'slate-history'
 
 const useDocument = () => {
   const [editorState, updateEditorState] = React.useState([{
@@ -20,25 +20,49 @@ const useDocument = () => {
     children: [{ type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] }]
   }])
 
+  const userName = useSelector(authSelectors.selectCurrUserProperty('name'))
+  const color = useSelector(authSelectors.selectCurrUserProperty('color'))
   const activeSectionId = useSelector(documentSelectors.selectSectionProperty('id'))
 
   const editor = React.useMemo(
     () => {
-      const enhancedEditor = flow(
+      const withPlugins = flow(
         withRectangleSelect,
         withDetectComponentInsert,
-        withPaging(),
         withNodeId,
         withHistory,
         withReact,
       )(createEditor())
 
-      enhancedEditor.connectedComponents = {}
+      const origin = process.env.NODE_ENV === 'production'
+        ? process.env.BASE_API_URL
+        : 'http://localhost:8000'
 
-      return enhancedEditor
+      const options = {
+        docId: `/${activeSectionId}`,
+        cursorData: {
+          name: userName,
+          color,
+          alphaColor: color.slice(0, -2) + '0.2)'
+        },
+        url: `${origin}/${activeSectionId}`,
+        connectOpts: {
+          query: {
+            name: userName,
+            token: 'id',
+            type: 'document',
+            slug: activeSectionId,
+          }
+        },
+      }
+
+      return withIOCollaboration(withPlugins, options)
     },
     []
   )
+
+  React.useEffect(() => { editor.connect() }, [])
+  React.useEffect(() => editor.destroy, [])
 
   return {
     editor,
