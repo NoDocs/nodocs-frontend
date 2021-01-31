@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Slate, Editable } from 'slate-react'
+import { useCursor } from '@slate-collaborative/client'
 
 import useDocument from './hooks/useDocument'
 import DocumentPanel from './DocumentPanel'
@@ -33,6 +34,7 @@ const StyledEditable = styled(Editable)`
 
 const SectionEditor = () => {
   const { editor, editorState, updateEditorState } = useDocument()
+  const { decorate } = useCursor(editor)
 
   const renderElement = React.useCallback(
     ({ attributes: { ref, ...otherAttributes }, element, children }) => {
@@ -64,7 +66,7 @@ const SectionEditor = () => {
 
   const renderLeaf = React.useCallback(
     (props) => <Leaf {...props} />,
-    []
+    [decorate]
   )
 
   return (
@@ -80,6 +82,7 @@ const SectionEditor = () => {
         <StyledEditable
           renderElement={renderElement}
           renderLeaf={renderLeaf}
+          decorate={decorate}
         />
       </Slate>
     </StyledDocumentContainer>

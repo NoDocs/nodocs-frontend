@@ -7,6 +7,7 @@ import { withIOCollaboration } from '@slate-collaborative/client'
 import flow from 'lodash/flow'
 import shortid from 'shortid'
 
+import { hexToRgba } from 'utils/color'
 import { authSelectors } from 'logic/auth'
 import { documentSelectors } from 'logic/document'
 import withRectangleSelect from '../plugins/withRectangleSelect'
@@ -20,7 +21,7 @@ const useDocument = () => {
     children: [{ type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] }]
   }])
 
-  const userName = useSelector(authSelectors.selectCurrUserProperty('name'))
+  const userName = useSelector(authSelectors.selectCurrUserProperty('fullName'))
   const color = useSelector(authSelectors.selectCurrUserProperty('color'))
   const activeSectionId = useSelector(documentSelectors.selectSectionProperty('id'))
   const activePageId = useSelector(documentSelectors.selectPageProperty('id'))
@@ -44,7 +45,7 @@ const useDocument = () => {
         cursorData: {
           name: userName,
           color,
-          alphaColor: color.slice(0, -2) + '0.2)'
+          alphaColor: hexToRgba(color, 0.7),
         },
         url: `${origin}/${activePageId}`,
         connectOpts: {

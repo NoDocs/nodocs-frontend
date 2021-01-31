@@ -22,17 +22,17 @@ const caretStyleBase = {
   width: 2,
 }
 
-const Caret = ({ alphaColor, isForward, name }) => {
+const Caret = ({ color, alphaColor, isForward, name }) => {
   const cursorStyles = {
     ...cursorStyleBase,
-    background: alphaColor,
+    backgroundColor: alphaColor,
     left: isForward ? '100%' : '0%',
   }
 
   const caretStyles = {
     ...caretStyleBase,
     ...(isForward ? { bottom: 0 } : { top: 0 }),
-    background: alphaColor,
+    background: color,
     left: isForward ? '100%' : '0%'
   }
 
