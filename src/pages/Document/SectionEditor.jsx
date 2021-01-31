@@ -49,14 +49,14 @@ const SectionEditor = () => {
       }
 
       return (
-        <p
+        <div
           data-node-id={element.id}
           style={{ position: 'relative', margin: 0 }}
           ref={ref}
           {...otherAttributes}
         >
           {children}
-        </p>
+        </div>
       )
     },
     []

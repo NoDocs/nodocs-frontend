@@ -14,9 +14,13 @@ const activeDocumentReducer = (state = initialState, action) => {
       const { document } = action.payload
       const { sections } = document
 
+      const activeSection = sections[0]
+      const activePage = activeSection.pages[0]
+
       return state
         .set('id', document.id)
-        .set('activeSectionId', sections[0].id)
+        .set('activeSectionId', activeSection.id)
+        .set('activePageId', activePage.id)
         .update('openedDocumentIds', ids => ids.includes(document.id) ? ids : ids.push(document.id))
     }
 

@@ -42,19 +42,13 @@ const documentsReducer = (state = initialState, action) => {
     case documentActionTypes.CREATE_SECTION: {
       const { section } = action.payload
 
-      return state.updateIn(
-        [section.document.id, 'sections'],
-        sections => sections.push(section.id)
-      )
+      return state.updateIn([section.document.id, 'sections'], sections => sections.push(section.id))
     }
 
     case documentActionTypes.ATTACH_TAG: {
       const { tag, documentId } = action.payload
 
-      return state.updateIn(
-        [documentId, 'tags'],
-        tags => tags.push(tag.id)
-      )
+      return state.updateIn([documentId, 'tags'], tags => tags.push(tag.id))
     }
 
     default:

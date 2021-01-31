@@ -1,8 +1,6 @@
 import { Map, List } from 'immutable'
 import * as documentActionTypes from './documentActionTypes'
 
-import * as componentActionTypes from '../component/componentActionTypes'
-
 const initialState = new Map()
 
 const sectionsReducer = (state = initialState, action) => {
@@ -12,14 +10,9 @@ const sectionsReducer = (state = initialState, action) => {
         .payload
         .document
         .sections
+        .map(section => ({ ...section, pages: section.pages.map(curr => curr.id) }))
         .reduce(
-          (res, curr) => res
-            .set(
-              curr.id,
-              new Map(curr)
-                .delete('components')
-                .set('componentIds', new List(curr.components.map(component => component.componentId)))
-            ),
+          (res, curr) => res.set(curr.id, new Map(curr)),
           new Map()
         )
     }
@@ -28,6 +21,7 @@ const sectionsReducer = (state = initialState, action) => {
       return action
         .payload
         .sections
+        .map(section => ({ ...section, pages: section.pages.map(curr => curr.id) }))
         .reduce(
           (res, curr) => res.set(curr.id, new Map(curr)),
           new Map()
@@ -49,17 +43,9 @@ const sectionsReducer = (state = initialState, action) => {
       )
     }
 
-    case componentActionTypes.CREATE_COMPONENT:
-    case componentActionTypes.PUT_COMPONENT: {
-      const { componentId, sectionId } = action.payload
-
-      return state.updateIn(
-        [sectionId, 'componentIds'],
-        (componentIds = new List()) => componentIds.push(componentId))
-    }
-
-    case documentActionTypes.CLEAR_DOCUMENT:
+    case documentActionTypes.CLEAR_DOCUMENT: {
       return initialState
+    }
 
     default:
       return state

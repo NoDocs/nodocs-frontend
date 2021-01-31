@@ -36,10 +36,9 @@ const StyledPagesContainer = styled.div`
 
 const Section = ({ id }) => {
   const dispatch = useDispatch()
-  const editor = useSlate()
   const activeSectionId = useSelector(documentSelectors.selectActiveSectionId)
   const title = useSelector(documentSelectors.selectSectionProperty('title', () => id))
-  const pages = JSON.parse(useSelector(documentSelectors.selectSectionProperty('content', () => id)))
+  const pages = useSelector(documentSelectors.selectSectionProperty('pages', () => id))
 
   const onSectionClick = () => {
     dispatch(documentActions.switchSection({
@@ -66,9 +65,7 @@ const Section = ({ id }) => {
       )}
     >
       <StyledPagesContainer>
-        {editor
-          .children
-          .map(page => <PageMenuItem key={page.id} page={page} />)}
+        {pages.map(pageId => <PageMenuItem key={pageId} pageId={pageId} />)}
       </StyledPagesContainer>
 
       <CreatePage />

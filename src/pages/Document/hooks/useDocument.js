@@ -23,6 +23,7 @@ const useDocument = () => {
   const userName = useSelector(authSelectors.selectCurrUserProperty('name'))
   const color = useSelector(authSelectors.selectCurrUserProperty('color'))
   const activeSectionId = useSelector(documentSelectors.selectSectionProperty('id'))
+  const activePageId = useSelector(documentSelectors.selectPageProperty('id'))
 
   const editor = React.useMemo(
     () => {
@@ -39,19 +40,19 @@ const useDocument = () => {
         : 'http://localhost:8000'
 
       const options = {
-        docId: `/${activeSectionId}`,
+        docId: `/${activePageId}`,
         cursorData: {
           name: userName,
           color,
           alphaColor: color.slice(0, -2) + '0.2)'
         },
-        url: `${origin}/${activeSectionId}`,
+        url: `${origin}/${activePageId}`,
         connectOpts: {
           query: {
             name: userName,
             token: 'id',
             type: 'document',
-            slug: activeSectionId,
+            slug: activePageId,
           }
         },
       }

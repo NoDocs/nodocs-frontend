@@ -13,6 +13,7 @@ import groupsReducer from './groups/groupsReducer'
 import notificationReducer from './notification/notificationReducer'
 import companiesReducer from './company/companiesReducer'
 import activeCompanyReducer from './company/activeCompanyReducer'
+import pagesReducer from './document/pagesReducer'
 
 export default combineReducers({
   auth: authReducer,
@@ -22,6 +23,7 @@ export default combineReducers({
   entities: combineReducers({
     documents: documentsReducer,
     sections: sectionsReducer,
+    pages: pagesReducer,
     tags: tagsReducer,
     teams: teamsReducer,
     members: membersReducer,
