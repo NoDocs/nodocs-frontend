@@ -16,9 +16,9 @@ import withNodeId from '../plugins/withNodeId'
 
 const useDocument = () => {
   const [editorState, updateEditorState] = React.useState([{
-    type: 'page',
+    type: 'paragraph',
     id: shortid.generate(),
-    children: [{ type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] }]
+    children: [{ text: '' }]
   }])
 
   const userName = useSelector(authSelectors.selectCurrUserProperty('fullName'))

@@ -1,21 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { Editable, Slate } from 'slate-react'
+import { useCursor } from '@slate-collaborative/client'
 
 import history from 'utils/history'
-import copyToClipboard from 'utils/copyToClipboard'
-import componentIcon from 'assets/component.svg'
 import deleteIcon from 'assets/delete.svg'
 import undoIcon from 'assets/undo.svg'
 import redoIcon from 'assets/redo.svg'
 import IconButton from 'atoms/IconButton'
 import Popup from 'molecules/Popup'
 import useComponent from './hooks/useComponent'
+import Leaf from './components/Leaf'
 
 const StyledComponentContainer = styled.div`
   background: ${({ isImported }) => isImported
     ? 'none' : '#F2F3F4'};
   padding: 2px;
+  display: flex;
   border-radius: 0 5px 5px 0;
 
   & div:first-child {
@@ -24,8 +26,7 @@ const StyledComponentContainer = styled.div`
 
   &:hover{
     background: ${({ isImported }) => isImported
-    ? 'none'
-    : 'rgb(250 235 215 / 0.6)'};
+    ? 'none' : 'rgb(250 235 215 / 0.6)'};
     border: ${({ isImported }) => isImported
     ? '2px solid rgb(123 97 255 / 50%)'
     : 'none'};
@@ -43,38 +44,46 @@ const StyledIcon = styled.div`
   background-repeat: no-repeat;
 `
 
-const Component = React.forwardRef(({ attributes, id, content }, ref) => {
-  const { isImported, rootDocumentId } = useComponent({ componentId: id })
+const Component = ({ id: componentId }) => {
+  const {
+    editorState,
+    onEditorStateChange,
+    isImported,
+    rootDocumentId,
+    editor,
+  } = useComponent({ componentId })
+  const { decorate } = useCursor(editor)
 
-  const copyComponent = () => {
-    copyToClipboard(`[[component=${id}]]`)
-  }
+  const renderLeaf = React.useCallback(
+    (props) => <Leaf {...props} />,
+    [decorate]
+  )
+
+  if (!editorState) return <div>Getting a component...</div>
 
   return (
     <Popup
       on="hover"
-      name={`component-${id}-options`}
+      name={`component-${componentId}-options`}
       style={{ padding: 0, borderRadius: '5px 10px' }}
       fullWidth={false}
       direction="TOP_RIGHT_INNER"
       trigger={(
         <StyledComponentContainer
           isImported={isImported}
-          ref={ref}
-          data-component-id={id}
-          {...attributes}
+          contentEditable={false}
+          data-component-id={componentId}
         >
-          {content}
+          <Slate editor={editor} value={editorState} onChange={onEditorStateChange}>
+            <Editable renderLeaf={renderLeaf} decorate={decorate} />
+          </Slate>
+
           {isImported && <StyledIcon onClick={() => history.push(`/d/${rootDocumentId}`)} />}
         </StyledComponentContainer>
       )}
     >
       <IconButton title="Add empty line before" variant="white">
         <img height={14} src={undoIcon} alt="add empty line before" />
-      </IconButton>
-
-      <IconButton onClick={copyComponent} title="Copy component" variant="white">
-        <img height={14} src={componentIcon} alt="copy component" />
       </IconButton>
 
       <IconButton title="Add empty line after" variant="white">
@@ -86,13 +95,10 @@ const Component = React.forwardRef(({ attributes, id, content }, ref) => {
       </IconButton>
     </Popup>
   )
-})
+}
 
-Component.displayName = 'Component'
 Component.propTypes = {
   id: PropTypes.string,
-  attributes: PropTypes.object,
-  content: PropTypes.object,
 }
 
 export default Component

@@ -3,7 +3,6 @@ import shortid from 'shortid'
 import { useEditor } from 'slate-react'
 import { Transforms } from 'slate'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
 
 import { documentSelectors } from 'logic/document'
 import componentIcon from 'assets/component.svg'
@@ -16,8 +15,7 @@ import IconButton from 'atoms/IconButton'
 const CreateComponent = () => {
   const editor = useEditor()
   const dispatch = useDispatch()
-  const activeSectionId = useSelector(documentSelectors.selectActiveSectionId)
-  const params = useParams()
+  const activePageId = useSelector(documentSelectors.selectActivePageId)
 
   const handleCreateComponent = async () => {
     if (!editor.selectedNodeIds) {
@@ -25,43 +23,31 @@ const CreateComponent = () => {
       return
     }
 
-    const { selectedNodeIds } = editor
     const componentId = shortid.generate()
 
     const component = {
       type: 'component',
       id: componentId,
       componentId,
-      children: []
+      rootPageId: activePageId,
+      children: [{ text: '' }]
     }
 
-    selectedNodeIds.forEach(page => {
-      const { content, pageIndex, start, end } = getSelectedRange({
-        editor,
-        pageId: page.get('id'),
-        nodeIds: page.get('nodeIds').toJS()
-      })
+    const { content, start, end } = getSelectedRange({ editor })
+    selectRange({ editor, start, end })
 
-      selectRange({ editor, pageIndex, start, end })
-
-      Transforms.wrapNodes(
-        editor,
-        { type: 'component', id: componentId, componentId }
-      )
-
-      component.children = [...component.children, ...content]
-    })
+    Transforms.delete(editor, { at: editor.selection })
+    Transforms.insertNodes(editor, component)
 
     const { data } = await componentServices.createComponent({
+      content: JSON.stringify(content),
       componentId,
-      sectionId: activeSectionId,
-      documentId: params.documentId,
-      content: JSON.stringify(component.children)
+      pageId: activePageId,
     })
-    dispatch(componentActions.putComponent({ ...data, sectionId: activeSectionId }))
+
+    dispatch(componentActions.putComponent({ ...data, pageId: activePageId }))
 
     editor.selectedNodeIds = undefined
-    editor.selectedPageId = undefined
     copyToClipboard(`[[component=${componentId}]]`)
   }
 

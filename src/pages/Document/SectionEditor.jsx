@@ -28,7 +28,7 @@ const StyledEditable = styled(Editable)`
   min-height: 540px;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
   border-radius: 10px;
-  padding: 20px;
+  padding: 20px 30px;
   border-left: 0px;
 `
 
@@ -80,6 +80,7 @@ const SectionEditor = () => {
         <DocumentLeftPanel />
 
         <StyledEditable
+          data-start="selection"
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           decorate={decorate}
