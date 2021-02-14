@@ -7,13 +7,16 @@ import { withIOCollaboration } from '@slate-collaborative/client'
 
 import * as componentServices from 'services/component'
 import { componentActions } from 'logic/component'
+import { hexToRgba } from 'utils/color'
 
 const useComponent = ({ componentId }) => {
   const params = useParams()
   const dispatch = useDispatch()
+
   const content = useSelector(state => state.getIn(['components', componentId, 'content']))
   const rootDocumentId = useSelector(state => state.getIn(['components', componentId, 'rootDocument', 'id']))
   const userName = useSelector(state => state.getIn(['auth', 'fullName']))
+  const color = useSelector(state => state.getIn(['auth', 'color']))
   const [editorState, updateEditorState] = React.useState(content
     ? JSON.parse(content)
     : null)
@@ -36,14 +39,18 @@ const useComponent = ({ componentId }) => {
     () => {
       const slateEditor = withReact(createEditor())
 
-      const origin =
-      process.env.NODE_ENV === 'production'
+      const origin = process.env.NODE_ENV === 'production'
         ? window.location.origin
-        : 'http://35.235.66.82'
+        : 'http://localhost:8000'
 
       const options = {
         docId: '/' + componentId,
         url: `${origin}/${componentId}`,
+        cursorData: {
+          name: userName,
+          color,
+          alphaColor: hexToRgba(color, 0.7)
+        },
         connectOpts: {
           query: {
             name: userName,

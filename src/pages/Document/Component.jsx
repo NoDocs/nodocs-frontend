@@ -15,7 +15,8 @@ import Leaf from './components/Leaf'
 
 const StyledComponentContainer = styled.div`
   background: ${({ isImported }) => isImported
-    ? 'none' : '#F2F3F4'};
+    ? 'none'
+    : '#F2F3F4'};
   padding: 2px;
   display: flex;
   border-radius: 0 5px 5px 0;
@@ -44,7 +45,7 @@ const StyledIcon = styled.div`
   background-repeat: no-repeat;
 `
 
-const Component = ({ id: componentId }) => {
+const Component = React.forwardRef(({ id: componentId, attributes }, ref) => {
   const {
     editorState,
     onEditorStateChange,
@@ -73,8 +74,16 @@ const Component = ({ id: componentId }) => {
           isImported={isImported}
           contentEditable={false}
           data-component-id={componentId}
+          ref={ref}
+          {...attributes}
         >
-          <Slate editor={editor} value={editorState} onChange={onEditorStateChange}>
+          <Slate
+            editor={editor}
+            value={editorState}
+            onChange={onEditorStateChange}
+            renderLeaf={renderLeaf}
+            decorate={decorate}
+          >
             <Editable renderLeaf={renderLeaf} decorate={decorate} />
           </Slate>
 
@@ -95,7 +104,7 @@ const Component = ({ id: componentId }) => {
       </IconButton>
     </Popup>
   )
-}
+})
 
 Component.propTypes = {
   id: PropTypes.string,

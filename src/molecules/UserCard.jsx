@@ -51,7 +51,13 @@ const UserCard = ({ user }) => {
       <Avatar userId={user.get('id')} color={user.get('color')} />
 
       <div>
-        <StyledUserName color="active" weight={500}>{user.get('fullName')}</StyledUserName>
+        <StyledUserName
+          color="active"
+          title={user.get('email')}
+          weight={500}
+        >
+          {user.get('fullName')}
+        </StyledUserName>
 
         <StyledPopup
           name="switch-company-popup"

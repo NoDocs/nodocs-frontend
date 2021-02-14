@@ -43,7 +43,6 @@ const SectionEditor = () => {
           <Component
             id={element.id}
             componentId={element.componentId}
-            content={children}
             attributes={otherAttributes}
             ref={ref}
           />
