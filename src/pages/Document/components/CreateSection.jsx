@@ -27,12 +27,7 @@ const CreateSection = ({ onDone }) => {
           documentId,
           title,
           sectionId: shortid.generate(),
-          content: JSON.stringify([{
-            type: 'page',
-            name: 'Untitled',
-            id: shortid.generate(),
-            children: [{ type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] }]
-          }])
+          content: JSON.stringify([{ type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] }])
         })
         .then(({ data }) => {
           dispatch(documentActions.createSection(data))

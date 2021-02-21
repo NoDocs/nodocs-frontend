@@ -66,6 +66,8 @@ const useDocument = () => {
   React.useEffect(() => { editor.connect() }, [])
   React.useEffect(() => editor.destroy, [])
 
+  console.log(editorState)
+
   return {
     editor,
     editorState,

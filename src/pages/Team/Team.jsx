@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { Map } from 'immutable'
 
-import { groupSelectors } from 'logic/groups'
+import { groupActions, groupSelectors } from 'logic/groups'
 import { PortalContext } from 'contexts'
 import Shortcut from 'atoms/Shortcut'
 
@@ -16,7 +17,21 @@ const StyledContentContainer = styled.div`
 
 const Team = () => {
   const { openPortal } = React.useContext(PortalContext)
+  const dispatch = useDispatch()
   const groups = useSelector(groupSelectors.groupsDomain)
+  const teamMembers = useSelector(state => state.getIn(['entities', 'members']))
+
+  React.useEffect(
+    () => {
+      const groups = teamMembers.map(member => new Map({
+        id: member.get('id'),
+        name: member.get('fullName')
+      }))
+
+      dispatch(groupActions.initializeGroup(groups))
+    },
+    []
+  )
 
   return (
     <React.Fragment>

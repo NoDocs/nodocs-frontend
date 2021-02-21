@@ -83,4 +83,5 @@ const UserCard = ({ user }) => {
 UserCard.propTypes = {
   user: PropTypes.object
 }
+
 export default UserCard

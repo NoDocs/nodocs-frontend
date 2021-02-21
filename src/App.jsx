@@ -20,7 +20,6 @@ const GlobalStyles = createGlobalStyle`
 `
 
 const App = () => {
-
   return (
     <React.Fragment>
       <Switch>

@@ -10,6 +10,10 @@ const membersReducer = (state = initialState, action) => {
         .payload
         .team
         .members
+        .reduce(
+          (res, curr) => res.set(curr.user.id, fromJS(curr.user)),
+          new Map()
+        )
 
       return normalized
     }

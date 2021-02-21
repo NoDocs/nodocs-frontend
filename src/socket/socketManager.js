@@ -1,28 +1,40 @@
-import store from '../store'
-import { componentActions } from '../redux/component'
-import socketEvents from './socketEvents'
 import { teamActions } from 'logic/team'
 import { documentActions } from 'logic/document'
 import { notificationActions } from 'logic/notification'
+import { companyActions } from 'logic/company'
+import * as companyServices from 'services/company'
+
+import store from '../store'
+import { componentActions } from '../redux/component'
+import socketEvents from './socketEvents'
 
 const onComponentUpdated = (dispatch) => (payload) => {
   dispatch(componentActions.putComponent(payload))
 }
 
-const handleSocketEvents = (event, data) => {
+const handleSocketEvents = async (event, data) => {
   const state = store.getState()
   const activeCompany = state.getIn(['ui', 'activeCompany', 'id'])
   const isSameCompany = activeCompany === data.companyId
 
+  const shouldIgnoreOtherCompany = event === socketEvents.TeamCreated
+    || event === socketEvents.TagCreated
+    || event === socketEvents.AttachTagToDocument
+
+  if (isSameCompany && shouldIgnoreOtherCompany) return
+
   switch (event) {
     case socketEvents.TeamCreated: {
-      if (isSameCompany) {
-        store.dispatch(teamActions.createTeam(data))
-      }
+      store.dispatch(teamActions.createTeam(data))
       break
     }
 
     case socketEvents.TeamMemberAdded: {
+      if (!isSameCompany) {
+        const { data: companies } = await companyServices.getCompanies()
+        store.dispatch(companyActions.setCompanies(companies))
+      }
+
       store.dispatch(notificationActions.notify({ type: 'notification', message: `You have been added to the team: ${data.name}` }))
       break
     }

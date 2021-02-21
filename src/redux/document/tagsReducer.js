@@ -22,13 +22,6 @@ const tagsReducer = (state = initialState, action) => {
       )
     }
 
-    case teamActionTypes.INITIALIZE_TEAM: {
-      return action
-        .payload
-        .team
-        .tags
-    }
-
     default:
       return state
   }

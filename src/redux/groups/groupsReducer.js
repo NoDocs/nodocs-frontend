@@ -1,19 +1,10 @@
 import { List, Map } from 'immutable'
 
 import * as groupActionTypes from './groupActionTypes'
-import * as teamTypes from '../team/teamActionTypes'
 import * as documentTypes from '../document/documentActionTypes'
 
 const groupsReducer = (state = new Map(), action) => {
   switch (action.type) {
-    case teamTypes.INITIALIZE_TEAM: {
-      return action
-        .payload
-        .team
-        .groups
-        .map(curr => curr.set('documents', new List()))
-    }
-
     case documentTypes.PUT_DOCUMENTS: {
       const { payload } = action
 
@@ -25,7 +16,7 @@ const groupsReducer = (state = new Map(), action) => {
       )
     }
 
-    case groupActionTypes.RE_INITIALIZE_GROUPS: {
+    case groupActionTypes.INITIALIZE_GROUPS: {
       const { payload } = action
 
       return payload.groups.map(curr => curr.set('documents', new List()))

@@ -38,5 +38,5 @@ export const selectFirstCollection = createSelector(
 
 export const selectTeamMemberProperty = (property, memberId) => createSelector(
   [membersDomain],
-  (members) => members.getIn([memberId, property])
+  (members) => members.getIn([memberId, property]),
 )

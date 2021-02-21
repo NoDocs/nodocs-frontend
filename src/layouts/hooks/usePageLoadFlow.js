@@ -7,6 +7,7 @@ import * as companyServices from 'services/company'
 import { authActions, authSelectors } from 'logic/auth'
 import { companyActions } from 'logic/company'
 import { teamSelectors, teamActions } from 'logic/team'
+import Socket from 'socket'
 
 const usePageLoadFlow = () => {
   const { search } = useLocation()
@@ -24,6 +25,7 @@ const usePageLoadFlow = () => {
         dispatch(authActions.signIn(data))
         dispatch(companyActions.setCompanies([data.currentCompany]))
         dispatch(companyActions.setActiveCompany(data.currentCompany.id))
+        Socket.connect()
       }
 
       const handleCatch = (error) => {

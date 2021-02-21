@@ -19,10 +19,10 @@ const StyledToggle = styled(Toggle)`
 const Group = ({ group }) => {
   const [loading, setLoading] = React.useState(true)
   const groupBy = useSelector(state => state.getIn(['ui', 'activeTeam', 'groupBy']))
-  
+
   const documents = useSelector(documentSelectors.selectDocumentsByGroup(group.get('id')))
   const dispatch = useDispatch()
-  
+
   React.useEffect(
     () => {
       let params = groupBy === 'tags' ? { tagId: group.get('id') } : { userId: group.get('id') }
@@ -62,7 +62,7 @@ const Group = ({ group }) => {
   if (loading) return <div>Loading</div>
 
   return (
-    <StyledToggle title={group.get('fullName')}>
+    <StyledToggle title={group.get('name')}>
       <Table
         proportions="38px 405px 1fr 1fr 1fr 1fr"
         headerTabs={[

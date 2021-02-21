@@ -20,40 +20,7 @@ const CreatePage = () => {
   const editor = useSlate()
 
   const onCreate = () => {
-    const lastPageIndex = editor.children.length - 1
-    const lastLineIndex = editor
-      .children[lastPageIndex]
-      .children
-      .length - 1
-
-    Transforms.insertNodes(editor, {
-      type: 'page',
-      name: 'Untitled',
-      id: shortid.generate(),
-      children: [{
-        type: 'paragraph',
-        id: shortid.generate(),
-        children: [{ text: '' }],
-      }]
-    }, { at: [lastPageIndex, lastLineIndex] })
-
-    Transforms.liftNodes(editor, { at: [lastPageIndex, lastLineIndex] })
-
-    const location = {
-      path: [lastPageIndex + 1, 0, 0],
-      offset: 0,
-    }
-
-    ReactEditor.focus(editor)
-
-    editor.apply({
-      type: 'set_selection',
-      properties: { anchor: { path: [0, 0, 0], offset: 0 } },
-      newProperties: {
-        focus: location,
-        anchor: location,
-      },
-    })
+    alert('TODO: create page')
   }
 
   return (
