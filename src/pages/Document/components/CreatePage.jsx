@@ -1,7 +1,4 @@
 import React from 'react'
-import { useSlate, ReactEditor } from 'slate-react'
-import { Transforms } from 'slate'
-import shortid from 'shortid'
 import styled from 'styled-components'
 
 import PlusIcon from 'assets/components/PlusIcon'
@@ -17,8 +14,6 @@ const StyledCreatePageContainer = styled.div`
 `
 
 const CreatePage = () => {
-  const editor = useSlate()
-
   const onCreate = () => {
     alert('TODO: create page')
   }

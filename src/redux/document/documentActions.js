@@ -54,3 +54,11 @@ export const clearDocument = () => ({
   type: documentActionTypes.CLEAR_DOCUMENT,
   payload: {},
 })
+
+export const updateDocument = ({ documentId, title }) => ({
+  type: documentActionTypes.UPDATE_DOCUMENT,
+  payload: {
+    documentId,
+    title,
+  }
+})

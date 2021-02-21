@@ -28,6 +28,15 @@ const documentsReducer = (state = initialState, action) => {
       )
     }
 
+    case documentActionTypes.UPDATE_DOCUMENT: {
+      const { documentId, title } = action.payload
+
+      return state.update(
+        documentId,
+        doc => doc.update('title', docTitle => title || docTitle)
+      )
+    }
+
     case documentActionTypes.CREATE_DOCUMENT: {
       return state
         .set(action.payload.id, fromJS({
