@@ -1,0 +1,132 @@
+type Query {
+  # Fetches an object given its ID
+  node(
+    # The ID of an object
+    id: ID!
+  ): Node
+
+  # Fetches objects given their IDs
+  nodes(
+    # The IDs of objects
+    ids: [ID!]!
+  ): [Node]!
+  users(orderBy: String, after: String, first: Int): UserConnection
+  documents(orderBy: String, teamId: String, userId: String, after: String, first: Int): DocumentConnection
+}
+
+# An object with an ID
+interface Node {
+  # The id of the object.
+  id: ID!
+}
+
+# A connection to a list of items.
+type UserConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [UserEdge]
+  count: Int!
+}
+
+# Information about pagination in a connection.
+type PageInfo {
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
+}
+
+# An edge in a connection.
+type UserEdge {
+  # The item at the end of the edge
+  node: User
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+type User implements Node {
+  # The ID of an object
+  id: ID!
+  fullName: String
+  email: String
+  color: String
+  type: String
+  password: String
+  currentCompany: String
+  currentTeam: String
+}
+
+# A connection to a list of items.
+type DocumentConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [DocumentEdge]
+  count: Int!
+}
+
+# An edge in a connection.
+type DocumentEdge {
+  # The item at the end of the edge
+  node: Document
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+type Document implements Node {
+  # The ID of an object
+  id: ID!
+  sections: [Section]
+  title: String
+  creator: User
+  company: Company
+  team: Team
+  createdAt(format: String): String
+  updatedAt(format: String): String
+}
+
+type Section implements Node {
+  # The ID of an object
+  id: ID!
+  sectionId: String
+  title: String
+}
+
+type Company implements Node {
+  # The ID of an object
+  id: ID!
+  name: String
+  members: [CompanyMember]
+}
+
+type CompanyMember implements Node {
+  # The ID of an object
+  id: ID!
+  user: User
+  role: String
+}
+
+type Team implements Node {
+  # The ID of an object
+  id: ID!
+  name: String
+  members: [TeamMember]
+}
+
+type TeamMember implements Node {
+  # The ID of an object
+  id: ID!
+  user: User
+}
