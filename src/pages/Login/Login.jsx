@@ -1,10 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useDispatch } from 'react-redux'
 
-import * as authServices from 'services/auth'
-import { authActions } from 'logic/auth'
+import signInMutation from './mutations/signInMutation'
 import history from 'utils/history'
+import useRelay from 'hooks/useRelay'
 
 import Label from 'atoms/Label'
 import Input from 'atoms/Input'
@@ -81,12 +80,10 @@ const StyledNoDocsImage = styled.img`
 `
 
 const Login = () => {
-  const [submitting, toggleSubmitting] = React.useState()
-  const dispatch = useDispatch()
+  const relay = useRelay()
 
   const handleSignIn = (event) => {
     event.preventDefault()
-    toggleSubmitting(true)
 
     const { email, password } = document.authForm.elements
 
@@ -95,14 +92,8 @@ const Login = () => {
       password: password.value,
     }
 
-    authServices.signIn(data)
-      .then(response => {
-        const { data: { token, ...rest } } = response
-
-        localStorage.setItem('token', token)
-        history.push('/')
-        dispatch(authActions.signIn({ token, ...rest }))
-      })
+    signInMutation.commit(relay.environment, data)
+      .then(console.log)
   }
 
   return (
@@ -126,7 +117,7 @@ const Login = () => {
               placeholder="password"
             />
 
-            <Button disabled={submitting}>Login</Button>
+            <Button>Login</Button>
 
             <StyledRegisterLabel
               onClick={() => history.push('/register')}

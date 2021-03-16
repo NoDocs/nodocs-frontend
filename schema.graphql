@@ -61,7 +61,8 @@ type User implements Node {
   email: String
   color: String
   type: String
-  password: String
+  token: String
+  accessToken: String
   currentCompany: String
   currentTeam: String
 }
@@ -129,4 +130,35 @@ type TeamMember implements Node {
   # The ID of an object
   id: ID!
   user: User
+}
+
+type Mutation {
+  # Sign in mutation
+  signIn(input: SignInInput!): SignInPayload
+
+  # Sign up mutation
+  signUp(input: SignUpInput!): SignUpPayload
+}
+
+type SignInPayload {
+  user: User
+  clientMutationId: String
+}
+
+input SignInInput {
+  email: String!
+  password: String!
+  clientMutationId: String
+}
+
+type SignUpPayload {
+  user: User
+  clientMutationId: String
+}
+
+input SignUpInput {
+  email: String!
+  fullName: String!
+  password: String!
+  clientMutationId: String
 }
