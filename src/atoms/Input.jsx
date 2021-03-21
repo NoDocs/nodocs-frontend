@@ -8,8 +8,8 @@ const StyledInputContainer = styled.div`
 `
 
 const StyledInput = styled.input`
-  border: 1px solid #000000;
-  border-radius: 20px;
+  border: 2px solid #000000;;
+  border-radius: 8px;
   padding: 7px 15px;
   ${props => props.hasIcon && 'padding-left: 40px'};
   outline: none;

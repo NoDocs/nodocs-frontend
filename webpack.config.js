@@ -90,6 +90,7 @@ module.exports = {
       socket: path.resolve(__dirname, 'src/socket'),
       contexts: path.resolve(__dirname, 'src/contexts'),
       modals: path.resolve(__dirname, 'src/modals'),
+      shared: path.resolve(__dirname, 'src/shared'),
     }
   },
   ...(isLocal

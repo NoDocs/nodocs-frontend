@@ -15,6 +15,7 @@
       "socket/*": ["./socket/*"],
       "contexts": ["./contexts/*"],
       "modals/*": ["./modals/*"],
+      "shared/*": ["./shared/*"],
     }
   },
   "exclude": [
