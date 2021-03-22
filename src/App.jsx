@@ -11,6 +11,7 @@ import Team from './pages/Team'
 import Document from './pages/Document'
 import CreateCompany from './pages/CreateCompany'
 import NotFoundTeam from './pages/NotFoundTeam'
+import Onboarding from './pages/Onboarding'
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -46,6 +47,7 @@ const App = () => {
 
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
+        <Route path="/onboarding/start" component={Onboarding} />
       </Switch>
 
       <Notifications />
