@@ -13,9 +13,9 @@ const StyledButton = styled.button`
   font-family: Quicksand;
 `
 
-const Button = ({ className, children }) => {
+const Button = ({ className, onClick, children }) => {
   return (
-    <StyledButton className={className}>
+    <StyledButton onClick={onClick} className={className}>
       {children}
     </StyledButton>
   )
@@ -23,6 +23,7 @@ const Button = ({ className, children }) => {
 
 Button.propTypes = {
   children: PropTypes.string,
+  onClick: PropTypes.func,
   className: PropTypes.string,
 }
 

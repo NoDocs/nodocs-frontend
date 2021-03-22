@@ -47,7 +47,7 @@ const App = () => {
 
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
-        <Route path="/onboarding/start" component={Onboarding} />
+        <Route path="/onboarding" component={Onboarding} />
       </Switch>
 
       <Notifications />

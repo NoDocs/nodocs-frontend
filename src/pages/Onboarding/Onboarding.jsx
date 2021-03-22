@@ -1,43 +1,20 @@
 import React from 'react'
-import styled from 'styled-components'
-
-import Box from 'atoms/Box'
-import Label from 'atoms/Label'
-import Button from 'atoms/Button'
+import { Switch, Route, useLocation } from 'react-router-dom'
 
 import ParticlesBoard from 'shared/ParticlesBoard'
-
-const StyledContainer = styled.div`
-  min-height: 100vh;
-  background-color: #000;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-`
-
-const StyledOnboardingContainer = styled.div`
-  max-width: 600px;
-  margin-right: 48px;
-  display: grid;
-  grid-row-gap: 16px;
-`
-
-const StyledBox = styled(Box)`
-  display: grid;
-  grid-row-gap: 12px;
-`
-
-const StyledButton = styled(Button)`
-  margin: auto;
-`
+import OnboardingStart from './OnboardingStart'
+import OnboardingAboutCompany from './OnboardingAboutCompany'
+import OnboardingAboutYou from './OnboardingAboutYou'
 
 const Onboarding = () => {
   const [particle, updateParticle] = React.useState()
+  const location = useLocation()
   const boxRef = React.useRef()
 
   React.useEffect(
     () => {
+      console.log(location.pathname)
+
       const { top: boxTop, left: boxLeft } = boxRef.current.getBoundingClientRect()
 
       const p = {
@@ -48,34 +25,65 @@ const Onboarding = () => {
         children: [],
       }
 
-      p.children.push({
-        top: 120,
-        left: 400,
-        label: 'Company profile',
-        id: '#company-profile',
-        children: [{ id: Date.now(), top: boxTop + 30, left: boxLeft }],
-      })
+      if (location.pathname.includes('/onboarding/start')) {
+        p.children.push({
+          top: 120,
+          left: 400,
+          label: 'Welcome message',
+          id: '#welcome-message',
+          children: [{ id: Date.now(), top: boxTop + 30, left: boxLeft }],
+        })
+      } else if (location.pathname.includes('/onboarding/about-company')) {
+        p.children.push({
+          top: 120,
+          left: 400,
+          label: 'About company',
+          id: '#about-company',
+          children: [{ id: Date.now(), top: boxTop + 30, left: boxLeft }],
+        })
+        p.children.push({
+          top: 200,
+          left: 50,
+          label: 'welcome message',
+          id: '#welcome-message',
+          children: [],
+        })
+      } else if (location.pathname.includes('/onboarding/about-you')) {
+        p.children.push({
+          top: 120,
+          left: 400,
+          label: 'About you',
+          id: '#about-you',
+          children: [{ id: Date.now(), top: boxTop + 30, left: boxLeft }],
+        })
+        p.children.push({
+          top: 200,
+          left: 50,
+          label: 'welcome message',
+          id: '#welcome-message',
+          children: [],
+        })
+        p.children.push({
+          top: 300,
+          left: 90,
+          label: 'Our company',
+          id: '#our-company',
+          children: [],
+        })
+      }
 
       updateParticle(p)
     },
-    []
+    [location.pathname]
   )
 
   return (
     <React.Fragment>
-      <StyledContainer>
-        <StyledOnboardingContainer ref={boxRef}>
-          <StyledBox>
-            <Label color="black">✍🏼 “Learning while building” — humanity</Label>
-            <Label color="black">Hey fella, we’re glad to have you around!</Label>
-            <Label color="black">
-              We will ask some questions for each member who signup in your organization, the answers will be stored in Neurons, the system will integrate them into a shared Document that will be visible for all the team members. In this way, all members will have collaborated in the construction of the first document from its dimensions. 🌊
-            </Label>
-          </StyledBox>
-
-          <StyledButton>Start</StyledButton>
-        </StyledOnboardingContainer>
-      </StyledContainer>
+      <Switch>
+        <Route path="/onboarding/start" component={() => <OnboardingStart ref={boxRef} />} />
+        <Route path="/onboarding/about-company" component={() => <OnboardingAboutCompany ref={boxRef} />} />
+        <Route path="/onboarding/about-you" component={() => <OnboardingAboutYou ref={boxRef} />} />
+      </Switch>
 
       <ParticlesBoard particle={particle} />
     </React.Fragment>
