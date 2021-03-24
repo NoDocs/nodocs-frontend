@@ -2,6 +2,7 @@ import React from 'react'
 import { createGlobalStyle } from 'styled-components'
 import { Switch, Route } from 'react-router-dom'
 
+import NeuronModal from 'modals/NeuronModal/NeuronModal'
 import MainLayout from './layouts/MainLayout'
 import ProtectedRoute from './atoms/ProtectedRoute'
 import Notifications from './molecules/Notifications'
@@ -51,6 +52,7 @@ const App = () => {
       </Switch>
 
       <Notifications />
+      <NeuronModal />
       <GlobalStyles />
     </React.Fragment>
   )

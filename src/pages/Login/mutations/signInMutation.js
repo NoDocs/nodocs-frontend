@@ -31,10 +31,15 @@ function commit(environment, input) {
       onError: reject,
 
       updater(store) {
-        console.log(store)
+        const user = store.getRootField('signIn').getLinkedRecord('user')
+        store.getRoot().setLinkedRecord(user, 'me')
 
-        // const user = store.getRootField('signIn').getLinkedRecord('user')
-        // store.getRoot().setLinkedRecord(user, 'me')
+        const token = store
+          .getRoot()
+          .getLinkedRecord('me')
+          .getValue('token')
+
+        localStorage.setItem('token', token)
       },
     })
   })

@@ -58,7 +58,7 @@ module.exports = {
         exclude: /\.module\.css$/
       },
       {
-        test: /\.(svg|png|jpg|gif)$/i,
+        test: /\.(png|jpg|gif)$/i,
         use: {
           loader: 'url-loader',
           options: {
@@ -66,6 +66,38 @@ module.exports = {
             name: 'static/media/[name].[hash:8].[ext]'
           }
         }
+      },
+      {
+        test: /\.svg$/,
+        use: [{
+          loader: '@svgr/webpack',
+          options: {
+            svgoConfig: {
+              plugins: {
+                removeViewBox: false
+              }
+            },
+            template: (
+              { template },
+              opts,
+              { imports, componentName, props, jsx }
+            ) => template.ast`
+              ${imports}
+              import useWithViewBox from '../hooks/useWithViewBox';
+  
+              const ${componentName} = (${props}) => {
+                const ref = React.useRef();
+                useWithViewBox({ ref, ...props });
+  
+                props = { ...props, ref };
+  
+                return ${jsx};
+              };
+  
+              export default ${componentName};
+            `,
+          },
+        }],
       }
     ]
   },

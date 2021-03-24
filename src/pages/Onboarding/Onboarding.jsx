@@ -5,6 +5,7 @@ import ParticlesBoard from 'shared/ParticlesBoard'
 import OnboardingStart from './OnboardingStart'
 import OnboardingAboutCompany from './OnboardingAboutCompany'
 import OnboardingAboutYou from './OnboardingAboutYou'
+import OnboardingSendInvites from './OnboardingSendInvites'
 
 const Onboarding = () => {
   const [particle, updateParticle] = React.useState()
@@ -13,8 +14,6 @@ const Onboarding = () => {
 
   React.useEffect(
     () => {
-      console.log(location.pathname)
-
       const { top: boxTop, left: boxLeft } = boxRef.current.getBoundingClientRect()
 
       const p = {
@@ -70,6 +69,35 @@ const Onboarding = () => {
           id: '#our-company',
           children: [],
         })
+      } else if (location.pathname.includes('/onboarding/send-invites')) {
+        p.children.push({
+          top: 120,
+          left: 400,
+          label: 'Invites',
+          id: '#invites',
+          children: [{ id: Date.now(), top: boxTop + 30, left: boxLeft }],
+        })
+        p.children.push({
+          top: 200,
+          left: 50,
+          label: 'welcome message',
+          id: '#welcome-message',
+          children: [],
+        })
+        p.children.push({
+          top: 300,
+          left: 90,
+          label: 'Our company',
+          id: '#our-company',
+          children: [],
+        })
+        p.children.push({
+          top: 210,
+          left: 150,
+          label: 'About me',
+          id: '#about-me',
+          children: [],
+        })
       }
 
       updateParticle(p)
@@ -83,6 +111,7 @@ const Onboarding = () => {
         <Route path="/onboarding/start" component={() => <OnboardingStart ref={boxRef} />} />
         <Route path="/onboarding/about-company" component={() => <OnboardingAboutCompany ref={boxRef} />} />
         <Route path="/onboarding/about-you" component={() => <OnboardingAboutYou ref={boxRef} />} />
+        <Route path="/onboarding/send-invites" component={() => <OnboardingSendInvites ref={boxRef} />} />
       </Switch>
 
       <ParticlesBoard particle={particle} />

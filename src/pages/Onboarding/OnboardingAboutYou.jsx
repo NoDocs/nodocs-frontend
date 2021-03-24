@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useHistory } from 'react-router-dom'
 
 import Box from 'atoms/Box'
 import Label from 'atoms/Label'
@@ -72,16 +73,18 @@ const roles = [
 ]
 
 const OnboardingAboutYou = React.forwardRef((_, ref) => {
+  const history = useHistory()
+
   return (
     <StyledContainer>
       <StyledOnboardingContainer ref={ref}>
         <StyledBox>
-          <Label color="black">✍🏼 About your company...</Label>
+          <Label color="black">✍🏼 About me...</Label>
 
-          <Label color="black">Company name</Label>
+          <Label color="black">What&#96;s your name?</Label>
           <StyledInput autoFocus />
 
-          <Label color="black">What&#96;s your company industry</Label>
+          <Label color="black">What team do you work?</Label>
           <StyledIndustriesContainer>
             {roles.map(role => (
               <StyledIndustry key={role}>
@@ -90,11 +93,11 @@ const OnboardingAboutYou = React.forwardRef((_, ref) => {
             ))}
           </StyledIndustriesContainer>
 
-          <Label color="black">And... what do you guys do?</Label>
+          <Label color="black">What&#96;s your role?</Label>
           <StyledInput />
         </StyledBox>
 
-        <StyledButton>Start</StyledButton>
+        <StyledButton onClick={() => history.push('/onboarding/send-invites')}>Next</StyledButton>
       </StyledOnboardingContainer>
     </StyledContainer>
   )

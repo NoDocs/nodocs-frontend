@@ -4,9 +4,9 @@ import styled from 'styled-components'
 import Label from 'atoms/Label'
 import Input from 'atoms/Input'
 import Button from 'atoms/Button'
-import mentionIcon from 'assets/mention.svg'
-import lockIcon from 'assets/lock.svg'
-import noDocsIcon from 'assets/noDocs.svg'
+import MentionIcon from 'assets/mention.svg'
+import LockIcon from 'assets/lock.svg'
+import NoDocsIcon from 'assets/noDocs.svg'
 import history from 'utils/history'
 import useRelay from 'hooks/useRelay'
 import signInMutation from './mutations/signInMutation'
@@ -37,8 +37,9 @@ const StyledRegisterLabel = styled(Label)`
   color: rgba(0, 0, 0, 0.5);
 `
 
-const StyledNoDocsImage = styled.img`
+const StyledNoDocsImage = styled(NoDocsIcon)`
   height: 35px;
+  width: auto;
   display: block;
   margin-right: auto;
 `
@@ -57,23 +58,23 @@ const LoginForm = React.forwardRef((_, ref) => {
     }
 
     signInMutation.commit(relay.environment, data)
-      .then(console.log)
+      .then(() => history.push('/'))
   }
 
   return (
     <StyledContentContainer ref={ref}>
-      <StyledNoDocsImage src={noDocsIcon} alt="NODOCS" />
+      <StyledNoDocsImage />
       <StyledLabel weight={700} color="black">✍🏼 Welcome back!</StyledLabel>
 
       <StyledForm name="authForm" onSubmit={handleSignIn}>
         <Input
-          icon={<img src={mentionIcon} alt="email" />}
+          icon={<MentionIcon size={15} />}
           name="email"
           placeholder="email"
         />
 
         <Input
-          icon={<img src={lockIcon} alt="password" />}
+          icon={<LockIcon size={15} />}
           name="password"
           type="password"
           placeholder="password"

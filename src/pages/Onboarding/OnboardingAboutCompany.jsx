@@ -96,7 +96,7 @@ const OnboardingStart = React.forwardRef((_, ref) => {
           <StyledInput />
         </StyledBox>
 
-        <StyledButton onClick={() => history.push('/onboarding/about-you')}>Start</StyledButton>
+        <StyledButton onClick={() => history.push('/onboarding/about-you')}>Next</StyledButton>
       </StyledOnboardingContainer>
     </StyledContainer>
   )

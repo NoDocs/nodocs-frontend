@@ -1,4 +1,6 @@
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'
+
+const getToken = () => localStorage.getItem('token')
  
 function fetchQuery(operation, variables, cacheConfig = {}) {
   // Instead of making an actual HTTP request to the API, use
@@ -14,7 +16,10 @@ function fetchQuery(operation, variables, cacheConfig = {}) {
 
   return fetch('http://localhost:8000/graphql', {
     method: 'POST',
-    headers: { 'content-type': 'application/json' },
+    headers: {
+      'content-type': 'application/json',
+      'Authorization': `bearer ${getToken()}`
+    },
     body: JSON.stringify({ query: operation.text, variables }),
     credentials: 'include',
   })

@@ -31,7 +31,7 @@ const Input = ({
     icon,
     {
       height: 18,
-      style: { position: 'absolute', top: '50%', left: 15, transform: 'translate(0px, -50%)' }
+      style: { position: 'absolute', top: 10, left: 15 }
     }
   )
 
