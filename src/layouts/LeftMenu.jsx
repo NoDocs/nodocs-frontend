@@ -80,7 +80,7 @@ const LeftMenu = ({ toggleNavbar }) => {
         <StyledGridContainer>
           <ListItem icon={<SearchIcon />} label="Search" />
           <ListItem icon={<UpdatesIcon />} label="Updates" />
-          <ListItem icon={<AddIcon />} label="Invite" />
+          <ListItem icon={<AddIcon color="rgba(255, 255, 255, 0.5)" />} label="Invite" />
 
           <StyledSeparator />
 
