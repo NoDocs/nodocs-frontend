@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import logoIcon from 'assets/logo.svg'
-import menuIcon from 'assets/menu.svg'
+import NoDocsLogoIcon from 'assets/logo.svg'
+import MenuIcon from 'assets/menu.svg'
 import IconButton from 'atoms/IconButton'
 import history from 'utils/history'
 
@@ -23,11 +23,13 @@ const NavBar = ({ navbarToggled, toggleNavbar }) => (
   <StyledContainer>
     {!navbarToggled && (
       <IconButton onClick={() => toggleNavbar(true)}>
-        <img src={menuIcon} />
+        <MenuIcon />
       </IconButton>
     )}
 
-    <img onClick={() => history.push('/')} src={logoIcon} alt="NoDocs" />
+    <IconButton onClick={() => history.push('/')}>
+      <NoDocsLogoIcon />
+    </IconButton>
 
     <OpenedDocuments />
     <CreateDocument />

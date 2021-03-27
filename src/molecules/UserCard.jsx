@@ -1,15 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { PortalContext } from 'contexts'
-import { companyActions, companySelectors } from 'logic/company'
+import { companyActions } from 'logic/company'
 import { notificationActions } from 'logic/notification'
 import Avatar from 'atoms/Avatar'
 import Label from 'atoms/Label'
 import ListItem from 'molecules/ListItem'
 import Popup from 'molecules/Popup'
+import { useLazyLoadQuery } from 'react-relay'
+import { graphql } from 'graphql'
 
 const StyledContainer = styled.div`
   display: grid;
@@ -31,10 +33,24 @@ const StyledLabel = styled(Label)`
   cursor: pointer;
 `
 
-const UserCard = ({ user }) => {
+const MeQuery = graphql`
+  query UserCardQuery {
+    me {
+      id
+      fullName
+      color
+      email
+
+      currentCompany {
+        name
+      }
+    }
+  }
+`
+
+const UserCard = () => {
+  const { me } = useLazyLoadQuery(MeQuery)
   const { closePortal } = React.useContext(PortalContext)
-  const activeCompanyName = useSelector(companySelectors.selectCompanyProperty('name'))
-  const availableCompanies = useSelector(companySelectors.selectAvailableCompanies)
   const dispatch = useDispatch()
 
   const switchCompany = company => () => {
@@ -48,32 +64,18 @@ const UserCard = ({ user }) => {
 
   return (
     <StyledContainer>
-      <Avatar userId={user.get('id')} color={user.get('color')} />
+      <Avatar name={me.fullName} avatar={me.avatar} color={me.color} />
 
       <div>
-        <StyledUserName
-          color="active"
-          title={user.get('email')}
-          weight={500}
-        >
-          {user.get('fullName')}
+        <StyledUserName color="active" title={me.email} weight={500}>
+          {me.fullName}
         </StyledUserName>
 
         <StyledPopup
           name="switch-company-popup"
-          trigger={<StyledLabel color="active">{activeCompanyName}</StyledLabel>}
-          disabled={!availableCompanies.size}
+          trigger={<StyledLabel color="active">{me.currentCompany.name}</StyledLabel>}
         >
-          {availableCompanies
-            .map(company => (
-              <ListItem
-                key={company.get('id')}
-                label={company.get('name')}
-                onClick={switchCompany(company)}
-                color="black"
-              />
-            ))
-            .toList()}
+          mda
         </StyledPopup>
       </div>
     </StyledContainer>

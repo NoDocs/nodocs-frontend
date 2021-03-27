@@ -18,7 +18,7 @@ function fetchQuery(operation, variables, cacheConfig = {}) {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      'Authorization': `bearer ${getToken()}`
+      'Authorization': `Bearer ${getToken()}`
     },
     body: JSON.stringify({ query: operation.text, variables }),
     credentials: 'include',

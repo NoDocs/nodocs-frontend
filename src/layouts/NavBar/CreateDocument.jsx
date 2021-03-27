@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import history from 'utils/history'
 import * as documentServices from 'services/document'
 import { documentActions } from 'logic/document'
-import addIcon from 'assets/add.svg'
+import AddIcon from 'assets/add.svg'
 import IconButton from 'atoms/IconButton'
 
 const CreateDocument = () => {
@@ -32,7 +32,7 @@ const CreateDocument = () => {
 
   return (
     <IconButton onClick={addDocument}>
-      <img src={addIcon} />
+      <AddIcon />
     </IconButton>
   )
 }

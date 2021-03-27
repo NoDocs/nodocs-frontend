@@ -1,29 +1,36 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { useSelector, useDispatch } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 
-import { teamActions, teamSelectors } from 'logic/team'
-import history from 'utils/history'
+import SearchIcon from 'assets/search.svg'
+import UpdatesIcon from 'assets/updates.svg'
+import AddIcon from 'assets/add.svg'
+import ExploreIcon from 'assets/explore.svg'
+import TeamsIcon from 'assets/teams.svg'
+import LikeIcon from 'assets/star.svg'
+import ArrowLeftIcon from 'assets/arrow-left.svg'
+import HomeIcon from 'assets/home.svg'
 
-import arrowLeftIcon from 'assets/arrow-left.svg'
-import MentionIcon from 'assets/components/MentionIcon'
-import homeIcon from 'assets/home.svg'
 import IconButton from 'atoms/IconButton'
-import ContentToggler from 'atoms/ContentToggler'
 import UserCard from 'molecules/UserCard'
 import ListItem from 'molecules/ListItem'
 
-import ToggleTeams from './components/ToggleTeams'
+import TeamNavigation from './TeamNavigation'
+import LoadingTeams from 'loaders/LoadingTeams'
+import LoadingUserCard from 'loaders/LoadingUserCard'
+
+const StyledLeftMenuContainer = styled.div`
+  grid-area: left;
+  width: 352px;
+  background-color: black;
+  display: flex;
+  align-items: flex-start;
+`
 
 const StyledContainer = styled.div`
-  grid-area: left;
-  width: 300px;
-  background-color: black;
-  padding-left: 28px;
-  padding-top: 13px;
-  padding-right: 17px;
+  padding: 16px 24px 0px;
+  width: 280px;
   box-sizing: border-box;
 `
 
@@ -31,6 +38,7 @@ const StyledLeftMenuHeader = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 25px;
+  align-items: center;
 `
 
 const StyledGridContainer = styled.div`
@@ -38,66 +46,54 @@ const StyledGridContainer = styled.div`
   grid-row-gap: 2px;
 `
 
-const StyledTeamListContainer = styled.div`
-  margin-left: 15px;
-  margin-top: 5px;
-  display: grid;
-  align-items: start;
-  grid-row-gap: 5px;
+const StyledSeparator = styled.div`
+  opacity: 0.3;
+  border: 1px solid #F2F2F2;
+  margin: 20px 0px;
+`
+
+const StyledIconButton = styled(IconButton)`
+  position: relative;
+  right: -10px;
 `
 
 const LeftMenu = ({ toggleNavbar }) => {
   const { pathname } = useLocation()
-  const dispatch = useDispatch()
-  const activeUser = useSelector(state => state.get('auth'))
-  const activeTeamId = useSelector(teamSelectors.selectActiveTeamId)
-  const teams = useSelector(state => state.getIn(['entities', 'teams']))
-
-  const chooseTeam = (team) => () => {
-    if (activeTeamId === team.get('id')) return
-
-    if (pathname === '/team/404') {
-      history.push('/')
-    }
-    dispatch(teamActions.setActiveTeam(team.get('id')))
-  }
 
   return (
-    <StyledContainer>
-      <StyledLeftMenuHeader>
-        <UserCard user={activeUser} />
+    <StyledLeftMenuContainer>
+      <React.Suspense fallback={<LoadingTeams />}>
+        <TeamNavigation />
+      </React.Suspense>
 
-        <IconButton onClick={() => toggleNavbar(false)}>
-          <img src={arrowLeftIcon} />
-        </IconButton>
-      </StyledLeftMenuHeader>
+      <StyledContainer>
+        <StyledLeftMenuHeader>
+          <React.Suspense fallback={<LoadingUserCard />}>
+            <UserCard />
+          </React.Suspense>
 
-      <StyledGridContainer>
-        <ListItem active icon={homeIcon} label="Home" />
-        <ListItem icon={homeIcon} label="Explore" />
-        <ListItem icon={homeIcon} label="Community" />
-        <ListItem icon={homeIcon} label="Private" />
+          <StyledIconButton onClick={() => toggleNavbar(false)}>
+            <ArrowLeftIcon />
+          </StyledIconButton>
+        </StyledLeftMenuHeader>
 
-        <ContentToggler
-          displayTrigger
-          trigger={<ToggleTeams />}
-        >
-          <StyledTeamListContainer>
-            {teams
-              .map(team => (
-                <ListItem
-                  onClick={chooseTeam(team)}
-                  active={team.get('id') === activeTeamId}
-                  key={team.get('id')}
-                  icon={<MentionIcon fill="#fff" size={18} />}
-                  label={team.get('name')}
-                  proportions="18px auto"
-                />))
-              .toList()}
-          </StyledTeamListContainer>
-        </ContentToggler>
-      </StyledGridContainer>
-    </StyledContainer>
+        <StyledGridContainer>
+          <ListItem icon={<SearchIcon />} label="Search" />
+          <ListItem icon={<UpdatesIcon />} label="Updates" />
+          <ListItem icon={<AddIcon />} label="Invite" />
+
+          <StyledSeparator />
+
+          <ListItem icon={<ExploreIcon />} label="Explore" />
+          <ListItem active={pathname === '/me'} icon={<HomeIcon />} label="Private" />
+          <ListItem active={pathname === '/'} icon={<TeamsIcon />} label="Team" />
+
+          <StyledSeparator />
+
+          <ListItem icon={<LikeIcon />} label="Starred" />
+        </StyledGridContainer>
+      </StyledContainer>
+    </StyledLeftMenuContainer>
   )
 }
 

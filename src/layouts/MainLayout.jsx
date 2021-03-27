@@ -1,22 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useLazyLoadQuery } from 'react-relay'
+import { graphql } from 'graphql'
 
 import GlobalStyles from './GlobalStyles'
 import NavBar from './NavBar'
 import LeftMenu from './LeftMenu'
-import usePageLoadFlow from './hooks/usePageLoadFlow'
-import useCompany from './hooks/useCompany'
-import useTeam from './hooks/useTeam'
 import InviteTeamMembersModal from 'modals/InviteTeamMembersModal'
 import CreateTeamModal from 'modals/CreateTeamModal'
 
 const StyledContainer = styled.div`
   display: grid;
   width: 100%;
-  ${({ navbarToggled }) => navbarToggled && 'grid-template-columns: 300px 1fr;'}
+  ${({ toggled }) => toggled && 'grid-template-columns: 352px 1fr;'}
   grid-template-rows: 56px auto;
-  grid-template-areas: ${({ navbarToggled }) => navbarToggled
+  grid-template-areas: ${({ toggled }) => toggled
     ? `
       "left nav"
       "left content"
@@ -28,26 +27,16 @@ const StyledContainer = styled.div`
   height: 100vh;
 `
 
-const MainLayout = ({ children, isTeamError }) => {
-  const [navbarToggled, toggleNavbar] = React.useState(false)
-
-  const { userId, isTeamLoaded } = usePageLoadFlow()
-  useCompany()
-  useTeam()
-
-  if (!userId) return <div>Fetching user...</div>
+const MainLayout = ({ children }) => {
+  const [toggled, toggle] = React.useState(true)
 
   return (
     <React.Fragment>
-      <StyledContainer navbarToggled={navbarToggled}>
-        {navbarToggled && <LeftMenu toggleNavbar={toggleNavbar} />}
+      <StyledContainer toggled={toggled}>
+        {toggled && <LeftMenu toggleNavbar={toggle} />}
 
-        <NavBar
-          toggleNavbar={toggleNavbar}
-          navbarToggled={navbarToggled}
-        />
-
-        {(isTeamError || isTeamLoaded) && <div>{children}</div>}
+        <NavBar toggleNavbar={toggle} navbarToggled={toggled} />
+        <div></div>
       </StyledContainer>
 
       <GlobalStyles />

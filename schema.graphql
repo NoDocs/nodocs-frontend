@@ -10,14 +10,56 @@ type Query {
     # The IDs of objects
     ids: [ID!]!
   ): [Node]!
+  me: User
   users(orderBy: String, after: String, first: Int): UserConnection
   documents(orderBy: String, teamId: String, userId: String, after: String, first: Int): DocumentConnection
+  teams(companyId: String): [Team]
 }
 
 # An object with an ID
 interface Node {
   # The id of the object.
   id: ID!
+}
+
+type User implements Node {
+  # The ID of an object
+  id: ID!
+  fullName: String
+  email: String
+  color: String
+  type: String
+  token: String
+  accessToken: String
+  currentCompany: Company
+  currentTeam: Team
+}
+
+type Company implements Node {
+  # The ID of an object
+  id: ID!
+  name: String
+  members: [CompanyMember]
+}
+
+type CompanyMember implements Node {
+  # The ID of an object
+  id: ID!
+  user: User
+  role: String
+}
+
+type Team implements Node {
+  # The ID of an object
+  id: ID!
+  name: String
+  members: [TeamMember]
+}
+
+type TeamMember implements Node {
+  # The ID of an object
+  id: ID!
+  user: User
 }
 
 # A connection to a list of items.
@@ -52,19 +94,6 @@ type UserEdge {
 
   # A cursor for use in pagination
   cursor: String!
-}
-
-type User implements Node {
-  # The ID of an object
-  id: ID!
-  fullName: String
-  email: String
-  color: String
-  type: String
-  token: String
-  accessToken: String
-  currentCompany: String
-  currentTeam: String
 }
 
 # A connection to a list of items.
@@ -105,39 +134,15 @@ type Section implements Node {
   title: String
 }
 
-type Company implements Node {
-  # The ID of an object
-  id: ID!
-  name: String
-  members: [CompanyMember]
-}
-
-type CompanyMember implements Node {
-  # The ID of an object
-  id: ID!
-  user: User
-  role: String
-}
-
-type Team implements Node {
-  # The ID of an object
-  id: ID!
-  name: String
-  members: [TeamMember]
-}
-
-type TeamMember implements Node {
-  # The ID of an object
-  id: ID!
-  user: User
-}
-
 type Mutation {
   # Sign in mutation
   signIn(input: SignInInput!): SignInPayload
 
   # Sign up mutation
   signUp(input: SignUpInput!): SignUpPayload
+
+  # Create company mutation
+  createCompany(input: CreateCompanyMutationInput!): CreateCompanyMutationPayload
 }
 
 type SignInPayload {
@@ -160,5 +165,17 @@ input SignUpInput {
   email: String!
   fullName: String!
   password: String!
+  clientMutationId: String
+}
+
+type CreateCompanyMutationPayload {
+  company: Company
+  clientMutationId: String
+}
+
+input CreateCompanyMutationInput {
+  name: String!
+  industry: String!
+  industryDescription: String!
   clientMutationId: String
 }

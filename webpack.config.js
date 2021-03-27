@@ -123,6 +123,7 @@ module.exports = {
       contexts: path.resolve(__dirname, 'src/contexts'),
       modals: path.resolve(__dirname, 'src/modals'),
       shared: path.resolve(__dirname, 'src/shared'),
+      loaders: path.resolve(__dirname, 'src/loaders'),
     }
   },
   ...(isLocal

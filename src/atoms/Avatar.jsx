@@ -1,9 +1,4 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
-
-import { teamSelectors } from 'logic/team'
 
 const StyledAvatar = styled.div`
   height: ${props => props.size || 35}px;
@@ -28,25 +23,4 @@ const StyledAvatar = styled.div`
   `};
 `
 
-const Avatar = ({ size, userId, className }) => {
-  const avatar = useSelector(teamSelectors.selectTeamMemberProperty('avatar', userId))
-  const name = useSelector(teamSelectors.selectTeamMemberProperty('fullName', userId))
-  const color = useSelector(teamSelectors.selectTeamMemberProperty('color', userId))
-
-  return (
-    <StyledAvatar
-      size={size}
-      avatar={avatar}
-      name={name}
-      color={color}
-      className={className}
-    />
-  )
-}
-
-Avatar.propTypes = {
-  size: PropTypes.number,
-  userId: PropTypes.string,
-  className: PropTypes.string
-}
-export default Avatar
+export default StyledAvatar
