@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { PortalContext } from 'contexts'
 import Shortcut from 'atoms/Shortcut'
 import TeamConfigurationBar from './TeamConfigurationBar'
+import TeamContent from './TeamContent'
 
 const StyledContentContainer = styled.div`
   margin: 0px 50px;
@@ -16,6 +17,7 @@ const Team = () => {
     <React.Fragment>
       <StyledContentContainer>
         <TeamConfigurationBar />
+        <TeamContent />
       </StyledContentContainer>
 
       <Shortcut

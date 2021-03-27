@@ -1,9 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { PortalContext } from 'contexts'
 import LoadingTeamMembers from 'loadings/LoadingTeamMembers'
 import TeamMembers from './TeamMembers'
+import TeamFilterAction from './TeamFilterAction'
+import TeamGroupByAction from './TeamGroupByAction'
+import TeamSortAction from './TeamSortAction'
+import TeamPropertiesAction from './TeamPropertiesAction'
 
 const StyledTeamConfigurationBarContainer = styled.div`
   height: 45px;
@@ -22,15 +25,26 @@ const LeftContainer = styled.div`
   align-items: center;
 `
 
-const TeamConfigurationBar = () => {
-  const { closePortal } = React.useContext(PortalContext)
+const StyledSeparator = styled.div`
+  height: 22px;
+  width: 1px;
+  background-color: #9FB0B8;
+`
 
+const TeamConfigurationBar = () => {
   return (
     <StyledTeamConfigurationBarContainer>
       <LeftContainer>
         <React.Suspense fallback={<LoadingTeamMembers />}>
           <TeamMembers />
         </React.Suspense>
+
+        <StyledSeparator />
+
+        <TeamFilterAction />
+        <TeamGroupByAction />
+        <TeamSortAction />
+        <TeamPropertiesAction />
       </LeftContainer>
     </StyledTeamConfigurationBarContainer>
   )

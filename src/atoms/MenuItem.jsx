@@ -8,27 +8,36 @@ const StyledMenuItemContainer = styled.div`
   display: inline-grid;
   grid-auto-flow: column;
   grid-column-gap: 5px;
-  background: #ECEFF1;
   border-radius: 4px;
   padding: 5px 10px;
   align-items: center;
+  cursor: pointer;
+
+  &:hover {
+    background: #ECEFF1;
+  }
 `
 
 const StyledLabel = styled(Label)`
-  color: rgba(0, 0, 0, 0.5);
+  color: black;
+  font-weight: 500;
+
+  ${props => props.size && `font-size: ${props.size}px;`}
 `
 
-const MenuItem = ({ Icon, text }) => {
+const MenuItem = ({ className, Icon, fontSize, text }) => {
   return (
-    <StyledMenuItemContainer>
-      <Icon />
-      <StyledLabel>{text}</StyledLabel>
+    <StyledMenuItemContainer className={className}>
+      {Icon}
+      <StyledLabel size={fontSize}>{text}</StyledLabel>
     </StyledMenuItemContainer>
   )
 }
 
 MenuItem.propTypes = {
+  className: PropTypes.string,
   Icon: PropTypes.any,
+  fontSize: PropTypes.number,
   text: PropTypes.string,
 }
 
