@@ -4,7 +4,7 @@ import logout from 'utils/logout'
 
 const requestAccessToken = async () => {
   try {
-    const api = await fetch('http://localhost:8000/get-access-token', {
+    const api = await fetch(`${process.env.BASE_API_URL}/get-access-token`, {
       method: 'GET',
       headers: { 'Content-type': 'application/json' }
     }).then(response => response.json())
@@ -33,7 +33,7 @@ const getAccessToken = async () => {
       : Promise.resolve(token)
   }
 }
- 
+
 const fetchQuery = async (operation, variables, cacheConfig = {}) => {
   const accessToken = await getAccessToken()
 
@@ -48,7 +48,7 @@ const fetchQuery = async (operation, variables, cacheConfig = {}) => {
     return Promise.resolve(cacheConfig.payload)
   }
 
-  return fetch('http://localhost:8000/graphql', {
+  return fetch(`${process.env.BASE_API_URL}/graphql`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
