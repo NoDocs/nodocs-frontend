@@ -1,8 +1,42 @@
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'
+import jwt_decode from 'jwt-decode'
+import logout from 'utils/logout'
 
-const getToken = () => localStorage.getItem('token')
+const requestAccessToken = async () => {
+  try {
+    const api = await fetch('http://localhost:8000/get-access-token', {
+      method: 'GET',
+      headers: { 'Content-type': 'application/json' }
+    }).then(response => response.json())
+
+    const { data } = api
+
+    if (data.accessToken) {
+      localStorage.setItem('token', data.accessToken)
+      return data.accessToken
+    }
+  } catch (error) {
+    localStorage.removeItem('token')
+    logout()
+  }
+}
+
+const getAccessToken = async () => {
+  const token = localStorage.getItem('token')
+
+  if (token) {
+    const data = jwt_decode(token, { headers: true })
+    const isExpired = new Date(data.exp * 1000) < new Date()
+
+    return isExpired
+      ? requestAccessToken()
+      : Promise.resolve(token)
+  }
+}
  
-function fetchQuery(operation, variables, cacheConfig = {}) {
+const fetchQuery = async (operation, variables, cacheConfig = {}) => {
+  const accessToken = await getAccessToken()
+
   // Instead of making an actual HTTP request to the API, use
   // hydrated data available during the initial page load.
   if (window.data !== undefined) {
@@ -18,16 +52,17 @@ function fetchQuery(operation, variables, cacheConfig = {}) {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      'Authorization': `Bearer ${getToken()}`
+      'Authorization': `Bearer ${accessToken}`
     },
     body: JSON.stringify({ query: operation.text, variables }),
     credentials: 'include',
   })
     .then(res => res.json())
+    .catch(console.log)
 }
 
 const recordSource = new RecordSource()
-const store = new Store(recordSource)
+export const store = new Store(recordSource)
 const network = Network.create(fetchQuery)
 
 const relay = new Environment({ store, network })

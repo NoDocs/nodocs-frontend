@@ -1,8 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { useLazyLoadQuery } from 'react-relay'
-import { graphql } from 'graphql'
 
 import GlobalStyles from './GlobalStyles'
 import NavBar from './NavBar'
@@ -36,7 +34,7 @@ const MainLayout = ({ children }) => {
         {toggled && <LeftMenu toggleNavbar={toggle} />}
 
         <NavBar toggleNavbar={toggle} navbarToggled={toggled} />
-        <div></div>
+        <div>{children}</div>
       </StyledContainer>
 
       <GlobalStyles />

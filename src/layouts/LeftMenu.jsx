@@ -17,8 +17,8 @@ import UserCard from 'molecules/UserCard'
 import ListItem from 'molecules/ListItem'
 
 import TeamNavigation from './TeamNavigation'
-import LoadingTeams from 'loaders/LoadingTeams'
-import LoadingUserCard from 'loaders/LoadingUserCard'
+import LoadingTeams from 'loadings/LoadingTeams'
+import LoadingUserCard from 'loadings/LoadingUserCard'
 
 const StyledLeftMenuContainer = styled.div`
   grid-area: left;

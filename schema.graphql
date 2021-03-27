@@ -14,6 +14,7 @@ type Query {
   users(orderBy: String, after: String, first: Int): UserConnection
   documents(orderBy: String, teamId: String, userId: String, after: String, first: Int): DocumentConnection
   teams(companyId: String): [Team]
+  currentTeam: Team
 }
 
 # An object with an ID
@@ -30,6 +31,7 @@ type User implements Node {
   color: String
   type: String
   token: String
+  avatar: String
   accessToken: String
   currentCompany: Company
   currentTeam: Team
