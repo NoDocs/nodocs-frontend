@@ -18,7 +18,11 @@ export type UserCardQueryResponse = {|
     +currentCompany: ?{|
       +name: ?string
     |},
-  |}
+  |},
+  +availableCompanies: ?$ReadOnlyArray<?{|
+    +id: string,
+    +name: ?string,
+  |}>,
 |};
 export type UserCardQuery = {|
   variables: UserCardQueryVariables,
@@ -38,6 +42,10 @@ query UserCardQuery {
       name
       id
     }
+  }
+  availableCompanies {
+    id
+    name
   }
 }
 */
@@ -77,6 +85,19 @@ v4 = {
   "kind": "ScalarField",
   "name": "name",
   "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "Company",
+  "kind": "LinkedField",
+  "name": "availableCompanies",
+  "plural": true,
+  "selections": [
+    (v0/*: any*/),
+    (v4/*: any*/)
+  ],
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -111,7 +132,8 @@ return {
           }
         ],
         "storageKey": null
-      }
+      },
+      (v5/*: any*/)
     ],
     "type": "Query",
     "abstractKey": null
@@ -149,20 +171,21 @@ return {
           }
         ],
         "storageKey": null
-      }
+      },
+      (v5/*: any*/)
     ]
   },
   "params": {
-    "cacheID": "625af1823d0097315f4465e028e9d52d",
+    "cacheID": "ebd20ae951d5adcebfd59fb5f2544913",
     "id": null,
     "metadata": {},
     "name": "UserCardQuery",
     "operationKind": "query",
-    "text": "query UserCardQuery {\n  me {\n    id\n    fullName\n    color\n    email\n    currentCompany {\n      name\n      id\n    }\n  }\n}\n"
+    "text": "query UserCardQuery {\n  me {\n    id\n    fullName\n    color\n    email\n    currentCompany {\n      name\n      id\n    }\n  }\n  availableCompanies {\n    id\n    name\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '59f787357162fc867bac58263275f379';
+(node/*: any*/).hash = 'efb1d297aad981f2e39f2b58b70087eb';
 
 module.exports = node;

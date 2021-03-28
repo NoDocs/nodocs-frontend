@@ -18,6 +18,7 @@ type Query {
   currentTeam: Team
   neuron(neuronId: String!): Neuron
   neurons(teamId: String, companyId: String): [Neuron]
+  availableCompanies: [Company]
 }
 
 # An object with an ID

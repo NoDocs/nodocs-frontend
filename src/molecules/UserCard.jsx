@@ -45,11 +45,16 @@ const MeQuery = graphql`
         name
       }
     }
+
+    availableCompanies {
+      id
+      name
+    }
   }
 `
 
 const UserCard = () => {
-  const { me } = useLazyLoadQuery(MeQuery)
+  const { me, availableCompanies } = useLazyLoadQuery(MeQuery)
   const { closePortal } = React.useContext(PortalContext)
   const dispatch = useDispatch()
 
@@ -74,8 +79,16 @@ const UserCard = () => {
         <StyledPopup
           name="switch-company-popup"
           trigger={<StyledLabel color="active">{me.currentCompany.name}</StyledLabel>}
+          disabled={!availableCompanies.length}
         >
-          mda
+          {availableCompanies.map(company => (
+            <ListItem
+              key={company.id}
+              label={company.name}
+              onClick={switchCompany(company)}
+              color="black"
+            />
+          ))}
         </StyledPopup>
       </div>
     </StyledContainer>
