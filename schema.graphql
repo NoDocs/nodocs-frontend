@@ -175,7 +175,7 @@ type Mutation {
   signUp(input: SignUpInput!): SignUpPayload
 
   # Create company mutation
-  createCompany(input: CreateCompanyMutationInput!): CreateCompanyMutationPayload
+  createCompany(input: CreateCompanyInput!): CreateCompanyPayload
 
   # Create neuron
   createNeuron(input: CreateNeuronInput!): CreateNeuronPayload
@@ -210,12 +210,12 @@ input SignUpInput {
   clientMutationId: String
 }
 
-type CreateCompanyMutationPayload {
+type CreateCompanyPayload {
   company: Company
   clientMutationId: String
 }
 
-input CreateCompanyMutationInput {
+input CreateCompanyInput {
   name: String!
   industry: String!
   industryDescription: String!

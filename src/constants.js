@@ -1,0 +1,18 @@
+export const industries = [
+  'Pharma',
+  'Research',
+  'Consulting',
+  'Healthcare',
+  'Food & Beverages',
+  'Tourism',
+  'Manufactoring',
+  'Software',
+  'Advertising',
+  'Biotech',
+  'Telecommunications',
+  'Oil & Gas',
+  'Military',
+  'Energy',
+  'Games',
+  'Other',
+]

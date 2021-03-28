@@ -73,9 +73,6 @@ const RegisterForm = React.forwardRef((_, ref) => {
           fullName: fullName.value,
         },
       },
-      onCompleted: () => {
-        history.push('/onboarding/start')
-      },
       updater: (store) => {
         const user = store.getRootField('signUp').getLinkedRecord('user')
         store.getRoot().setLinkedRecord(user, 'me')
@@ -86,6 +83,7 @@ const RegisterForm = React.forwardRef((_, ref) => {
           .getValue('token')
 
         localStorage.setItem('token', token)
+        history.push('/onboarding/start')
       }
     })
   }

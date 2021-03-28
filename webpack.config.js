@@ -124,6 +124,7 @@ module.exports = {
       modals: path.resolve(__dirname, 'src/modals'),
       shared: path.resolve(__dirname, 'src/shared'),
       loadings: path.resolve(__dirname, 'src/loadings'),
+      constants: path.resolve(__dirname, 'src/constants.js'),
     }
   },
   ...(isLocal
