@@ -14,7 +14,7 @@ const StyledContainer = styled.div`
   justify-content: flex-end;
 `
 
-const StyledLoginContainer = styled.div`
+const StyledRegisterContainer = styled.div`
   display: grid;
   grid-row-gap: 24px;
   margin-right: 48px;
@@ -61,10 +61,10 @@ const Register = () => {
   return (
     <React.Fragment>
       <StyledContainer>
-        <StyledLoginContainer>
+        <StyledRegisterContainer>
           <RegisterForm ref={formRef} />
           <RegisterCommunity ref={contactRef} />
-        </StyledLoginContainer>
+        </StyledRegisterContainer>
       </StyledContainer>
 
       <ParticlesBoard particle={particle} />

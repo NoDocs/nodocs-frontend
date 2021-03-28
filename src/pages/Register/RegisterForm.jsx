@@ -1,15 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
+import { graphql, useMutation } from 'react-relay'
 
+import NoDocsIcon from 'assets/noDocs.svg'
+import MentionIcon from 'assets/mention.svg'
+import LockIcon from 'assets/lock.svg'
 import Label from 'atoms/Label'
 import Input from 'atoms/Input'
 import Button from 'atoms/Button'
-import mentionIcon from 'assets/mention.svg'
-import lockIcon from 'assets/lock.svg'
-import noDocsIcon from 'assets/noDocs.svg'
 import history from 'utils/history'
-import useRelay from 'hooks/useRelay'
-import registerMutation from './mutations/registerMutation'
 
 const StyledContentContainer = styled.div`
   background: #FFFFFF;
@@ -37,57 +36,87 @@ const StyledRegisterLabel = styled(Label)`
   color: rgba(0, 0, 0, 0.5);
 `
 
-const StyledNoDocsImage = styled.img`
+const StyledNoDocsImage = styled(NoDocsIcon)`
   height: 35px;
+  width: auto;
   display: block;
   margin-right: auto;
 `
 
+const registerMutation = graphql`
+  mutation RegisterFormMutation($input: SignUpInput!) {
+    signUp(input: $input) {
+      clientMutationId
+      user {
+        id
+        fullName
+        token
+        email
+      }
+    }
+  }
+`
+
 const RegisterForm = React.forwardRef((_, ref) => {
-  const relay = useRelay()
+  const [register] = useMutation(registerMutation)
 
   const handleRegister = (event) => {
     event.preventDefault()
 
     const { email, password, fullName } = document.registerForm.elements
 
-    const data = {
-      email: email.value,
-      password: password.value,
-      fullName: fullName.value,
-    }
+    register({
+      variables: {
+        input: {
+          email: email.value,
+          password: password.value,
+          fullName: fullName.value,
+        },
+      },
+      onCompleted: () => {
+        history.push('/onboarding/start')
+      },
+      updater: (store) => {
+        const user = store.getRootField('signUp').getLinkedRecord('user')
+        store.getRoot().setLinkedRecord(user, 'me')
 
-    registerMutation.commit(relay.environment, data)
-      .then(console.log)
+        const token = store
+          .getRoot()
+          .getLinkedRecord('me')
+          .getValue('token')
+
+        localStorage.setItem('token', token)
+      }
+    })
   }
 
   return (
     <StyledContentContainer ref={ref}>
-      <StyledNoDocsImage src={noDocsIcon} alt="NODOCS" />
+      <StyledNoDocsImage />
       <StyledLabel weight={700} color="black">✍🏼 Welcome back!</StyledLabel>
 
       <StyledForm name="registerForm" onSubmit={handleRegister}>
         <Input
-          icon={<img src={mentionIcon} alt="Full Name" />}
+          icon={<MentionIcon size={20} />}
           name="fullName"
           placeholder="Full Name"
         />
 
         <Input
-          icon={<img src={mentionIcon} alt="email" />}
+          icon={<MentionIcon size={20} />}
           name="email"
           placeholder="email"
         />
 
         <Input
-          icon={<img src={lockIcon} alt="password" />}
+          icon={<LockIcon size={20} />}
           name="password"
           type="password"
           placeholder="password"
         />
 
         <Input
-          icon={<img src={lockIcon} alt="Confirm Password" />}
+          icon={<LockIcon size={20} />}
           name="confirmPassword"
           type="password"
           placeholder="Confirm Password"
