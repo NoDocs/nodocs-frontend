@@ -16,15 +16,22 @@ const StyledButtonContainer = styled.button`
   }
 `
 
-const IconButton = ({ className, title, variant = 'black', children, onClick }) => (
-  <StyledButtonContainer title={title} className={className} variant={variant} onClick={onClick}>
-    {children}
-  </StyledButtonContainer>
-)
+const IconButton = ({ className, title, size, variant = 'black', children, onClick }) => {
+  const enhancedChildren = size
+    ? React.cloneElement(children, { style: { width: size, height: size } })
+    : children
+
+  return (
+    <StyledButtonContainer title={title} className={className} variant={variant} onClick={onClick}>
+      {enhancedChildren}
+    </StyledButtonContainer>
+  )
+}
 
 IconButton.propTypes = {
   className: PropTypes.string,
   variant: PropTypes.string,
+  size: PropTypes.number,
   title: PropTypes.string,
   children: PropTypes.element,
   onClick: PropTypes.func,

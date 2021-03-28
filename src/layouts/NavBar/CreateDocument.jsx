@@ -1,18 +1,30 @@
 import React from 'react'
 import shortid from 'shortid'
-import { useDispatch } from 'react-redux'
 
 import history from 'utils/history'
-import * as documentServices from 'services/document'
-import { documentActions } from 'logic/document'
 import AddIcon from 'assets/add.svg'
 import IconButton from 'atoms/IconButton'
+import { graphql } from 'graphql'
+import { useMutation } from 'react-relay'
+
+const createDocumentMutation = graphql`
+  mutation CreateDocumentMutation($input: CreateDocumentInput!) {
+    createDocument(input: $input) {
+      clientMutationId
+      document {
+        id
+      }
+    }
+  }
+`
 
 const CreateDocument = () => {
-  const dispatch = useDispatch()
+  const [createDocument] = useMutation(createDocumentMutation)
 
   const addDocument = () => {
     const params = {
+      name: 'Untitled',
+      documentId: shortid.generate(),
       content: JSON.stringify([{
         type: 'paragraph',
         id: shortid.generate(),
@@ -20,19 +32,19 @@ const CreateDocument = () => {
       }])
     }
 
-    documentServices
-      .createDocument(params)
-      .then(response => {
-        const { data } = response
-
-        dispatch(documentActions.createDocument(data))
-        history.push(`/d/${data.id}`)
-      })
+    createDocument({
+      variables: {
+        input: params
+      },
+      onCompleted: ({ createDocument: { document } }) => {
+        history.push(`/d/${document.id}`)
+      }
+    })
   }
 
   return (
     <IconButton onClick={addDocument}>
-      <AddIcon />
+      <AddIcon color="white" />
     </IconButton>
   )
 }

@@ -3,6 +3,7 @@ import { createGlobalStyle } from 'styled-components'
 import { Switch, Route } from 'react-router-dom'
 
 import NeuronModal from 'modals/NeuronModal/NeuronModal'
+import LoadingDocument from 'loadings/LoadingDocument'
 import MainLayout from './layouts/MainLayout'
 import ProtectedRoute from './atoms/ProtectedRoute'
 import Notifications from './molecules/Notifications'
@@ -35,8 +36,13 @@ const App = () => {
         <ProtectedRoute
           path="/d/:documentId"
           Layout={MainLayout}
-          component={Document}
+          component={() => (
+            <React.Suspense fallback={<LoadingDocument />}>
+              <Document />
+            </React.Suspense>
+          )}
         />
+
         <ProtectedRoute
           path="/team/404"
           Layout={MainLayout}

@@ -9,9 +9,9 @@ import deleteIcon from 'assets/delete.svg'
 import undoIcon from 'assets/undo.svg'
 import redoIcon from 'assets/redo.svg'
 import IconButton from 'atoms/IconButton'
+import Leaf from 'shared/Leaf'
 import Popup from 'molecules/Popup'
 import useComponent from './hooks/useComponent'
-import Leaf from './components/Leaf'
 
 const StyledComponentContainer = styled.div`
   background: ${({ isImported }) => isImported
@@ -108,6 +108,7 @@ const Component = React.forwardRef(({ id: componentId, attributes }, ref) => {
 
 Component.propTypes = {
   id: PropTypes.string,
+  attributes: PropTypes.object,
 }
 
 export default Component

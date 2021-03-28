@@ -43,30 +43,30 @@ const NeuronHeader = () => {
       <AddTag />
 
       <StyledActionsContainer>
-        <IconButton variant="light">
-          <TextStylingIcon size={20} />
+        <IconButton size={20} variant="light">
+          <TextStylingIcon />
         </IconButton>
 
-        <IconButton variant="light">
-          <SynapsesIcon size={20} />
+        <IconButton size={20} variant="light">
+          <SynapsesIcon />
         </IconButton>
 
-        <IconButton variant="light">
-          <SimilarityIcon size={20} />
+        <IconButton size={20} variant="light">
+          <SimilarityIcon />
         </IconButton>
 
-        <StyledSeparator size={20} />
+        <StyledSeparator />
 
-        <IconButton variant="white">
-          <UndoIcon size={20} />
+        <IconButton size={20} variant="white">
+          <UndoIcon />
         </IconButton>
 
-        <IconButton variant="white">
-          <ChatIcon size={24} />
+        <IconButton size={20} variant="white">
+          <ChatIcon />
         </IconButton>
 
-        <IconButton variant="white">
-          <SubscribersIcon size={20} />
+        <IconButton size={20} variant="white">
+          <SubscribersIcon />
         </IconButton>
       </StyledActionsContainer>
 

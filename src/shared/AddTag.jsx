@@ -5,7 +5,7 @@ import MenuItem from 'atoms/MenuItem'
 
 const AddTag = () => {
   return (
-    <MenuItem Icon={HasTagIcon} text="add tags" />
+    <MenuItem Icon={<HasTagIcon />} text="add tags" />
   )
 }
 

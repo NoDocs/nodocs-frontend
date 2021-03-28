@@ -12,9 +12,12 @@ type Query {
   ): [Node]!
   me: User
   users(orderBy: String, after: String, first: Int): UserConnection
+  document(documentId: String): Document
   documents(orderBy: String, teamId: String, userId: String, after: String, first: Int): DocumentConnection
   teams(companyId: String): [Team]
   currentTeam: Team
+  neuron(neuronId: String!): Neuron
+  neurons(teamId: String, companyId: String): [Neuron]
 }
 
 # An object with an ID
@@ -32,7 +35,6 @@ type User implements Node {
   type: String
   token: String
   avatar: String
-  accessToken: String
   currentCompany: Company
   currentTeam: Team
 }
@@ -98,6 +100,38 @@ type UserEdge {
   cursor: String!
 }
 
+type Document implements Node {
+  # The ID of an object
+  id: ID!
+  sections: [Section]
+  title: String
+  creator: User
+  company: Company
+  team: Team
+  createdAt(format: String): String
+  updatedAt(format: String): String
+}
+
+type Section implements Node {
+  # The ID of an object
+  id: ID!
+  sectionId: String
+  pages: [Page]
+  title: String
+}
+
+type Page implements Node {
+  # The ID of an object
+  id: ID!
+  pageId: String
+  title: String
+  section: Section
+  content: String
+  creator: User
+  createdAt(format: String): String
+  updatedAt(format: String): String
+}
+
 # A connection to a list of items.
 type DocumentConnection {
   # Information to aid in pagination.
@@ -117,23 +151,19 @@ type DocumentEdge {
   cursor: String!
 }
 
-type Document implements Node {
+type Neuron implements Node {
   # The ID of an object
   id: ID!
-  sections: [Section]
-  title: String
+  name: String
+  neuronId: String
+  content: String
   creator: User
-  company: Company
-  team: Team
+  pages: [Page]
+  teams: [Team]
+  companies: [Company]
   createdAt(format: String): String
   updatedAt(format: String): String
-}
-
-type Section implements Node {
-  # The ID of an object
-  id: ID!
-  sectionId: String
-  title: String
+  deletedAt(format: String): String
 }
 
 type Mutation {
@@ -145,6 +175,15 @@ type Mutation {
 
   # Create company mutation
   createCompany(input: CreateCompanyMutationInput!): CreateCompanyMutationPayload
+
+  # Create neuron
+  createNeuron(input: CreateNeuronInput!): CreateNeuronPayload
+
+  # Attach neuron to page
+  attachNeuronToDocument(input: attachNeuronToPageInput!): attachNeuronToPagePayload
+
+  # Create document
+  createDocument(input: CreateDocumentInput!): CreateDocumentPayload
 }
 
 type SignInPayload {
@@ -179,5 +218,41 @@ input CreateCompanyMutationInput {
   name: String!
   industry: String!
   industryDescription: String!
+  clientMutationId: String
+}
+
+type CreateNeuronPayload {
+  neuron: Neuron
+  clientMutationId: String
+}
+
+input CreateNeuronInput {
+  neuronId: String!
+  content: String!
+  name: String!
+  clientMutationId: String
+}
+
+type attachNeuronToPagePayload {
+  attachedPageId: String
+  neuronId: String
+  clientMutationId: String
+}
+
+input attachNeuronToPageInput {
+  neuronId: String!
+  pageId: String!
+  clientMutationId: String
+}
+
+type CreateDocumentPayload {
+  document: Document
+  clientMutationId: String
+}
+
+input CreateDocumentInput {
+  documentId: String!
+  content: String!
+  name: String!
   clientMutationId: String
 }

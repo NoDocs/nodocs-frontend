@@ -1,36 +1,92 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import styled from 'styled-components'
+import { Slate, Editable } from 'slate-react'
+import { useCursors } from 'slate-yjs'
 
-import * as documentServices from 'services/document'
-import { documentActions, documentSelectors } from 'logic/document'
-import SectionEditor from './SectionEditor'
+import Leaf from 'shared/Leaf'
+import useDocument from './hooks/useDocument'
+import DocumentPanel from './DocumentPanel'
+import DocumentLeftPanel from './DocumentLeftPanel'
+import Component from './Component'
 
-const Document = () => {
-  const dispatch = useDispatch()
-  const params = useParams()
-  const activeSectionId = useSelector(documentSelectors.selectActiveSectionId)
+const StyledDocumentContainer = styled.div`
+  display: grid;
+  grid-template-areas:
+    "document-panel document-panel"
+    "document-left-panel document-content"
+  ;
+  grid-template-rows: 45px;
+  grid-template-columns: 250px auto;
+  grid-row-gap: 25px;
+  grid-column-gap: 25px;
+`
 
-  React.useEffect(
-    () => {
-      const fetchDocument = async () => {
-        const docId = params.documentId
-        const { data: doc } = await documentServices.getDocument(docId)
+const StyledEditable = styled(Editable)`
+  grid-area: document-content;
+  margin-right: 20px;
+  background: #FFFFFF;
+  min-height: 540px;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  padding: 20px 30px;
+  border-left: 0px;
+`
 
-        dispatch(documentActions.putDocuments({ documents: [doc] }))
-        dispatch(documentActions.initializeDocument(doc))
+const SectionEditor = () => {
+  const { editor, editorState, updateEditorState } = useDocument()
+  const { decorate } = useCursors(editor)
+
+  const renderElement = React.useCallback(
+    ({ attributes: { ref, ...otherAttributes }, element, children }) => {
+      if (element.type === 'component') {
+        return (
+          <Component
+            id={element.id}
+            componentId={element.componentId}
+            attributes={otherAttributes}
+            ref={ref}
+          />
+        )
       }
 
-      fetchDocument()
-
-      return () => { dispatch(documentActions.clearDocument()) }
+      return (
+        <div
+          data-node-id={element.id}
+          style={{ position: 'relative', margin: 0 }}
+          ref={ref}
+          {...otherAttributes}
+        >
+          {children}
+        </div>
+      )
     },
-    [params.documentId]
+    []
   )
 
-  return activeSectionId
-    ? <SectionEditor />
-    : <p>Loading Document...</p>
+  const renderLeaf = React.useCallback(
+    (props) => <Leaf {...props} />,
+    [decorate]
+  )
+
+  return (
+    <StyledDocumentContainer>
+      <Slate
+        editor={editor}
+        value={editorState}
+        onChange={updateEditorState}
+      >
+        {/* <DocumentPanel /> */}
+        {/* <DocumentLeftPanel /> */}
+
+        <StyledEditable
+          data-start="selection"
+          renderElement={renderElement}
+          renderLeaf={renderLeaf}
+          decorate={decorate}
+        />
+      </Slate>
+    </StyledDocumentContainer>
+  )
 }
 
-export default Document
+export default React.memo(SectionEditor)

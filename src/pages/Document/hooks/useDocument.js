@@ -1,78 +1,123 @@
+import { graphql } from 'graphql'
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { withReact } from 'slate-react'
+import { useLazyLoadQuery } from 'react-relay'
+import { useParams } from 'react-router-dom'
 import { createEditor } from 'slate'
 import { withHistory } from 'slate-history'
-import { withIOCollaboration } from '@slate-collaborative/client'
-import flow from 'lodash/flow'
-import shortid from 'shortid'
+import { withReact } from 'slate-react'
+import * as Yjs from 'yjs'
+import { toSharedType, withCursor, withYjs } from 'slate-yjs'
+import { WebsocketProvider } from 'y-websocket'
 
-import { hexToRgba } from 'utils/color'
-import { authSelectors } from 'logic/auth'
-import { documentSelectors } from 'logic/document'
-import withRectangleSelect from '../plugins/withRectangleSelect'
-import withDetectComponentInsert from '../plugins/withDetectComponentInsert'
 import withNodeId from '../plugins/withNodeId'
+const WEBSOCKET_ENDPOINT = process.env.BASE_SHAREDB_WS
+
+const query = graphql`
+  query useDocumentQuery ($documentId: String!) {
+    document(documentId: $documentId) {
+      id
+      sections {
+        id
+        pages {
+          id
+          title
+          pageId
+          content
+        }
+      }
+    }
+
+    me {
+      color
+      fullName
+    }
+  }
+`
+
+const getFirstSectionId = document => document
+  .sections[0]
+  .id
+
+const getFirstPageId = document => document
+  .sections[0]
+  .pages[0]
+  .id
+
+const getEditorContent = ({ document, activeSectionId, activePageId }) => JSON.parse(
+  document
+    .sections
+    .find(section => section.id === activeSectionId)
+    .pages
+    .find(page => page.id === activePageId)
+    .content
+)
 
 const useDocument = () => {
-  const [editorState, updateEditorState] = React.useState([{
-    type: 'paragraph',
-    id: shortid.generate(),
-    children: [{ text: '' }]
-  }])
+  const { documentId } = useParams()
+  const { me, document } = useLazyLoadQuery(query, { documentId })
+  const [activeSectionId] = React.useState(getFirstSectionId(document))
+  const [activePageId] = React.useState(getFirstPageId(document))
 
-  const userName = useSelector(authSelectors.selectCurrUserProperty('fullName'))
-  const color = useSelector(authSelectors.selectCurrUserProperty('color'))
-  const activeSectionId = useSelector(documentSelectors.selectSectionProperty('id'))
-  const activePageId = useSelector(documentSelectors.selectPageProperty('id'))
+  const [isOnline, toggleIsOnline] = React.useState(false)
+  const [editorState, updateEditorState] = React.useState(getEditorContent({ document, activeSectionId, activePageId }))
+
+  const [sharedType, provider] = React.useMemo(
+    () => {
+      const doc = new Yjs.Doc()
+      const sharedType = doc.getArray('content')
+      const provider = new WebsocketProvider(
+        WEBSOCKET_ENDPOINT,
+        document.id,
+        doc,
+        { connect: false }
+      )
+
+      return [sharedType, provider]
+    },
+    [document]
+  )
 
   const editor = React.useMemo(
     () => {
-      const withPlugins = flow(
-        withRectangleSelect,
-        withDetectComponentInsert,
-        withNodeId,
-        withHistory,
-        withReact,
-      )(createEditor())
+      const enhancedEditor = withNodeId(withReact(withHistory(createEditor())))
 
-      const origin = process.env.NODE_ENV === 'production'
-        ? process.env.BASE_API_URL
-        : 'http://localhost:8000'
-
-      const options = {
-        docId: `/${activePageId}`,
-        cursorData: {
-          name: userName,
-          color,
-          alphaColor: hexToRgba(color, 0.7),
-        },
-        url: `${origin}/${activePageId}`,
-        connectOpts: {
-          query: {
-            name: userName,
-            token: 'id',
-            type: 'document',
-            slug: activePageId,
-          }
-        },
-      }
-
-      return withIOCollaboration(withPlugins, options)
+      return !provider
+        ? enhancedEditor
+        : withCursor(withYjs(enhancedEditor, sharedType), provider.awareness)
     },
-    []
+    [sharedType, provider]
   )
 
-  React.useEffect(() => { editor.connect() }, [])
-  React.useEffect(() => editor.destroy, [])
+  React.useEffect(
+    () => {
+      provider.on('status', ({ status }) => { toggleIsOnline(status === 'connected') })
+      provider.on('sync', (isSynced) => {
+        if (isSynced && sharedType.length === 0) {
+          toSharedType(sharedType, [
+            { type: 'paragraph', children: [{ text: 'Hello world!' }] },
+          ])
+        }
+      })
 
-  console.log(editorState)
+      provider.awareness.setLocalState({
+        alphaColor: me.color,
+        color: me.color,
+        name: me.fullName
+      })
+      provider.connect()
+
+      return () => provider.disconnect()
+    },
+    [provider]
+  )
 
   return {
     editor,
     editorState,
     updateEditorState,
     activeSectionId,
+    activePageId,
+    isOnline,
   }
 }
 

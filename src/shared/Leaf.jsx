@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Label from 'atoms/Label'
 import Caret from './Caret'
 
 const Leaf = ({ attributes, children, leaf }) => {
@@ -21,21 +20,16 @@ const Leaf = ({ attributes, children, leaf }) => {
     children = <u>{children}</u>
   }
 
+  const data = leaf.data || {}
+
   return (
-    <Label
-      as="span"
-      color="black"
+    <span
       {...attributes}
-      style={
-        {
-          position: 'relative',
-          backgroundColor: leaf.alphaColor,
-        }
-      }
+      style={{ position: 'relative', backgroundColor: data.alphaColor }}
     >
-      {leaf.isCaret && <Caret {...leaf} />}
+      {leaf.isCaret ? <Caret {...(leaf)} /> : null}
       {children}
-    </Label>
+    </span>
   )
 }
 

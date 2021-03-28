@@ -4,7 +4,9 @@ import styled from 'styled-components'
 
 import NeuronIcon from 'assets/neuron.svg'
 import withRenderPortal from 'molecules/withRenderPortal'
+import LoadingNeuronModal from 'loadings/LoadingNeuronModal'
 import NeuronHeader from './NeuronHeader'
+import NeuronContent from './NeuronContent'
 
 const StyledOverlay = styled.div`
   background-color: rgba(0, 0, 0, 0.9);
@@ -43,6 +45,9 @@ const NeuronModal = () => {
 
         <StyledModal>
           <NeuronHeader />
+          <React.Suspense fallback={<LoadingNeuronModal />}>
+            <NeuronContent />
+          </React.Suspense>
         </StyledModal>
       </StyledModalContainer>
     </StyledOverlay>,
