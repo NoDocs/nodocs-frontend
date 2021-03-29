@@ -46,9 +46,9 @@ const StyledAvatar = styled(Avatar)`
   }
 `
 
-const DocumentElement = ({ name, authorName, createdAt, members }) => {
+const DocumentElement = ({ name, authorName, onClick, createdAt, members }) => {
   return (
-    <StyledDocumentContainer>
+    <StyledDocumentContainer onClick={onClick}>
       <StyledDocumentHeader>
         <StyledDocumentIcon />
         <Label weight={600} color="black">{name}</Label>
@@ -76,6 +76,7 @@ const DocumentElement = ({ name, authorName, createdAt, members }) => {
 DocumentElement.propTypes = {
   name: PropTypes.string,
   authorName: PropTypes.string,
+  onClick: PropTypes.func,
   createdAt: PropTypes.string,
   members: PropTypes.array,
 }

@@ -12,6 +12,7 @@ const StyledItemsContainer = styled.div`
   display: grid;
   margin-top: 16px;
   grid-column-gap: 12px;
+  grid-row-gap: 12px;
   margin-bottom: 32px;
   grid-template-columns: repeat(auto-fill, 240px);
 `

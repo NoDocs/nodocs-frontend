@@ -4,6 +4,7 @@ import { graphql, useLazyLoadQuery } from 'react-relay'
 import DocumentIcon from 'assets/document.svg'
 import DocumentElement from 'molecules/DocumentElement'
 import TeamSection from './TeamSection'
+import { useHistory } from 'react-router'
 
 const query = graphql`
   query TeamDocumentsQuery {
@@ -23,6 +24,11 @@ const query = graphql`
 
 const TeamDocuments = () => {
   const { documents } = useLazyLoadQuery(query)
+  const history = useHistory()
+
+  const onDocumentClick = doc => () => {
+    history.push(`/d/${doc.id}`)
+  }
 
   return (
     <TeamSection Icon={<DocumentIcon />} title="Documents">
@@ -33,6 +39,7 @@ const TeamDocuments = () => {
           members={[document.owner]}
           authorName={document.owner.fullName}
           createdAt={document.createdAt}
+          onClick={onDocumentClick(document)}
         />
       ))}
     </TeamSection>
