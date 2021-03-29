@@ -8446,9 +8446,9 @@ yeast@0.1.2:
   resolved "https://registry.yarnpkg.com/yeast/-/yeast-0.1.2.tgz#008e06d8094320c372dbc2f8ed76a0ca6c8ac419"
   integrity sha1-AI4G2AlDIMNy28L47XagymyKxBk=
 
-yjs@^13.3.2:
-  version "13.5.3"
-  resolved "https://registry.yarnpkg.com/yjs/-/yjs-13.5.3.tgz#0efc5983ec287d24f4471f8f4184f9df80780835"
-  integrity sha512-LlkmCr68LCfkmoic6rBjDaD01vbdMhy07dXYo65sQ0wOYh8eylrU1b0lTo3YT/BmcyH5Jn4KewDxyJMsDwvERw==
+yjs@13.5.2:
+  version "13.5.2"
+  resolved "https://registry.yarnpkg.com/yjs/-/yjs-13.5.2.tgz#b518be0df84164591f4cc774aa24468d288e0e75"
+  integrity sha512-X5vscuAhQIYf77xuNeJSlEiQZq0aUVtvs3x2X3//ZGpDqcWiR3D0H1XMDfEnNzdTMzuhfDBMMxSl70klD+0OXw==
   dependencies:
     lib0 "^0.2.38"
