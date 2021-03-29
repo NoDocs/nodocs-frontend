@@ -9,11 +9,12 @@
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
 export type useDocumentQueryVariables = {|
-  documentId: string
+  id: string
 |};
 export type useDocumentQueryResponse = {|
   +document: ?{|
     +id: string,
+    +name: ?string,
     +sections: ?$ReadOnlyArray<?{|
       +id: string,
       +pages: ?$ReadOnlyArray<?{|
@@ -38,10 +39,11 @@ export type useDocumentQuery = {|
 
 /*
 query useDocumentQuery(
-  $documentId: String!
+  $id: String!
 ) {
-  document(documentId: $documentId) {
+  document(id: $id) {
     id
+    name
     sections {
       id
       pages {
@@ -65,7 +67,7 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "documentId"
+    "name": "id"
   }
 ],
 v1 = {
@@ -80,8 +82,8 @@ v2 = {
   "args": [
     {
       "kind": "Variable",
-      "name": "documentId",
-      "variableName": "documentId"
+      "name": "id",
+      "variableName": "id"
     }
   ],
   "concreteType": "Document",
@@ -90,6 +92,13 @@ v2 = {
   "plural": false,
   "selections": [
     (v1/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "name",
+      "storageKey": null
+    },
     {
       "alias": null,
       "args": null,
@@ -201,16 +210,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b2f9623f4a290ebfe98cfdfadfaec101",
+    "cacheID": "412c6fdf2936d4996eb49e5e15e858a7",
     "id": null,
     "metadata": {},
     "name": "useDocumentQuery",
     "operationKind": "query",
-    "text": "query useDocumentQuery(\n  $documentId: String!\n) {\n  document(documentId: $documentId) {\n    id\n    sections {\n      id\n      pages {\n        id\n        title\n        pageId\n        content\n      }\n    }\n  }\n  me {\n    color\n    fullName\n    id\n  }\n}\n"
+    "text": "query useDocumentQuery(\n  $id: String!\n) {\n  document(id: $id) {\n    id\n    name\n    sections {\n      id\n      pages {\n        id\n        title\n        pageId\n        content\n      }\n    }\n  }\n  me {\n    color\n    fullName\n    id\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'fb78862c3b282e693725027f88998c27';
+(node/*: any*/).hash = '97d6d261dbf4f66333c0109591d99f42';
 
 module.exports = node;

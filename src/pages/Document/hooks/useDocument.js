@@ -13,9 +13,10 @@ import withNodeId from '../plugins/withNodeId'
 const WEBSOCKET_ENDPOINT = process.env.BASE_SHAREDB_WS
 
 const query = graphql`
-  query useDocumentQuery ($documentId: String!) {
-    document(documentId: $documentId) {
+  query useDocumentQuery ($id: String!) {
+    document(id: $id) {
       id
+      name
       sections {
         id
         pages {
@@ -54,7 +55,7 @@ const getEditorContent = ({ document, activeSectionId, activePageId }) => JSON.p
 
 const useDocument = () => {
   const { documentId } = useParams()
-  const { me, document } = useLazyLoadQuery(query, { documentId })
+  const { me, document } = useLazyLoadQuery(query, { id: documentId })
   const [activeSectionId] = React.useState(getFirstSectionId(document))
   const [activePageId] = React.useState(getFirstPageId(document))
 

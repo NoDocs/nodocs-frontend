@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useRouteMatch } from 'react-router-dom'
 
 import NoDocsLogoIcon from 'assets/logo.svg'
 import MenuIcon from 'assets/menu.svg'
@@ -19,22 +20,26 @@ const StyledContainer = styled.div`
   padding-left: 30px;
 `
 
-const NavBar = ({ navbarToggled, toggleNavbar }) => (
-  <StyledContainer>
-    {!navbarToggled && (
-      <IconButton onClick={() => toggleNavbar(true)}>
-        <MenuIcon />
+const NavBar = ({ navbarToggled, toggleNavbar }) => {
+  const match = useRouteMatch()
+
+  return (
+    <StyledContainer>
+      {!navbarToggled && (
+        <IconButton onClick={() => toggleNavbar(true)}>
+          <MenuIcon />
+        </IconButton>
+      )}
+
+      <IconButton onClick={() => history.push('/')}>
+        <NoDocsLogoIcon />
       </IconButton>
-    )}
 
-    <IconButton onClick={() => history.push('/')}>
-      <NoDocsLogoIcon />
-    </IconButton>
-
-    <OpenedDocuments />
-    <CreateDocument />
-  </StyledContainer>
-)
+      {match.path === '/d/:documentId' && <OpenedDocuments />}
+      <CreateDocument />
+    </StyledContainer>
+  )
+}
 
 NavBar.propTypes = {
   navbarToggled: PropTypes.bool,

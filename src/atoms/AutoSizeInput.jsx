@@ -37,7 +37,7 @@ const getInputWidth = (value) => {
 
   console.log('width -> ', window.getComputedStyle(span).getPropertyValue('width'))
 
-  document.body.removeChild(span)
+  // document.body.removeChild(span)
 
   return Math.max(width, 14)
 }
@@ -46,11 +46,16 @@ const AutoSizeInput = ({ value, onChange, onBlur }) => {
   const [width, updateWidth] = React.useState(getInputWidth(value))
 
   const onInputChange = (event) => {
-    const newWidth = getInputWidth(event.target.value)
-    updateWidth(newWidth)
-
     onChange(event)
   }
+
+  React.useEffect(
+    () => {
+      const newWidth = getInputWidth(value)
+      updateWidth(newWidth)
+    },
+    [value]
+  )
 
   return (
     <StyledInput
@@ -64,6 +69,7 @@ const AutoSizeInput = ({ value, onChange, onBlur }) => {
 
 AutoSizeInput.propTypes = {
   value: PropTypes.string,
+  onBlur: PropTypes.func,
   onChange: PropTypes.func,
 }
 

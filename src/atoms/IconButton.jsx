@@ -9,6 +9,9 @@ const StyledButtonContainer = styled.button`
   border-radius: 5px 10px;
   cursor: pointer;
 
+  ${props => props.size && `height: ${props.size}px;`}
+  ${props => props.size && `width: ${props.size}px;`}
+
   &:hover {
     background-color: ${({ variant }) => variant === 'black'
     ? 'rgba(255, 255, 255, 0.15)'
@@ -17,13 +20,9 @@ const StyledButtonContainer = styled.button`
 `
 
 const IconButton = ({ className, title, size, variant = 'black', children, onClick }) => {
-  const enhancedChildren = size
-    ? React.cloneElement(children, { style: { width: size, height: size } })
-    : children
-
   return (
-    <StyledButtonContainer title={title} className={className} variant={variant} onClick={onClick}>
-      {enhancedChildren}
+    <StyledButtonContainer size={size} title={title} className={className} variant={variant} onClick={onClick}>
+      {children}
     </StyledButtonContainer>
   )
 }

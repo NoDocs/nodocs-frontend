@@ -12,12 +12,12 @@ type Query {
   ): [Node]!
   me: User
   users(orderBy: String, after: String, first: Int): UserConnection
-  document(documentId: String): Document
+  document(id: String): Document
   documents(orderBy: String, teamId: String, userId: String, after: String, first: Int): [Document]
   teams(companyId: String): [Team]
   currentTeam: Team
   neuron(neuronId: String!): Neuron
-  neurons(teamId: String, companyId: String): [Neuron]
+  neurons(teamId: String): [Neuron]
   availableCompanies: [Company]
 }
 
@@ -170,6 +170,9 @@ type Mutation {
   # Create document
   createDocument(input: CreateDocumentInput!): CreateDocumentPayload
 
+  # Update document
+  updateDocument(input: UpdateDocumentInput!): UpdateDocumentPayload
+
   # Send team invitations
   sendInvitations(input: SendInvitationsInput!): SendInvitationsPayload
 }
@@ -254,6 +257,17 @@ input CreateDocumentInput {
   documentId: String!
   content: String!
   name: String!
+  clientMutationId: String
+}
+
+type UpdateDocumentPayload {
+  document: Document
+  clientMutationId: String
+}
+
+input UpdateDocumentInput {
+  id: String
+  name: String
   clientMutationId: String
 }
 
