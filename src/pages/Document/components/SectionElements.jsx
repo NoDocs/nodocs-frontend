@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useSlate } from 'slate-react'
 
-import textIcon from 'assets/text.svg'
+import TextIcon from 'assets/text.svg'
 import ListItem from 'molecules/ListItem'
 
 const StyledListItem = styled(ListItem)`
@@ -14,14 +14,13 @@ const SectionElements = () => {
 
   return slate
     .children
-    .reduce((acc, curr) => [...acc, ...curr.children], [])
     .filter(curr => curr.type === 'paragraph' ? Boolean(curr.children[0].text) : true)
-    .map(curr => {
+    .map((curr, index) => {
       if (curr.type === 'paragraph') {
         return (
           <StyledListItem
-            key={curr.id}
-            icon={textIcon}
+            key={index}
+            icon={<TextIcon />}
             color="black"
             label={curr.children[0].text}
           />

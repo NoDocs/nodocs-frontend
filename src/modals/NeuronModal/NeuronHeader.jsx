@@ -20,7 +20,7 @@ const StyledHeaderContainer = styled.div`
 
 const StyledSeparator = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
-  height: 30px;
+  height: 25px;
   margin-left: 5px;
   margin-right: 5px;
 `
@@ -43,30 +43,30 @@ const NeuronHeader = () => {
       <AddTag />
 
       <StyledActionsContainer>
-        <IconButton size={20} variant="light">
-          <TextStylingIcon />
+        <IconButton variant="light">
+          <TextStylingIcon size={20} />
         </IconButton>
 
-        <IconButton size={20} variant="light">
-          <SynapsesIcon />
+        <IconButton variant="light">
+          <SynapsesIcon size={20} />
         </IconButton>
 
-        <IconButton size={20} variant="light">
-          <SimilarityIcon />
+        <IconButton variant="light">
+          <SimilarityIcon size={20} />
         </IconButton>
 
         <StyledSeparator />
 
-        <IconButton size={20} variant="white">
-          <UndoIcon />
+        <IconButton variant="white">
+          <UndoIcon size={20} />
         </IconButton>
 
-        <IconButton size={20} variant="white">
-          <ChatIcon />
+        <IconButton variant="white">
+          <ChatIcon size={20} />
         </IconButton>
 
-        <IconButton size={20} variant="white">
-          <SubscribersIcon />
+        <IconButton variant="white">
+          <SubscribersIcon size={26} />
         </IconButton>
       </StyledActionsContainer>
 

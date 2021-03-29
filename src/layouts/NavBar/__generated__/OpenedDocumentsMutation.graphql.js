@@ -9,6 +9,7 @@
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
 export type UpdateDocumentInput = {|
+  id?: ?string,
   name?: ?string,
   clientMutationId?: ?string,
 |};

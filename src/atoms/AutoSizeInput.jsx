@@ -35,9 +35,7 @@ const getInputWidth = (value) => {
     .getPropertyValue('width')
     .replace('px', ''))
 
-  console.log('width -> ', window.getComputedStyle(span).getPropertyValue('width'))
-
-  // document.body.removeChild(span)
+  document.body.removeChild(span)
 
   return Math.max(width, 14)
 }

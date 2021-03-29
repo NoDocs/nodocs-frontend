@@ -17,6 +17,7 @@ export type useDocumentQueryResponse = {|
     +name: ?string,
     +sections: ?$ReadOnlyArray<?{|
       +id: string,
+      +title: ?string,
       +pages: ?$ReadOnlyArray<?{|
         +id: string,
         +title: ?string,
@@ -46,6 +47,7 @@ query useDocumentQuery(
     name
     sections {
       id
+      title
       pages {
         id
         title
@@ -79,6 +81,13 @@ v1 = {
 },
 v2 = {
   "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "title",
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
   "args": [
     {
       "kind": "Variable",
@@ -108,6 +117,7 @@ v2 = {
       "plural": true,
       "selections": [
         (v1/*: any*/),
+        (v2/*: any*/),
         {
           "alias": null,
           "args": null,
@@ -117,13 +127,7 @@ v2 = {
           "plural": true,
           "selections": [
             (v1/*: any*/),
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "title",
-              "storageKey": null
-            },
+            (v2/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -147,14 +151,14 @@ v2 = {
   ],
   "storageKey": null
 },
-v3 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "color",
   "storageKey": null
 },
-v4 = {
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -168,7 +172,7 @@ return {
     "metadata": null,
     "name": "useDocumentQuery",
     "selections": [
-      (v2/*: any*/),
+      (v3/*: any*/),
       {
         "alias": null,
         "args": null,
@@ -177,8 +181,8 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
-          (v3/*: any*/),
-          (v4/*: any*/)
+          (v4/*: any*/),
+          (v5/*: any*/)
         ],
         "storageKey": null
       }
@@ -192,7 +196,7 @@ return {
     "kind": "Operation",
     "name": "useDocumentQuery",
     "selections": [
-      (v2/*: any*/),
+      (v3/*: any*/),
       {
         "alias": null,
         "args": null,
@@ -201,8 +205,8 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
-          (v3/*: any*/),
           (v4/*: any*/),
+          (v5/*: any*/),
           (v1/*: any*/)
         ],
         "storageKey": null
@@ -210,16 +214,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "412c6fdf2936d4996eb49e5e15e858a7",
+    "cacheID": "90667965d9b120a299790ea5f117be2e",
     "id": null,
     "metadata": {},
     "name": "useDocumentQuery",
     "operationKind": "query",
-    "text": "query useDocumentQuery(\n  $id: String!\n) {\n  document(id: $id) {\n    id\n    name\n    sections {\n      id\n      pages {\n        id\n        title\n        pageId\n        content\n      }\n    }\n  }\n  me {\n    color\n    fullName\n    id\n  }\n}\n"
+    "text": "query useDocumentQuery(\n  $id: String!\n) {\n  document(id: $id) {\n    id\n    name\n    sections {\n      id\n      title\n      pages {\n        id\n        title\n        pageId\n        content\n      }\n    }\n  }\n  me {\n    color\n    fullName\n    id\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '97d6d261dbf4f66333c0109591d99f42';
+(node/*: any*/).hash = 'be5a50aa10bfaf77dfb8690a35286940';
 
 module.exports = node;

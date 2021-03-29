@@ -18,6 +18,14 @@ const StyledInput = styled.input`
   box-sizing: border-box;
 `
 
+const StyledIconContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translate(0px, -50%);
+  height: 18px;
+`
+
 const Input = ({
   icon,
   placeholder,
@@ -27,14 +35,6 @@ const Input = ({
   onChange,
   value,
 }) => {
-  const clonedIcon = icon && React.cloneElement(
-    icon,
-    {
-      height: 18,
-      style: { position: 'absolute', top: 10, left: 15 }
-    }
-  )
-
   return (
     <StyledInputContainer className={className}>
       <StyledInput
@@ -46,7 +46,11 @@ const Input = ({
         onChange={onChange}
       />
 
-      {clonedIcon}
+      {icon && (
+        <StyledIconContainer>
+          {icon}
+        </StyledIconContainer>
+      )}
     </StyledInputContainer>
   )
 }

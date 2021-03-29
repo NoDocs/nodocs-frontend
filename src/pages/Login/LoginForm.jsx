@@ -68,13 +68,13 @@ const LoginForm = React.forwardRef((_, ref) => {
 
       <StyledForm name="authForm" onSubmit={handleSignIn}>
         <Input
-          icon={<MentionIcon size={15} />}
+          icon={<MentionIcon size={18} />}
           name="email"
           placeholder="email"
         />
 
         <Input
-          icon={<LockIcon size={15} />}
+          icon={<LockIcon size={18} />}
           name="password"
           type="password"
           placeholder="password"

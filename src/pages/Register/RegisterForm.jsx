@@ -95,26 +95,26 @@ const RegisterForm = React.forwardRef((_, ref) => {
 
       <StyledForm name="registerForm" onSubmit={handleRegister}>
         <Input
-          icon={<MentionIcon size={20} />}
+          icon={<MentionIcon size={18} />}
           name="fullName"
           placeholder="Full Name"
         />
 
         <Input
-          icon={<MentionIcon size={20} />}
+          icon={<MentionIcon size={18} />}
           name="email"
           placeholder="email"
         />
 
         <Input
-          icon={<LockIcon size={20} />}
+          icon={<LockIcon size={18} />}
           name="password"
           type="password"
           placeholder="password"
         />
 
         <Input
-          icon={<LockIcon size={20} />}
+          icon={<LockIcon size={18} />}
           name="confirmPassword"
           type="password"
           placeholder="Confirm Password"

@@ -15,7 +15,7 @@ const StyledButtonContainer = styled.button`
   &:hover {
     background-color: ${({ variant }) => variant === 'black'
     ? 'rgba(255, 255, 255, 0.15)'
-    : '#F3F3F3'};
+    : '#ECEFF1'};
   }
 `
 

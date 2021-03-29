@@ -75,8 +75,8 @@ const SectionEditor = () => {
         value={editorState}
         onChange={updateEditorState}
       >
-        {/* <DocumentPanel /> */}
-        {/* <DocumentLeftPanel /> */}
+        <DocumentPanel />
+        <DocumentLeftPanel />
 
         <StyledEditable
           data-start="selection"

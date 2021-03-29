@@ -19,6 +19,7 @@ const query = graphql`
       name
       sections {
         id
+        title
         pages {
           id
           title

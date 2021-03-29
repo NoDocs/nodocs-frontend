@@ -2,17 +2,17 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import arrowRightIcon from 'assets/arrow-right.svg'
+import ArrowRightIcon from 'assets/arrow-right.svg'
 import Label from 'atoms/Label'
-import IconButton from 'atoms/IconButton'
 import HoverableContainer from 'atoms/HoverableContainer'
 import ContentToggler from 'atoms/ContentToggler'
 import CreatePage from './CreatePage'
+import PageMenuItem from './PageMenuItem'
 
 const StyledSectionContainer = styled(HoverableContainer)`
   display: grid;
   grid-auto-flow: column;
-  grid-template-columns: 14px auto;
+  grid-template-columns: 5px auto;
   grid-column-gap: 10px;
   align-items: center;
 `
@@ -30,23 +30,21 @@ const StyledPagesContainer = styled.div`
   }
 `
 
-const Section = ({ id }) => {
+const Section = ({ section }) => {
   return (
     <ContentToggler
       displayTrigger
       trigger={(
-        <StyledSectionContainer
-          variant="inverted"
-        >
-          <IconButton>
-            <img src={arrowRightIcon} />
-          </IconButton>
-
-          <Label color="black">{'Untitled'}</Label>
+        <StyledSectionContainer variant="inverted">
+          <ArrowRightIcon />
+          <Label color="black">{section.title}</Label>
         </StyledSectionContainer>
       )}
     >
       <StyledPagesContainer>
+        {section
+          .pages
+          .map(page => <PageMenuItem key={page.id} page={page} />)}
       </StyledPagesContainer>
 
       <CreatePage />
@@ -55,7 +53,7 @@ const Section = ({ id }) => {
 }
 
 Section.propTypes = {
-  id: PropTypes.string,
+  section: PropTypes.object,
 }
 
 export default Section

@@ -3,7 +3,7 @@ import shortid from 'shortid'
 import { useEditor } from 'slate-react'
 import { Transforms } from 'slate'
 
-import componentIcon from 'assets/component.svg'
+import NeuronIcon from 'assets/neuron.svg'
 import copyToClipboard from 'utils/copyToClipboard'
 import { getSelectedRange, selectRange } from 'utils/editor'
 import IconButton from 'atoms/IconButton'
@@ -37,8 +37,8 @@ const CreateComponent = () => {
   }
 
   return (
-    <IconButton variant="white" onClick={handleCreateComponent}>
-      <img src={componentIcon} />
+    <IconButton variant="white">
+      <NeuronIcon size={24} />
     </IconButton>
   )
 }

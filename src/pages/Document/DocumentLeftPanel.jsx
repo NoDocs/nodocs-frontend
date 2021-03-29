@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
+import { graphql } from 'relay-runtime'
+import { useParams } from 'react-router-dom'
 
 import PlusIcon from 'assets/components/PlusIcon'
 import IconButton from 'atoms/IconButton'
@@ -8,9 +9,9 @@ import Label from 'atoms/Label'
 import Section from './components/Section'
 import CreateSection from './components/CreateSection'
 import SectionElements from './components/SectionElements'
+import { useLazyLoadQuery } from 'react-relay'
 
 const StyledLeftPanelContainer = styled.div`
-  padding-top: 25px;
   margin-left: 20px;
 `
 
@@ -39,9 +40,30 @@ const StyledElementsLabel = styled(Label)`
   margin-bottom: 15px;
 `
 
+const query = graphql`
+  query DocumentLeftPanelQuery ($id: String!) {
+    document(id: $id) {
+      sections {
+        id
+        title
+
+        pages {
+          id
+          title
+        }
+      }
+    }
+  }
+`
+
 const DocumentLeftPanel = () => {
   const [newSection, toggleNewSection] = React.useState(false)
-  const sections = []
+  const params = useParams()
+  const { document } = useLazyLoadQuery(
+    query,
+    { id: params.documentId },
+    { fetchPolicy: 'store-only' }
+  )
 
   return (
     <StyledLeftPanelContainer>
@@ -54,7 +76,9 @@ const DocumentLeftPanel = () => {
       </StyledFlexContainer>
 
       <StyledSectionsContainer>
-        {sections.map(sectionId => <Section key={sectionId} id={sectionId} />)}
+        {document
+          .sections
+          .map(section => <Section key={section.id} section={section} />)}
 
         {newSection && <CreateSection onDone={() => toggleNewSection(false)} />}
       </StyledSectionsContainer>

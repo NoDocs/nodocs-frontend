@@ -1,17 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import imageIcon from 'assets/image.svg'
-import embedIcon from 'assets/embed.svg'
-import tableIcon from 'assets/table.svg'
-import linkIcon from 'assets/link.svg'
-import graphIcon from 'assets/graph.svg'
-import moreIcon from 'assets/more.svg'
-import chatIcon from 'assets/chat.svg'
+import ImageIcon from 'assets/image.svg'
+import EmbedIcon from 'assets/embed.svg'
+import OrderedListIcon from 'assets/ordered-list.svg'
+import LinkIcon from 'assets/link.svg'
+import SimilarityIcon from 'assets/similarity.svg'
+import SynapsesIcon from 'assets/synapses.svg'
+import ChatIcon from 'assets/chat.svg'
 import subscribersIcon from 'assets/eyeopen.svg'
 import IconButton from 'atoms/IconButton'
 
-import CreateComponent from './components/CreateComponent'
+import CreateComponent from './components/CreateComponentButton'
 import CreateTag from './components/CreateTag'
 
 const StyledDocumentPanelContainer = styled.div`
@@ -21,7 +21,6 @@ const StyledDocumentPanelContainer = styled.div`
   border: 1px solid #CFD8DC;
   grid-area: document-panel;
 `
-
 
 const StyledSeparator = styled.div`
   width: 1px;
@@ -34,27 +33,29 @@ const DocumentPanel = () => {
   return (
     <StyledDocumentPanelContainer>
       <IconButton variant="white">
-        <img src={imageIcon} />
+        <OrderedListIcon size={24} />
       </IconButton>
 
       <IconButton variant="white">
-        <img src={embedIcon} />
+        <ImageIcon size={24} />
       </IconButton>
 
       <IconButton variant="white">
-        <img src={tableIcon} />
+        <EmbedIcon size={24} />
       </IconButton>
 
       <IconButton variant="white">
-        <img src={linkIcon} />
+        <LinkIcon size={24} />
+      </IconButton>
+
+      <StyledSeparator />
+
+      <IconButton variant="white">
+        <SimilarityIcon size={24} />
       </IconButton>
 
       <IconButton variant="white">
-        <img src={graphIcon} />
-      </IconButton>
-
-      <IconButton variant="white">
-        <img src={moreIcon} />
+        <SynapsesIcon size={24} />
       </IconButton>
 
       <StyledSeparator />
@@ -62,14 +63,8 @@ const DocumentPanel = () => {
       <CreateComponent />
 
       <IconButton variant="white">
-        <img src={chatIcon} />
+        <ChatIcon size={24} />
       </IconButton>
-
-      <IconButton variant="white">
-        <img src={subscribersIcon} />
-      </IconButton>
-
-      <CreateTag />
     </StyledDocumentPanelContainer>
   )
 }
