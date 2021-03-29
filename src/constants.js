@@ -16,3 +16,23 @@ export const industries = [
   'Games',
   'Other',
 ]
+
+export const departments = [
+  'Design',
+  'Product',
+  'Engineering',
+  'Operations',
+  'Sales',
+  'Marketing',
+  'Growth',
+  'Finance',
+  'Accounting',
+  'Business Dev',
+  'HHRR',
+  'R&D',
+  'Data',
+  'IT',
+  'Support',
+  'Legal',
+  'Other',
+]

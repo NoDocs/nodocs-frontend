@@ -1,10 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
+import { graphql, useMutation } from 'react-relay'
 
 import Box from 'atoms/Box'
 import Label from 'atoms/Label'
 import Button from 'atoms/Button'
+import { departments } from 'constants'
 
 const StyledContainer = styled.div`
   min-height: 100vh;
@@ -36,11 +38,12 @@ const StyledInput = styled.input`
   width: 100%;
   outline: none;
   border-left: 1px solid rgba(0, 0, 0, 0.2);
+  padding-left: 6px;
 `
 
 const StyledIndustriesContainer = styled.div``
 
-const StyledIndustry = styled(Label)`
+const StyledDepartment = styled(Label)`
   border: 1.2px solid #000000;
   padding: 5px 12px;
   color: black;
@@ -50,30 +53,43 @@ const StyledIndustry = styled(Label)`
   font-size: 12px;
   margin-bottom: 8px;
   font-weight: 500;
+  cursor: pointer;
+
+  ${props => props.selected && 'background-color: black;'}
+  ${props => props.selected && 'color: white;'}
 `
 
-const roles = [
-  'Design',
-  'Product',
-  'Engineering',
-  'Operations',
-  'Sales',
-  'Marketing',
-  'Growth',
-  'Finance',
-  'Accounting',
-  'Business Dev',
-  'HHRR',
-  'R&D',
-  'Data',
-  'IT',
-  'Support',
-  'Legal',
-  'Other',
-]
+const updateCompanyMemberInformationMutation = graphql`
+  mutation OnboardingAboutYouMutation($input: UpdateCompanyMemberInformationInput!) {
+    updateCompanyMemberInformation(input: $input) {
+      companyMember {
+        id
+      }
+    }
+  }
+`
 
 const OnboardingAboutYou = React.forwardRef((_, ref) => {
   const history = useHistory()
+  const [name, updateName] = React.useState('')
+  const [department, updateDepartment] = React.useState()
+  const [departmentDescription, updateDepartmentDescription] = React.useState('')
+  const [updateCompanyMember] = useMutation(updateCompanyMemberInformationMutation)
+
+  const handleContinue = () => {
+    updateCompanyMember({
+      variables: {
+        input: {
+          name,
+          department,
+          departmentDescription
+        }
+      },
+      onCompleted: () => {
+        history.push('/onboarding/send-invites')
+      }
+    })
+  }
 
   return (
     <StyledContainer>
@@ -82,22 +98,33 @@ const OnboardingAboutYou = React.forwardRef((_, ref) => {
           <Label color="black">✍🏼 About me...</Label>
 
           <Label color="black">What&#96;s your name?</Label>
-          <StyledInput autoFocus />
+          <StyledInput
+            autoFocus
+            value={name}
+            onChange={event => updateName(event.target.value)}
+          />
 
           <Label color="black">What team do you work?</Label>
           <StyledIndustriesContainer>
-            {roles.map(role => (
-              <StyledIndustry key={role}>
-                {role}
-              </StyledIndustry>
+            {departments.map(curr => (
+              <StyledDepartment
+                key={curr}
+                selected={department === curr}
+                onClick={() => updateDepartment(curr)}
+              >
+                {curr}
+              </StyledDepartment>
             ))}
           </StyledIndustriesContainer>
 
           <Label color="black">What&#96;s your role?</Label>
-          <StyledInput />
+          <StyledInput
+            value={departmentDescription}
+            onChange={event => updateDepartmentDescription(event.target.value)}
+          />
         </StyledBox>
 
-        <StyledButton onClick={() => history.push('/onboarding/send-invites')}>Next</StyledButton>
+        <StyledButton onClick={handleContinue}>Next</StyledButton>
       </StyledOnboardingContainer>
     </StyledContainer>
   )

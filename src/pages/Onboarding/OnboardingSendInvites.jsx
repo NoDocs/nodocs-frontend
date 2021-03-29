@@ -5,6 +5,8 @@ import { useHistory } from 'react-router-dom'
 import Box from 'atoms/Box'
 import Label from 'atoms/Label'
 import Button from 'atoms/Button'
+import { graphql } from 'relay-runtime'
+import { useMutation } from 'react-relay'
 
 const StyledContainer = styled.div`
   min-height: 100vh;
@@ -38,8 +40,41 @@ const StyledInput = styled.input`
   border-left: 1px solid rgba(0, 0, 0, 0.2);
 `
 
+const sendInvitesMutation = graphql`
+  mutation OnboardingSendInvitesMutation($input: SendInvitationsInput!) {
+    sendInvitations(input: $input) {
+      teamMembers {
+        id
+        user {
+          email
+        }
+      }
+    }
+  }
+`
+
 const OnboardingSendInvites = React.forwardRef((_, ref) => {
   const history = useHistory()
+  const [emails, setEmails] = React.useState()
+  const [sendInvitations] = useMutation(sendInvitesMutation)
+
+  const handleFinish = () => {
+    if (!emails) {
+      history.push('/')
+      return
+    }
+
+    sendInvitations({
+      variables: {
+        input: {
+          emails,
+        },
+      },
+      onCompleted: () => {
+        history.push('/')
+      }
+    })
+  }
 
   return (
     <StyledContainer>
@@ -48,12 +83,16 @@ const OnboardingSendInvites = React.forwardRef((_, ref) => {
           <Label color="black">✍🏼 Let’s bring some teammates to the club...</Label>
 
           <Label color="black">Emails, comma separated</Label>
-          <StyledInput autoFocus />
+          <StyledInput
+            autoFocus
+            value={emails}
+            onChange={event => setEmails(event.target.value)}
+          />
 
           <Label color="black">* You can skip and do it later by pressing “Finish”</Label>
         </StyledBox>
 
-        <StyledButton onClick={() => history.push('/')}>Finish</StyledButton>
+        <StyledButton onClick={handleFinish}>Finish</StyledButton>
       </StyledOnboardingContainer>
     </StyledContainer>
   )

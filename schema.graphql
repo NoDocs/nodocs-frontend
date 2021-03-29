@@ -177,6 +177,9 @@ type Mutation {
   # Create company mutation
   createCompany(input: CreateCompanyInput!): CreateCompanyPayload
 
+  # Update company member information mutation
+  updateCompanyMemberInformation(input: UpdateCompanyMemberInformationInput!): UpdateCompanyMemberInformationPayload
+
   # Create neuron
   createNeuron(input: CreateNeuronInput!): CreateNeuronPayload
 
@@ -185,6 +188,9 @@ type Mutation {
 
   # Create document
   createDocument(input: CreateDocumentInput!): CreateDocumentPayload
+
+  # Send team invitations
+  sendInvitations(input: SendInvitationsInput!): SendInvitationsPayload
 }
 
 type SignInPayload {
@@ -222,6 +228,18 @@ input CreateCompanyInput {
   clientMutationId: String
 }
 
+type UpdateCompanyMemberInformationPayload {
+  companyMember: CompanyMember
+  clientMutationId: String
+}
+
+input UpdateCompanyMemberInformationInput {
+  name: String!
+  department: String!
+  departmentDescription: String!
+  clientMutationId: String
+}
+
 type CreateNeuronPayload {
   neuron: Neuron
   clientMutationId: String
@@ -255,5 +273,15 @@ input CreateDocumentInput {
   documentId: String!
   content: String!
   name: String!
+  clientMutationId: String
+}
+
+type SendInvitationsPayload {
+  teamMembers: [TeamMember]
+  clientMutationId: String
+}
+
+input SendInvitationsInput {
+  emails: String!
   clientMutationId: String
 }
