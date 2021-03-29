@@ -13,6 +13,7 @@ const StyledItemsContainer = styled.div`
   margin-top: 16px;
   grid-column-gap: 12px;
   margin-bottom: 32px;
+  grid-template-columns: repeat(auto-fill, 240px);
 `
 
 const TeamSection = ({ Icon, title, children }) => {

@@ -26,7 +26,7 @@ const StyledContainer = styled.div`
 `
 
 const MainLayout = ({ children }) => {
-  const [toggled, toggle] = React.useState(true)
+  const [toggled, toggle] = React.useState(false)
 
   return (
     <React.Fragment>

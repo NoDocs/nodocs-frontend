@@ -14,6 +14,9 @@ const Label = styled.p`
   line-height: 17px;
   font-size: 14px;
 
+  ${props => props.ml && `margin-left: ${props.ml}px;`}
+  ${props => props.mr && `margin-right: ${props.mr}px;`}
+
   ${props => props.hoverable && `
     cursor: pointer;
 

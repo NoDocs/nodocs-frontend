@@ -1,12 +1,40 @@
 import React from 'react'
+import { graphql, useLazyLoadQuery } from 'react-relay'
 
 import DocumentIcon from 'assets/document.svg'
+import DocumentElement from 'molecules/DocumentElement'
 import TeamSection from './TeamSection'
 
+const query = graphql`
+  query TeamDocumentsQuery {
+    documents {
+      id
+      name
+      createdAt (format: "MMM D")
+      owner {
+        id
+        avatar
+        color
+        fullName
+      }
+    }
+  }
+`
+
 const TeamDocuments = () => {
+  const { documents } = useLazyLoadQuery(query)
+
   return (
     <TeamSection Icon={<DocumentIcon />} title="Documents">
-      Some content here
+      {documents.map(document => (
+        <DocumentElement
+          key={document.id}
+          name={document.name}
+          members={[document.owner]}
+          authorName={document.owner.fullName}
+          createdAt={document.createdAt}
+        />
+      ))}
     </TeamSection>
   )
 }

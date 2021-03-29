@@ -13,7 +13,7 @@ type Query {
   me: User
   users(orderBy: String, after: String, first: Int): UserConnection
   document(documentId: String): Document
-  documents(orderBy: String, teamId: String, userId: String, after: String, first: Int): DocumentConnection
+  documents(orderBy: String, teamId: String, userId: String, after: String, first: Int): [Document]
   teams(companyId: String): [Team]
   currentTeam: Team
   neuron(neuronId: String!): Neuron
@@ -105,8 +105,8 @@ type Document implements Node {
   # The ID of an object
   id: ID!
   sections: [Section]
-  title: String
-  creator: User
+  name: String
+  owner: User
   company: Company
   team: Team
   createdAt(format: String): String
@@ -131,25 +131,6 @@ type Page implements Node {
   creator: User
   createdAt(format: String): String
   updatedAt(format: String): String
-}
-
-# A connection to a list of items.
-type DocumentConnection {
-  # Information to aid in pagination.
-  pageInfo: PageInfo!
-
-  # A list of edges.
-  edges: [DocumentEdge]
-  count: Int!
-}
-
-# An edge in a connection.
-type DocumentEdge {
-  # The item at the end of the edge
-  node: Document
-
-  # A cursor for use in pagination
-  cursor: String!
 }
 
 type Neuron implements Node {

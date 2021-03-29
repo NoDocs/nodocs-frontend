@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import LoadingTeamDocuments from 'loadings/LoadingTeamDocuments'
 import TeamDocuments from './TeamDocuments'
 import TeamNeurons from './TeamNeurons'
 
@@ -11,7 +12,10 @@ const StyledTeamContentContainer = styled.div`
 const TeamContent = () => {
   return (
     <StyledTeamContentContainer>
-      <TeamDocuments />
+      <React.Suspense fallback={<LoadingTeamDocuments />}>
+        <TeamDocuments />
+      </React.Suspense>
+
       <TeamNeurons />
     </StyledTeamContentContainer>
   )
