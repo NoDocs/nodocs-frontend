@@ -2,16 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Editable, Slate } from 'slate-react'
-import { useCursor } from '@slate-collaborative/client'
+import { useCursors } from 'slate-yjs'
 
-import history from 'utils/history'
 import deleteIcon from 'assets/delete.svg'
 import undoIcon from 'assets/undo.svg'
 import redoIcon from 'assets/redo.svg'
 import IconButton from 'atoms/IconButton'
 import Leaf from 'shared/Leaf'
 import Popup from 'molecules/Popup'
-import useComponent from './hooks/useComponent'
+import useNeuron from './hooks/useNeuron'
 
 const StyledComponentContainer = styled.div`
   background: ${({ isImported }) => isImported
@@ -34,26 +33,13 @@ const StyledComponentContainer = styled.div`
   }
 `
 
-const StyledIcon = styled.div`
-  display: inline-flex;
-  width: 14px;
-  height: 14px;
-  margin: 0 0 0 10px;
-  opacity: 0.2;
-  background: url('https://res.cloudinary.com/nodocs/image/upload/v1604540189/icons/component.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-`
-
-const Component = React.forwardRef(({ id: componentId, attributes }, ref) => {
+const Component = React.forwardRef(({ id: neuronId, attributes }, ref) => {
   const {
     editorState,
-    onEditorStateChange,
-    isImported,
-    rootDocumentId,
+    updateEditorState,
     editor,
-  } = useComponent({ componentId })
-  const { decorate } = useCursor(editor)
+  } = useNeuron({ neuronId })
+  const { decorate } = useCursors(editor)
 
   const renderLeaf = React.useCallback(
     (props) => <Leaf {...props} />,
@@ -65,29 +51,27 @@ const Component = React.forwardRef(({ id: componentId, attributes }, ref) => {
   return (
     <Popup
       on="hover"
-      name={`component-${componentId}-options`}
+      name={`component-${neuronId}-options`}
       style={{ padding: 0, borderRadius: '5px 10px' }}
       fullWidth={false}
       direction="TOP_RIGHT_INNER"
       trigger={(
         <StyledComponentContainer
-          isImported={isImported}
+          isImported
           contentEditable={false}
-          data-component-id={componentId}
+          data-neuron-id={neuronId}
           ref={ref}
           {...attributes}
         >
           <Slate
             editor={editor}
             value={editorState}
-            onChange={onEditorStateChange}
+            onChange={updateEditorState}
             renderLeaf={renderLeaf}
             decorate={decorate}
           >
             <Editable renderLeaf={renderLeaf} decorate={decorate} />
           </Slate>
-
-          {isImported && <StyledIcon onClick={() => history.push(`/d/${rootDocumentId}`)} />}
         </StyledComponentContainer>
       )}
     >

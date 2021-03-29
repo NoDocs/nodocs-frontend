@@ -8,9 +8,11 @@ import { withReact } from 'slate-react'
 import * as Yjs from 'yjs'
 import { toSharedType, withCursor, withYjs } from 'slate-yjs'
 import { WebsocketProvider } from 'y-websocket'
+import { useDispatch } from 'react-redux'
 
 import withNodeId from '../plugins/withNodeId'
-const WEBSOCKET_ENDPOINT = process.env.BASE_SHAREDB_WS
+import withDetectNeuronInsert from '../plugins/withDetectNeuronInsert'
+import { documentActions } from 'logic/document'
 
 const query = graphql`
   query useDocumentQuery ($id: String!) {
@@ -62,13 +64,14 @@ const useDocument = () => {
 
   const [isOnline, toggleIsOnline] = React.useState(false)
   const [editorState, updateEditorState] = React.useState(getEditorContent({ document, activeSectionId, activePageId }))
+  const dispatch = useDispatch()
 
   const [sharedType, provider] = React.useMemo(
     () => {
       const doc = new Yjs.Doc()
       const sharedType = doc.getArray('content')
       const provider = new WebsocketProvider(
-        WEBSOCKET_ENDPOINT,
+        process.env.BASE_SHAREDB_WS,
         document.id,
         doc,
         { connect: false }
@@ -81,13 +84,21 @@ const useDocument = () => {
 
   const editor = React.useMemo(
     () => {
-      const enhancedEditor = withNodeId(withReact(withHistory(createEditor())))
+      const enhancedEditor = withDetectNeuronInsert(withNodeId(withReact(withHistory(createEditor()))))
 
       return !provider
         ? enhancedEditor
         : withCursor(withYjs(enhancedEditor, sharedType), provider.awareness)
     },
     [sharedType, provider]
+  )
+
+  React.useEffect(
+    () => {
+      dispatch(documentActions.setActivePageId({ activePageId }))
+      dispatch(documentActions.setActiveSectionId({ activeSectionId }))
+    },
+    [documentId]
   )
 
   React.useEffect(

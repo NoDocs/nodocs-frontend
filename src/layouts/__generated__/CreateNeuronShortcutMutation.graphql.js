@@ -14,10 +14,10 @@ export type CreateNeuronInput = {|
   name: string,
   clientMutationId?: ?string,
 |};
-export type TeamMutationVariables = {|
+export type CreateNeuronShortcutMutationVariables = {|
   input: CreateNeuronInput
 |};
-export type TeamMutationResponse = {|
+export type CreateNeuronShortcutMutationResponse = {|
   +createNeuron: ?{|
     +clientMutationId: ?string,
     +neuron: ?{|
@@ -28,15 +28,15 @@ export type TeamMutationResponse = {|
     |},
   |}
 |};
-export type TeamMutation = {|
-  variables: TeamMutationVariables,
-  response: TeamMutationResponse,
+export type CreateNeuronShortcutMutation = {|
+  variables: CreateNeuronShortcutMutationVariables,
+  response: CreateNeuronShortcutMutationResponse,
 |};
 */
 
 
 /*
-mutation TeamMutation(
+mutation CreateNeuronShortcutMutation(
   $input: CreateNeuronInput!
 ) {
   createNeuron(input: $input) {
@@ -129,7 +129,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "TeamMutation",
+    "name": "CreateNeuronShortcutMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -138,20 +138,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "TeamMutation",
+    "name": "CreateNeuronShortcutMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "c2f1e59592cc802a5df80bdb402f18c0",
+    "cacheID": "dc0d8d48e0f0af73fafb6cf7426bdd2a",
     "id": null,
     "metadata": {},
-    "name": "TeamMutation",
+    "name": "CreateNeuronShortcutMutation",
     "operationKind": "mutation",
-    "text": "mutation TeamMutation(\n  $input: CreateNeuronInput!\n) {\n  createNeuron(input: $input) {\n    clientMutationId\n    neuron {\n      id\n      name\n      neuronId\n      content\n    }\n  }\n}\n"
+    "text": "mutation CreateNeuronShortcutMutation(\n  $input: CreateNeuronInput!\n) {\n  createNeuron(input: $input) {\n    clientMutationId\n    neuron {\n      id\n      name\n      neuronId\n      content\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '67ba3aaf2bacfce6756e79f664d4ff94';
+(node/*: any*/).hash = 'e78267c6155a2ba3dc5cddb9e385fd5e';
 
 module.exports = node;

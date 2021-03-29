@@ -17,7 +17,7 @@ const StyledDocumentContainer = styled.div`
   ;
   grid-template-rows: 45px;
   grid-template-columns: 250px auto;
-  grid-row-gap: 25px;
+  grid-row-gap: 20px;
   grid-column-gap: 25px;
 `
 
@@ -38,11 +38,10 @@ const SectionEditor = () => {
 
   const renderElement = React.useCallback(
     ({ attributes: { ref, ...otherAttributes }, element, children }) => {
-      if (element.type === 'component') {
+      if (element.type === 'neuron') {
         return (
           <Component
             id={element.id}
-            componentId={element.componentId}
             attributes={otherAttributes}
             ref={ref}
           />

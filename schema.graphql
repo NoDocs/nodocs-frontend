@@ -165,7 +165,7 @@ type Mutation {
   createNeuron(input: CreateNeuronInput!): CreateNeuronPayload
 
   # Attach neuron to page
-  attachNeuronToDocument(input: attachNeuronToPageInput!): attachNeuronToPagePayload
+  attachNeuronToPage(input: AttachNeuronToPageInput!): AttachNeuronToPagePayload
 
   # Create document
   createDocument(input: CreateDocumentInput!): CreateDocumentPayload
@@ -236,13 +236,12 @@ input CreateNeuronInput {
   clientMutationId: String
 }
 
-type attachNeuronToPagePayload {
-  attachedPageId: String
-  neuronId: String
+type AttachNeuronToPagePayload {
+  neuron: Neuron
   clientMutationId: String
 }
 
-input attachNeuronToPageInput {
+input AttachNeuronToPageInput {
   neuronId: String!
   pageId: String!
   clientMutationId: String

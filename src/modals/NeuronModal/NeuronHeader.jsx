@@ -1,6 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 
+import { PortalContext } from 'contexts'
+import copyToClipboard from 'utils/copyToClipboard'
 import AddTag from 'shared/AddTag'
 import TextStylingIcon from 'assets/textstyling.svg'
 import SynapsesIcon from 'assets/synapses.svg'
@@ -38,6 +41,16 @@ const StyledSharingContainer = styled.div`
 `
 
 const NeuronHeader = () => {
+  const { pathname, search } = useLocation()
+  const history = useHistory()
+  const { closePortal } = React.useContext(PortalContext)
+
+  const copyNeuron = () => {
+    copyToClipboard(`[[neuron=${new URLSearchParams(search).get('neuronId')}]]`)
+    closePortal('neuron-modal')
+    history.push(pathname)
+  }
+
   return (
     <StyledHeaderContainer>
       <AddTag />
@@ -71,7 +84,7 @@ const NeuronHeader = () => {
       </StyledActionsContainer>
 
       <StyledSharingContainer>
-        <IconButton variant="white">
+        <IconButton variant="white" onClick={copyNeuron}>
           <PlusIcon fill="black" size={18} />
         </IconButton>
       </StyledSharingContainer>
