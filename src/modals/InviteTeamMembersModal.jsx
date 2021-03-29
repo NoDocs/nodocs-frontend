@@ -1,17 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { useDispatch, useSelector } from 'react-redux'
 import { List } from 'immutable'
-
-import * as memberService from 'services/member'
-import { teamSelectors, teamActions } from 'logic/team'
-import { notificationActions } from 'logic/notification'
-import withRenderPortal from 'molecules/withRenderPortal'
 
 import Label from 'atoms/Label'
 import Input from 'atoms/Input'
 import Button from 'atoms/Button'
+import withRenderPortal from 'molecules/withRenderPortal'
 import FullScreenModal from 'molecules/FullScreenModal'
 
 const StyledForm = styled.form`
@@ -49,43 +44,10 @@ const StyledCaption = styled(Label)`
 `
 
 const InviteTeamMembers = ({ closePortal }) => {
-  const activeTeamId = useSelector(teamSelectors.selectActiveTeamId)
   const [emails, updateEmails] = React.useState(new List(['']))
-  const dispatch = useDispatch()
 
   const inviteUsers = (e) => {
     e.preventDefault()
-    const body = { teamId: activeTeamId, emails: emails.toJS() }
-
-    memberService
-      .addMembers(body)
-      .then(response => {
-        const { data } = response
-
-        if (data.failed.length) {
-          dispatch(notificationActions.notify({
-            type: 'error',
-            message: `Failed to add users ${data.failed.join(', ')}`,
-          }))
-        }
-
-        if (data.members.length) {
-          dispatch(notificationActions.notify({
-            type: 'success',
-            message: `Added users ${data
-              .members
-              .map(member => member.user.email)
-              .join(', ')}`,
-          }))
-
-          dispatch(teamActions.addMembers({
-            members: data.members.map(curr => curr.user),
-            teamId: activeTeamId
-          }))
-          closePortal()
-        }
-      })
-      .catch(error => console.log(error))
   }
 
   return (

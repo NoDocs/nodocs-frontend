@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 
-import { documentSelectors } from 'logic/document'
 import PlusIcon from 'assets/components/PlusIcon'
 import IconButton from 'atoms/IconButton'
 import Label from 'atoms/Label'
@@ -42,7 +41,7 @@ const StyledElementsLabel = styled(Label)`
 
 const DocumentLeftPanel = () => {
   const [newSection, toggleNewSection] = React.useState(false)
-  const sections = useSelector(documentSelectors.selectDocumentProperty('sections'))
+  const sections = []
 
   return (
     <StyledLeftPanelContainer>

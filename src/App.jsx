@@ -12,7 +12,6 @@ import Register from './pages/Register'
 import Team from './pages/Team'
 import Document from './pages/Document'
 import CreateCompany from './pages/CreateCompany'
-import NotFoundTeam from './pages/NotFoundTeam'
 import Onboarding from './pages/Onboarding'
 
 const GlobalStyles = createGlobalStyle`
@@ -41,13 +40,6 @@ const App = () => {
               <Document />
             </React.Suspense>
           )}
-        />
-
-        <ProtectedRoute
-          path="/team/404"
-          Layout={MainLayout}
-          component={NotFoundTeam}
-          isTeamError
         />
 
         <ProtectedRoute path="/create-company" component={CreateCompany} />

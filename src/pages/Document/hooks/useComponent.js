@@ -1,17 +1,14 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { createEditor } from 'slate'
 import { withReact } from 'slate-react'
 import { withIOCollaboration } from '@slate-collaborative/client'
 
-import * as componentServices from 'services/component'
-import { componentActions } from 'logic/component'
 import { hexToRgba } from 'utils/color'
 
 const useComponent = ({ componentId }) => {
   const params = useParams()
-  const dispatch = useDispatch()
 
   const content = useSelector(state => state.getIn(['components', componentId, 'content']))
   const rootDocumentId = useSelector(state => state.getIn(['components', componentId, 'rootDocument', 'id']))
@@ -23,14 +20,6 @@ const useComponent = ({ componentId }) => {
 
   React.useEffect(
     () => {
-      if (!content) {
-        componentServices
-          .getComponent(componentId)
-          .then(({ data }) => {
-            dispatch(componentActions.putComponent(data))
-            updateEditorState(JSON.parse(data.content))
-          })
-      }
     },
     []
   )

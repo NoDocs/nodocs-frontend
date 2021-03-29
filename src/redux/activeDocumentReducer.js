@@ -1,5 +1,4 @@
 import { fromJS } from 'immutable'
-import * as documentActionTypes from './documentActionTypes'
 
 const initialState = fromJS({
   id: '',
@@ -10,7 +9,7 @@ const initialState = fromJS({
 
 const activeDocumentReducer = (state = initialState, action) => {
   switch (action.type) {
-    case documentActionTypes.INITIALIZE_DOCUMENT: {
+    case 'document/INITIALIZE_DOCUMENT': {
       const { document } = action.payload
       const { sections } = document
 
@@ -24,17 +23,11 @@ const activeDocumentReducer = (state = initialState, action) => {
         .update('openedDocumentIds', ids => ids.includes(document.id) ? ids : ids.push(document.id))
     }
 
-    case documentActionTypes.SWITCH_SECTION: {
+    case 'document/SWITCH_SECTION': {
       return state
         .set('activeSectionId', action.payload.sectionId)
         .set('activePageId', action.payload.pageId)
     }
-
-    case documentActionTypes.CLEAR_DOCUMENT:
-      return state
-        .set('id', '')
-        .set('activeSectionId', '')
-        .set('activePageId', '')
 
     default:
       return state

@@ -1,10 +1,10 @@
 import React from 'react'
 import { graphql, useLazyLoadQuery } from 'react-relay'
+import { useHistory } from 'react-router-dom'
 
 import DocumentIcon from 'assets/document.svg'
 import DocumentElement from 'molecules/DocumentElement'
 import TeamSection from './TeamSection'
-import { useHistory } from 'react-router'
 
 const query = graphql`
   query TeamDocumentsQuery {

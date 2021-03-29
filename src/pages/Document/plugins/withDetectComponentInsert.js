@@ -1,8 +1,4 @@
-import { Transforms } from 'slate'
-
-import store from 'store'
-import * as documentService from 'services/document'
-import { componentActions } from 'logic/component'
+// import { Transforms } from 'slate'
 
 const withDetectComponent = (editor) => {
   const { apply } = editor
@@ -16,16 +12,16 @@ const withDetectComponent = (editor) => {
       const isComponentExpression = regex.test(text)
 
       if (isComponentExpression) {
-        const splitted = text.split('=')[1]
-        const id = splitted.replace(']]', '')
+        // const splitted = text.split('=')[1]
+        // const id = splitted.replace(']]', '')
 
-        const state = store.getState()
-        const sectionId = state.getIn(['ui', 'activeDocument', 'activeSectionId'])
+        // const state = store.getState()
+        // const sectionId = state.getIn(['ui', 'activeDocument', 'activeSectionId'])
 
-        const { data } = await documentService.attachComponentToSection(sectionId, { componentId: id })
-        store.dispatch(componentActions.putComponent({ ...data, sectionId }))
+        // const { data } = await documentService.attachComponentToSection(sectionId, { componentId: id })
+        // store.dispatch(componentActions.putComponent({ ...data, sectionId }))
 
-        Transforms.insertNodes(editor, { type: 'component', id, children: JSON.parse(data.content) })
+        // Transforms.insertNodes(editor, { type: 'component', id, children: JSON.parse(data.content) })
         return
       }
     }

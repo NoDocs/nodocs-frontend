@@ -4,8 +4,6 @@ import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 
 import { notificationActions } from 'logic/notification'
-import { teamActions } from 'logic/team'
-import * as teamServices from 'services/team'
 import Label from 'atoms/Label'
 import Input from 'atoms/Input'
 import Button from 'atoms/Button'
@@ -55,16 +53,7 @@ const CreateTeamModal = ({ closePortal }) => {
       return
     }
 
-    teamServices
-      .createTeam({ name: name.value })
-      .then(({ data }) => {
-        dispatch(teamActions.createTeam(data))
-        dispatch(teamActions.setActiveTeam(data.id))
-
-        teamServices.setCurrentTeam({ teamId: data.id }) // update currentTeam on authenticated user
-        closePortal()
-      })
-      .catch(error => console.log(error))
+    // Creat team mutation
   }
 
   return (

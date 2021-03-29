@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 
 import { PortalContext } from 'contexts'
-import { companyActions } from 'logic/company'
 import { notificationActions } from 'logic/notification'
 import Avatar from 'atoms/Avatar'
 import Label from 'atoms/Label'
@@ -59,7 +58,6 @@ const UserCard = () => {
   const dispatch = useDispatch()
 
   const switchCompany = company => () => {
-    dispatch(companyActions.setActiveCompany(company.get('id')))
     dispatch(notificationActions.notify({
       type: 'success',
       message: `Switched to ${company.get('name')} company`

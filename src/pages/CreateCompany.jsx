@@ -4,10 +4,7 @@ import { useDispatch } from 'react-redux'
 
 import backgroundImage from 'assets/background-dark.svg'
 import logoWhite from 'assets/logo-white.svg'
-import * as companyService from 'services/company'
 import { notificationActions } from 'logic/notification'
-import { companyActions } from 'logic/company'
-import history from 'utils/history'
 import Label from 'atoms/Label'
 import Input from 'atoms/Input'
 import Button from 'atoms/Button'
@@ -66,15 +63,6 @@ const CreateCompany = () => {
       dispatch(notificationActions.notify({ type: 'error', message: 'Please fill the company name' }))
       return
     }
-
-    companyService
-      .createCompany({ name: name.value })
-      .then((response) => {
-        dispatch(companyActions.setCompanies([response.data]))
-        dispatch(companyActions.setActiveCompany(response.data.id))
-        history.push('/')
-      })
-      .catch(error => console.log(error))
   }
 
   return (
