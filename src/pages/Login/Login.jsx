@@ -8,16 +8,17 @@ import LoginForm from './LoginForm'
 const StyledContainer = styled.div`
   min-height: 100vh;
   background-color: #000;
-  position: relative;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
 `
 
 const StyledLoginContainer = styled.div`
-  display: grid;
+  width: 1250px;
+  margin: auto;
+  display: inline-grid;
+  justify-content: end;
   grid-row-gap: 24px;
-  margin-right: 48px;
+  position: relative;
 `
 
 const Login = () => {
@@ -27,13 +28,16 @@ const Login = () => {
 
   React.useEffect(
     () => {
-      const { top: formTop, left: formLeft } = formRef.current.getBoundingClientRect()
-      const { top: contactTop, left: contactLeft } = contactRef.current.getBoundingClientRect()
+      const formCoords = formRef.current.getBoundingClientRect()
+      const contactCoords = contactRef.current.getBoundingClientRect()
+
+      const offsetLeft = (window.innerWidth - 1250) / 2
+      const offsetTop = (window.innerHeight - (formCoords.height + contactCoords.height)) / 2
 
       const p = {
-        top: 50,
-        left: 100,
-        label: 'login page',
+        top: 30,
+        left: 25,
+        label: 'Login page',
         id: '#login-page',
         children: [],
       }
@@ -43,14 +47,14 @@ const Login = () => {
         left: 400,
         label: 'login',
         id: '#login',
-        children: [{ id: Date.now(), top: formTop + 30, left: formLeft }],
+        children: [{ id: Date.now(), top: formCoords.top - offsetTop + 50, left: formCoords.left - offsetLeft }],
       })
       p.children.push({
         top: 370,
         left: 450,
         label: 'community',
         id: '#community',
-        children: [{ id: Date.now(), top: contactTop + 30, left: contactLeft }],
+        children: [{ id: Date.now(), top: contactCoords.top - offsetTop + 50, left: contactCoords.left - offsetLeft }],
       })
 
       setParticle(p)
@@ -59,16 +63,13 @@ const Login = () => {
   )
 
   return (
-    <React.Fragment>
-      <StyledContainer>
-        <StyledLoginContainer>
-          <LoginForm ref={formRef} />
-          <LoginCommunity ref={contactRef} />
-        </StyledLoginContainer>
-      </StyledContainer>
-
-      <ParticlesBoard particle={particle} />
-    </React.Fragment>
+    <StyledContainer>
+      <StyledLoginContainer>
+        <LoginForm ref={formRef} />
+        <LoginCommunity ref={contactRef} />
+        <ParticlesBoard particle={particle} />
+      </StyledLoginContainer>
+    </StyledContainer>
   )
 }
 

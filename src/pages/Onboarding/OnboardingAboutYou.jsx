@@ -8,15 +8,6 @@ import Label from 'atoms/Label'
 import Button from 'atoms/Button'
 import { departments } from 'constants'
 
-const StyledContainer = styled.div`
-  min-height: 100vh;
-  background-color: #000;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-`
-
 const StyledOnboardingContainer = styled.div`
   width: 600px;
   margin-right: 48px;
@@ -92,41 +83,39 @@ const OnboardingAboutYou = React.forwardRef((_, ref) => {
   }
 
   return (
-    <StyledContainer>
-      <StyledOnboardingContainer ref={ref}>
-        <StyledBox>
-          <Label color="black">✍🏼 About me...</Label>
+    <StyledOnboardingContainer ref={ref}>
+      <StyledBox>
+        <Label color="black">✍🏼 About me...</Label>
 
-          <Label color="black">What&#96;s your name?</Label>
-          <StyledInput
-            autoFocus
-            value={name}
-            onChange={event => updateName(event.target.value)}
-          />
+        <Label color="black">What&#96;s your name?</Label>
+        <StyledInput
+          autoFocus
+          value={name}
+          onChange={event => updateName(event.target.value)}
+        />
 
-          <Label color="black">What team do you work?</Label>
-          <StyledIndustriesContainer>
-            {departments.map(curr => (
-              <StyledDepartment
-                key={curr}
-                selected={department === curr}
-                onClick={() => updateDepartment(curr)}
-              >
-                {curr}
-              </StyledDepartment>
-            ))}
-          </StyledIndustriesContainer>
+        <Label color="black">What team do you work?</Label>
+        <StyledIndustriesContainer>
+          {departments.map(curr => (
+            <StyledDepartment
+              key={curr}
+              selected={department === curr}
+              onClick={() => updateDepartment(curr)}
+            >
+              {curr}
+            </StyledDepartment>
+          ))}
+        </StyledIndustriesContainer>
 
-          <Label color="black">What&#96;s your role?</Label>
-          <StyledInput
-            value={departmentDescription}
-            onChange={event => updateDepartmentDescription(event.target.value)}
-          />
-        </StyledBox>
+        <Label color="black">What&#96;s your role?</Label>
+        <StyledInput
+          value={departmentDescription}
+          onChange={event => updateDepartmentDescription(event.target.value)}
+        />
+      </StyledBox>
 
-        <StyledButton onClick={handleContinue}>Next</StyledButton>
-      </StyledOnboardingContainer>
-    </StyledContainer>
+      <StyledButton onClick={handleContinue}>Next</StyledButton>
+    </StyledOnboardingContainer>
   )
 })
 

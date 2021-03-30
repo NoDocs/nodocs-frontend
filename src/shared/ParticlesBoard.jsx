@@ -6,8 +6,8 @@ const StyledSvg = styled.svg`
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
 `
 
@@ -16,7 +16,7 @@ const StyledText = styled.text`
 `
 
 const ParticlesBoard = ({ particle }) => (
-  <StyledSvg width={window.innerWidth} height={window.innerHeight}>
+  <StyledSvg>
     {particle && (
       <React.Fragment>
         <StyledText

@@ -9,15 +9,6 @@ import Button from 'atoms/Button'
 import { industries } from 'constants'
 import { useMutation } from 'react-relay'
 
-const StyledContainer = styled.div`
-  min-height: 100vh;
-  background-color: #000;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-`
-
 const StyledOnboardingContainer = styled.div`
   width: 600px;
   margin-right: 48px;
@@ -96,41 +87,39 @@ const OnboardingAboutCompany = React.forwardRef((_, ref) => {
   }
 
   return (
-    <StyledContainer>
-      <StyledOnboardingContainer ref={ref}>
-        <StyledBox>
-          <Label color="black">✍🏼 About your company...</Label>
+    <StyledOnboardingContainer ref={ref}>
+      <StyledBox>
+        <Label color="black">✍🏼 About your company...</Label>
 
-          <Label color="black">Company name</Label>
-          <StyledInput
-            autoFocus
-            value={name}
-            onChange={event => updateName(event.target.value)}
-          />
+        <Label color="black">Company name</Label>
+        <StyledInput
+          autoFocus
+          value={name}
+          onChange={event => updateName(event.target.value)}
+        />
 
-          <Label color="black">What&#96;s your company industry</Label>
-          <StyledIndustriesContainer>
-            {industries.map(curr => (
-              <StyledIndustry
-                key={curr}
-                onClick={() => updateIndustry(curr)}
-                selected={curr === industry}
-              >
-                {curr}
-              </StyledIndustry>
-            ))}
-          </StyledIndustriesContainer>
+        <Label color="black">What&#96;s your company industry</Label>
+        <StyledIndustriesContainer>
+          {industries.map(curr => (
+            <StyledIndustry
+              key={curr}
+              onClick={() => updateIndustry(curr)}
+              selected={curr === industry}
+            >
+              {curr}
+            </StyledIndustry>
+          ))}
+        </StyledIndustriesContainer>
 
-          <Label color="black">And... what do you guys do?</Label>
-          <StyledInput
-            value={industryDescription}
-            onChange={event => updateIndustryDescription(event.target.value)}
-          />
-        </StyledBox>
+        <Label color="black">And... what do you guys do?</Label>
+        <StyledInput
+          value={industryDescription}
+          onChange={event => updateIndustryDescription(event.target.value)}
+        />
+      </StyledBox>
 
-        <StyledButton onClick={handleContinue}>Next</StyledButton>
-      </StyledOnboardingContainer>
-    </StyledContainer>
+      <StyledButton onClick={handleContinue}>Next</StyledButton>
+    </StyledOnboardingContainer>
   )
 })
 

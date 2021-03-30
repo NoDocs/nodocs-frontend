@@ -10,9 +10,10 @@ import { toSharedType, withCursor, withYjs } from 'slate-yjs'
 import { WebsocketProvider } from 'y-websocket'
 import { useDispatch } from 'react-redux'
 
+import { documentActions } from 'logic/document'
 import withNodeId from '../plugins/withNodeId'
 import withDetectNeuronInsert from '../plugins/withDetectNeuronInsert'
-import { documentActions } from 'logic/document'
+import withEditableNeuronVoid from '../plugins/withEditableNeuronVoid'
 
 const query = graphql`
   query useDocumentQuery ($id: String!) {
@@ -84,7 +85,17 @@ const useDocument = () => {
 
   const editor = React.useMemo(
     () => {
-      const enhancedEditor = withDetectNeuronInsert(withNodeId(withReact(withHistory(createEditor()))))
+      const enhancedEditor = withDetectNeuronInsert(
+        withEditableNeuronVoid(
+          withNodeId(
+            withReact(
+              withHistory(
+                createEditor()
+              )
+            )
+          )
+        )
+      )
 
       return !provider
         ? enhancedEditor

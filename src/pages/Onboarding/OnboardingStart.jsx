@@ -6,17 +6,8 @@ import Box from 'atoms/Box'
 import Label from 'atoms/Label'
 import Button from 'atoms/Button'
 
-const StyledContainer = styled.div`
-  min-height: 100vh;
-  background-color: #000;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-`
-
 const StyledOnboardingContainer = styled.div`
-  max-width: 600px;
+  max-width: 500px;
   margin-right: 48px;
   display: grid;
   grid-row-gap: 16px;
@@ -35,19 +26,17 @@ const OnboardingStart = React.forwardRef((_, ref) => {
   const history = useHistory()
 
   return (
-    <StyledContainer>
-      <StyledOnboardingContainer ref={ref}>
-        <StyledBox>
-          <Label color="black">✍🏼 “Learning while building” — humanity</Label>
-          <Label color="black">Hey fella, we’re glad to have you around!</Label>
-          <Label color="black">
-            We will ask some questions for each member who signup in your organization, the answers will be stored in Neurons, the system will integrate them into a shared Document that will be visible for all the team members. In this way, all members will have collaborated in the construction of the first document from its dimensions. 🌊
-          </Label>
-        </StyledBox>
+    <StyledOnboardingContainer ref={ref}>
+      <StyledBox>
+        <Label color="black">✍🏼 “Learning while building” — humanity</Label>
+        <Label color="black">Hey fella, we’re glad to have you around!</Label>
+        <Label color="black">
+          We will ask some questions for each member who signup in your organization, the answers will be stored in Neurons, the system will integrate them into a shared Document that will be visible for all the team members. In this way, all members will have collaborated in the construction of the first document from its dimensions. 🌊
+        </Label>
+      </StyledBox>
 
-        <StyledButton onClick={() => history.push('/onboarding/about-company')}>Start</StyledButton>
-      </StyledOnboardingContainer>
-    </StyledContainer>
+      <StyledButton onClick={() => history.push('/onboarding/about-company')}>Start</StyledButton>
+    </StyledOnboardingContainer>
   )
 })
 

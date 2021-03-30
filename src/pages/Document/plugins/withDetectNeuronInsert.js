@@ -23,10 +23,10 @@ const withDetectNeuronInsert = (editor) => {
 
         attachNeuronToPage
           .commit(RelayEnvironment, { pageId, neuronId: id })
-          .then(({ attachNeuronToPage: { neuron } }) => {
+          .then(() => {
             Transforms.insertNodes(
               editor,
-              { type: 'neuron', id, children: JSON.parse(neuron.content) }
+              { type: 'neuron', id, children: [{ text: '' }] }
             )
           })
 

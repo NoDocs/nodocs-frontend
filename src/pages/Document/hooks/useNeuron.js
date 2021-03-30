@@ -46,9 +46,9 @@ const useNeuron = ({ neuronId }) => {
     () => {
       const enhancedEditor = withReact(withHistory(createEditor()))
 
-      return !provider
-        ? enhancedEditor
-        : withCursor(withYjs(enhancedEditor, sharedType), provider.awareness)
+      return provider
+        ? withCursor(withYjs(enhancedEditor, sharedType), provider.awareness)
+        : enhancedEditor
     },
     [sharedType, provider]
   )
