@@ -1,4 +1,5 @@
 import { Transforms } from 'slate'
+import { ReactEditor } from 'slate-react'
 import store from 'store'
 import RelayEnvironment from '../../../RelayEnvironment'
 import attachNeuronToPage from '../mutations/attachNeuronToPageMutation'
@@ -12,23 +13,16 @@ const withDetectNeuronInsert = (editor) => {
     if (operation.type === 'insert_text') {
       const text = operation.text
 
-      const isComponentExpression = regex.test(text)
-
-      if (isComponentExpression) {
+      if (regex.test(text)) {
         const splitted = text.split('=')[1]
         const id = splitted.replace(']]', '')
 
         const state = store.getState()
         const pageId = state.getIn(['document', 'activePageId'])
 
-        attachNeuronToPage
-          .commit(RelayEnvironment, { pageId, neuronId: id })
-          .then(() => {
-            Transforms.insertNodes(
-              editor,
-              { type: 'neuron', id, children: [{ text: '' }] }
-            )
-          })
+        await attachNeuronToPage.commit(RelayEnvironment, { pageId, neuronId: id })
+        Transforms.insertNodes(editor, { type: 'neuron', id, children: [{ text: '' }] })
+        ReactEditor.blur(editor)
 
         return
       }

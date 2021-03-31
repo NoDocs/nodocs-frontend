@@ -54,21 +54,19 @@ const useNeuron = ({ neuronId }) => {
   )
 
   React.useEffect(() => {
-    provider.on('status', ({ status }) => { toggleIsOnline(status === 'connected') })
-
-    provider.awareness.setLocalState({ alphaColor: me.color, color: me.color, name: me.fullName })
-    provider.on('sync', (isSynced, ...rest) => {
-      console.log(isSynced, rest)
-      if (isSynced && sharedType.length === 0) {
-        toSharedType(sharedType, [
-          { type: 'paragraph', children: [{ text: 'Hello world!' }] },
-        ])
+    const sync = (synced) => {
+      if (synced && sharedType.length === 0) {
+        toSharedType(sharedType, editorState)
       }
-    })
+    }
+
+    provider.on('status', ({ status }) => toggleIsOnline(status === 'connected'))
+    provider.awareness.setLocalState({ alphaColor: me.color, color: me.color, name: me.fullName })
+    provider.on('sync', sync)
 
     provider.connect()
 
-    return provider.disconnect
+    return () => provider.disconnect()
   }, [provider])
 
   return {

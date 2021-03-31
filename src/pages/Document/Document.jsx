@@ -7,7 +7,7 @@ import Leaf from 'shared/Leaf'
 import useDocument from './hooks/useDocument'
 import DocumentPanel from './DocumentPanel'
 import DocumentLeftPanel from './DocumentLeftPanel'
-import Component from './Component'
+import Neuron from './Neuron'
 
 const StyledDocumentContainer = styled.div`
   display: grid;
@@ -32,7 +32,7 @@ const StyledEditable = styled(Editable)`
   border-left: 0px;
 `
 
-const SectionEditor = () => {
+const Document = () => {
   const { editor, editorState, updateEditorState } = useDocument()
   const { decorate } = useCursors(editor)
 
@@ -40,11 +40,13 @@ const SectionEditor = () => {
     ({ attributes: { ref, ...otherAttributes }, element, children }) => {
       if (element.type === 'neuron') {
         return (
-          <Component
-            id={element.id}
-            attributes={otherAttributes}
-            ref={ref}
-          />
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <Neuron
+              id={element.id}
+              attributes={otherAttributes}
+              ref={ref}
+            />
+          </React.Suspense>
         )
       }
 
@@ -88,4 +90,4 @@ const SectionEditor = () => {
   )
 }
 
-export default React.memo(SectionEditor)
+export default React.memo(Document)

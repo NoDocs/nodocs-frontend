@@ -114,14 +114,14 @@ const useDocument = () => {
 
   React.useEffect(
     () => {
-      provider.on('status', ({ status }) => { toggleIsOnline(status === 'connected') })
-      provider.on('sync', (isSynced) => {
-        if (isSynced && sharedType.length === 0) {
-          toSharedType(sharedType, [
-            { type: 'paragraph', children: [{ text: 'Hello world!' }] },
-          ])
+      const sync = (synced) => {
+        if (synced && sharedType.length === 0) {
+          toSharedType(sharedType, editorState)
         }
-      })
+      }
+
+      provider.on('status', ({ status }) => { toggleIsOnline(status === 'connected') })
+      provider.on('sync', sync)
 
       provider.awareness.setLocalState({
         alphaColor: me.color,
