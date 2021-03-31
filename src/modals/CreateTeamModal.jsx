@@ -1,74 +1,112 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { useDispatch } from 'react-redux'
+import { graphql } from 'relay-runtime'
+import { useMutation } from 'react-relay'
 
-import { notificationActions } from 'logic/notification'
+import { industries } from 'constants'
 import Label from 'atoms/Label'
-import Input from 'atoms/Input'
-import Button from 'atoms/Button'
-import Notifications from 'molecules/Notifications'
 import FullScreenModal from 'molecules/FullScreenModal'
 import withRenderPortal from 'molecules/withRenderPortal'
+import Button from 'atoms/Button'
 
-const StyledForm = styled.form`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  max-width: 400px;
+const StyledCreateTeamContainer = styled.div`
+  padding: 36px 42px;
+  background-color: white;
+  width: 600px;
+  border-radius: 10px;
+  display: grid;
+  grid-row-gap: 15px;
 `
 
-const StyledTitle = styled(Label)`
-  font-size: 24px;
+const StyledInput = styled.input`
+  border: none;
+  width: 100%;
+  outline: none;
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
+  padding-left: 6px;
+`
+
+const StyledIndustriesContainer = styled.div``
+
+const StyledIndustry = styled(Label)`
+  border: 1.2px solid #000000;
+  padding: 5px 12px;
+  color: black;
+  display: inline-block;
+  border-radius: 80px;
+  margin-right: 8px;
+  font-size: 12px;
+  margin-bottom: 8px;
   font-weight: 500;
-  margin-top: 100px;
-  margin-bottom: 12px;
+  cursor: pointer;
+
+  ${props => props.selected && 'background-color: black;'}
+  ${props => props.selected && 'color: white;'}
 `
 
-const StyledDescription = styled(Label)`
-  font-size: 18px;
-  margin-bottom: 40px;
-`
-
-const StyledInput = styled(Input)`
-  width: 70%;
-`
-
-const StyledCaption = styled(Label)`
+const StyledCreateTeamButton = styled(Button)`
+  display: block;
+  margin: auto;
   margin-top: 20px;
-  margin-bottom: 100px;
+`
+
+const createTeamMutation = graphql`
+  mutation CreateTeamModalMutation ($input: CreateTeamInput!) {
+    createTeam(input: $input) {
+      team {
+        id
+      }
+    }
+  }
 `
 
 const CreateTeamModal = ({ closePortal }) => {
-  const dispatch = useDispatch()
+  const [name, updateTeamName] = React.useState('')
+  const [industry, updateIndustry] = React.useState('')
+  const [createTeam] = useMutation(createTeamMutation)
 
-  const createTeam = (e) => {
-    e.preventDefault()
-
-    const { name } = document.createTeamForm.elements
-
-    if (!name.value) {
-      dispatch(notificationActions.notify({ type: 'error', message: 'Please fill the team name' }))
-      return
-    }
-
-    // Creat team mutation
+  const handleCreateTeam = () => {
+    createTeam({
+      variables: {
+        input: {
+          name,
+          industry,
+        }
+      },
+      onCompleted: ({ createTeam: { team } }) => {
+        console.log(team)
+        closePortal()
+      },
+      updater: store => store.invalidateStore()
+    })
   }
 
   return (
     <FullScreenModal close={closePortal}>
-      <StyledForm name="createTeamForm" onSubmit={createTeam}>
-        <StyledTitle color="active">Create team</StyledTitle>
-        <StyledDescription color="active">Send invitation links to team members</StyledDescription>
+      <StyledCreateTeamContainer>
+        <Label weight={500} color="black">✍🏼 Add a team name...</Label>
+        <StyledInput
+          autoFocus
+          value={name}
+          onChange={event => updateTeamName(event.target.value)}
+        />
 
-        <StyledInput name="name" placeholder="i.e team name" autoFocus />
-        <StyledCaption color="active">After creating a workspace, you can invite others to join.</StyledCaption>
+        <Label weight={500} color="black">Industry</Label>
+        <StyledIndustriesContainer>
+          {industries.map(curr => (
+            <StyledIndustry
+              key={curr}
+              onClick={() => updateIndustry(curr)}
+              selected={curr === industry}
+            >
+              {curr}
+            </StyledIndustry>
+          ))}
+        </StyledIndustriesContainer>
+      </StyledCreateTeamContainer>
 
-        <Button type="submit">CREATE TEAM</Button>
-      </StyledForm>
-
-      <Notifications />
+      <StyledCreateTeamButton onClick={handleCreateTeam}>Create Team</StyledCreateTeamButton>
     </FullScreenModal>
   )
 }

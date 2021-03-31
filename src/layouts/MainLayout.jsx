@@ -9,7 +9,8 @@ import CreateTeamModal from 'modals/CreateTeamModal'
 import GlobalStyles from './GlobalStyles'
 import NavBar from './NavBar'
 import LeftMenu from './LeftMenu'
-import CreateNeuronShortcut from './CreateNeuronShortcut'
+import CreateNeuronShortcut from './components/CreateNeuronShortcut'
+import CreateTeamShortcut from './components/CreateTeamShortcut'
 
 const StyledContainer = styled.div`
   display: grid;
@@ -57,6 +58,7 @@ const MainLayout = ({ children }) => {
       <InviteTeamMembersModal />
       <CreateTeamModal />
       <CreateNeuronShortcut />
+      <CreateTeamShortcut />
     </React.Fragment>
   )
 }

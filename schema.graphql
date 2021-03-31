@@ -175,6 +175,12 @@ type Mutation {
 
   # Send team invitations
   sendInvitations(input: SendInvitationsInput!): SendInvitationsPayload
+
+  # Switch team
+  switchTeam(input: SwitchTeamInput!): SwitchTeamPayload
+
+  # Create team
+  createTeam(input: CreateTeamInput!): CreateTeamPayload
 }
 
 type SignInPayload {
@@ -277,5 +283,26 @@ type SendInvitationsPayload {
 
 input SendInvitationsInput {
   emails: String!
+  clientMutationId: String
+}
+
+type SwitchTeamPayload {
+  team: Team
+  clientMutationId: String
+}
+
+input SwitchTeamInput {
+  teamId: String!
+  clientMutationId: String
+}
+
+type CreateTeamPayload {
+  team: Team
+  clientMutationId: String
+}
+
+input CreateTeamInput {
+  name: String!
+  industry: String!
   clientMutationId: String
 }

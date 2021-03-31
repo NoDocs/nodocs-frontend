@@ -8,8 +8,10 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-export type TeamDocumentsQueryVariables = {||};
-export type TeamDocumentsQueryResponse = {|
+export type TeamDocumentsDocumentsQueryVariables = {|
+  teamId: string
+|};
+export type TeamDocumentsDocumentsQueryResponse = {|
   +documents: ?$ReadOnlyArray<?{|
     +id: string,
     +name: ?string,
@@ -22,16 +24,18 @@ export type TeamDocumentsQueryResponse = {|
     |},
   |}>
 |};
-export type TeamDocumentsQuery = {|
-  variables: TeamDocumentsQueryVariables,
-  response: TeamDocumentsQueryResponse,
+export type TeamDocumentsDocumentsQuery = {|
+  variables: TeamDocumentsDocumentsQueryVariables,
+  response: TeamDocumentsDocumentsQueryResponse,
 |};
 */
 
 
 /*
-query TeamDocumentsQuery {
-  documents {
+query TeamDocumentsDocumentsQuery(
+  $teamId: String!
+) {
+  documents(teamId: $teamId) {
     id
     name
     createdAt(format: "MMM D")
@@ -46,23 +50,36 @@ query TeamDocumentsQuery {
 */
 
 const node/*: ConcreteRequest*/ = (function(){
-var v0 = {
+var v0 = [
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "teamId"
+  }
+],
+v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v1 = [
+v2 = [
   {
     "alias": null,
-    "args": null,
+    "args": [
+      {
+        "kind": "Variable",
+        "name": "teamId",
+        "variableName": "teamId"
+      }
+    ],
     "concreteType": "Document",
     "kind": "LinkedField",
     "name": "documents",
     "plural": true,
     "selections": [
-      (v0/*: any*/),
+      (v1/*: any*/),
       {
         "alias": null,
         "args": null,
@@ -91,7 +108,7 @@ v1 = [
         "name": "owner",
         "plural": false,
         "selections": [
-          (v0/*: any*/),
+          (v1/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -122,32 +139,32 @@ v1 = [
 ];
 return {
   "fragment": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "TeamDocumentsQuery",
-    "selections": (v1/*: any*/),
+    "name": "TeamDocumentsDocumentsQuery",
+    "selections": (v2/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "TeamDocumentsQuery",
-    "selections": (v1/*: any*/)
+    "name": "TeamDocumentsDocumentsQuery",
+    "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "9162b11c08b47dec63b0bc2b0c5d7549",
+    "cacheID": "e583a70db83c7c6dea21f1e79298be71",
     "id": null,
     "metadata": {},
-    "name": "TeamDocumentsQuery",
+    "name": "TeamDocumentsDocumentsQuery",
     "operationKind": "query",
-    "text": "query TeamDocumentsQuery {\n  documents {\n    id\n    name\n    createdAt(format: \"MMM D\")\n    owner {\n      id\n      avatar\n      color\n      fullName\n    }\n  }\n}\n"
+    "text": "query TeamDocumentsDocumentsQuery(\n  $teamId: String!\n) {\n  documents(teamId: $teamId) {\n    id\n    name\n    createdAt(format: \"MMM D\")\n    owner {\n      id\n      avatar\n      color\n      fullName\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '88d58a8f1c183621dc3890bed8558294';
+(node/*: any*/).hash = 'f465f4cfd9331b35cb1e73c351dc2b8a';
 
 module.exports = node;

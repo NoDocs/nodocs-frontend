@@ -51,7 +51,6 @@ const StyledIndustry = styled(Label)`
   ${props => props.selected && 'color: white;'}
 `
 
-
 const createCompanyMutation = graphql`
   mutation OnboardingAboutCompanyMutation($input: CreateCompanyInput!) {
     createCompany(input: $input) {

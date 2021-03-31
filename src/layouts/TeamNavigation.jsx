@@ -1,19 +1,26 @@
 import React from 'react'
 import styled from 'styled-components'
 import { graphql } from 'graphql'
-import { useLazyLoadQuery } from 'react-relay'
+import { useLazyLoadQuery, useMutation } from 'react-relay'
 
 import Title from 'atoms/Title'
+import CreateTeamButton from './components/CreateTeamButton'
 
 const StyledTeamNavigationContainer = styled.div`
   width: 72px;
   height: 100vh;
-  display: grid;
-  grid-row-gap: 10px;
-  justify-content: center;
   border-right: 2px solid rgba(255, 255, 255, 0.2);
   padding-top: 18px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+const StyledGridContainer = styled.div`
+  display: inline-grid;
+  grid-row-gap: 10px;
+  justify-content: center;
 `
 
 const StyledTeam = styled.div`
@@ -28,7 +35,7 @@ const StyledTeam = styled.div`
   justify-content: center;
   cursor: pointer;
 
-  ${props => props.active && 'box-shadow: 0px 0px 5px white;'}
+  ${props => props.active && 'box-shadow: 0px 0px 10px white;'}
 `
 
 const TeamsQuery = graphql`
@@ -45,25 +52,59 @@ const TeamsQuery = graphql`
   }
 `
 
+const createTeamMutation = graphql`
+  mutation TeamNavigationMutation($input: SwitchTeamInput!) {
+    switchTeam(input: $input) {
+      team {
+        id
+      }
+    }
+  }
+`
+
 const TeamNavigation = () => {
+  const [createTeam] = useMutation(createTeamMutation)
   const { teams, me } = useLazyLoadQuery(TeamsQuery)
 
   const chooseTeam = (team) => () => {
-    if (me.currentTeam.id === team.id) return
-    console.log('do something here !!')
+    if (me.currentTeam.id === team.id) {
+      return
+    }
+
+    createTeam({
+      variables: {
+        input: {
+          teamId: team.id,
+        }
+      },
+      updater: store => {
+        const newTeam = store
+          .getRootField('switchTeam')
+          .getLinkedRecord('team')
+
+        store
+          .getRoot()
+          .getLinkedRecord('me')
+          .setLinkedRecord(newTeam, 'currentTeam')
+      },
+    })
   }
 
   return (
     <StyledTeamNavigationContainer>
-      {teams.map(team => (
-        <StyledTeam
-          key={team.id}
-          active={me.currentTeam.id === team.id}
-          onClick={chooseTeam}
-        >
-          <Title color="active">{team.name.slice(0, 1)}</Title>
-        </StyledTeam>
-      ))}
+      <StyledGridContainer>
+        {teams.map(team => (
+          <StyledTeam
+            key={team.id}
+            active={me.currentTeam.id === team.id}
+            onClick={chooseTeam(team)}
+          >
+            <Title color="active">{team.name.slice(0, 1)}</Title>
+          </StyledTeam>
+        ))}
+      </StyledGridContainer>
+
+      <CreateTeamButton />
     </StyledTeamNavigationContainer>
   )
 }

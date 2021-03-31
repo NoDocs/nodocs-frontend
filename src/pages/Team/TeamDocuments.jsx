@@ -6,9 +6,19 @@ import DocumentIcon from 'assets/document.svg'
 import DocumentElement from 'molecules/DocumentElement'
 import TeamSection from './TeamSection'
 
-const query = graphql`
-  query TeamDocumentsQuery {
-    documents {
+const currTeamQuery = graphql`
+  query TeamDocumentsMeQuery {
+    me {
+      currentTeam {
+        id
+      }
+    }
+  }
+`
+
+const documentsQuery = graphql`
+  query TeamDocumentsDocumentsQuery ($teamId: String!) {
+    documents(teamId: $teamId) {
       id
       name
       createdAt (format: "MMM D")
@@ -23,7 +33,8 @@ const query = graphql`
 `
 
 const TeamDocuments = () => {
-  const { documents } = useLazyLoadQuery(query)
+  const { me } = useLazyLoadQuery(currTeamQuery)
+  const { documents } = useLazyLoadQuery(documentsQuery, { teamId: me.currentTeam.id })
   const history = useHistory()
 
   const onDocumentClick = doc => () => {
