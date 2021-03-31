@@ -38,14 +38,24 @@ const StyledTeam = styled.div`
   ${props => props.active && 'box-shadow: 0px 0px 10px white;'}
 `
 
+const currentCompanyQuery = graphql`
+  query TeamNavigationCompanyQuery {
+    me {
+      currentCompany {
+        id
+      }
+    }
+  }
+`
+
 const teamsQuery = graphql`
-  query TeamNavigationQuery {
+  query TeamNavigationTeamsQuery($companyId: String!) {
     me {
       currentTeam {
         id
       }
     }
-    teams {
+    teams (companyId: $companyId) {
       id
       name
     }
@@ -64,7 +74,8 @@ const createTeamMutation = graphql`
 
 const TeamNavigation = () => {
   const [createTeam] = useMutation(createTeamMutation)
-  const { teams, me } = useLazyLoadQuery(teamsQuery)
+  const { me: { currentCompany } } = useLazyLoadQuery(currentCompanyQuery)
+  const { teams, me } = useLazyLoadQuery(teamsQuery, { companyId: currentCompany.id })
 
   const chooseTeam = (team) => () => {
     if (me.currentTeam.id === team.id) {

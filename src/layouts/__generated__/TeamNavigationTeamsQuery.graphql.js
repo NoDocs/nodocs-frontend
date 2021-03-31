@@ -8,8 +8,10 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-export type TeamNavigationQueryVariables = {||};
-export type TeamNavigationQueryResponse = {|
+export type TeamNavigationTeamsQueryVariables = {|
+  companyId: string
+|};
+export type TeamNavigationTeamsQueryResponse = {|
   +me: ?{|
     +currentTeam: ?{|
       +id: string
@@ -20,22 +22,24 @@ export type TeamNavigationQueryResponse = {|
     +name: ?string,
   |}>,
 |};
-export type TeamNavigationQuery = {|
-  variables: TeamNavigationQueryVariables,
-  response: TeamNavigationQueryResponse,
+export type TeamNavigationTeamsQuery = {|
+  variables: TeamNavigationTeamsQueryVariables,
+  response: TeamNavigationTeamsQueryResponse,
 |};
 */
 
 
 /*
-query TeamNavigationQuery {
+query TeamNavigationTeamsQuery(
+  $companyId: String!
+) {
   me {
     currentTeam {
       id
     }
     id
   }
-  teams {
+  teams(companyId: $companyId) {
     id
     name
   }
@@ -43,23 +47,18 @@ query TeamNavigationQuery {
 */
 
 const node/*: ConcreteRequest*/ = (function(){
-var v0 = {
+var v0 = [
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "companyId"
+  }
+],
+v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
-  "storageKey": null
-},
-v1 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "Team",
-  "kind": "LinkedField",
-  "name": "currentTeam",
-  "plural": false,
-  "selections": [
-    (v0/*: any*/)
-  ],
   "storageKey": null
 },
 v2 = {
@@ -67,10 +66,28 @@ v2 = {
   "args": null,
   "concreteType": "Team",
   "kind": "LinkedField",
+  "name": "currentTeam",
+  "plural": false,
+  "selections": [
+    (v1/*: any*/)
+  ],
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": [
+    {
+      "kind": "Variable",
+      "name": "companyId",
+      "variableName": "companyId"
+    }
+  ],
+  "concreteType": "Team",
+  "kind": "LinkedField",
   "name": "teams",
   "plural": true,
   "selections": [
-    (v0/*: any*/),
+    (v1/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -83,10 +100,10 @@ v2 = {
 };
 return {
   "fragment": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "TeamNavigationQuery",
+    "name": "TeamNavigationTeamsQuery",
     "selections": [
       {
         "alias": null,
@@ -96,20 +113,20 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
-          (v1/*: any*/)
+          (v2/*: any*/)
         ],
         "storageKey": null
       },
-      (v2/*: any*/)
+      (v3/*: any*/)
     ],
     "type": "Query",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "TeamNavigationQuery",
+    "name": "TeamNavigationTeamsQuery",
     "selections": [
       {
         "alias": null,
@@ -119,25 +136,25 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
-          (v1/*: any*/),
-          (v0/*: any*/)
+          (v2/*: any*/),
+          (v1/*: any*/)
         ],
         "storageKey": null
       },
-      (v2/*: any*/)
+      (v3/*: any*/)
     ]
   },
   "params": {
-    "cacheID": "1c368eea61e0bcdb2c612b20fabd6fd7",
+    "cacheID": "8b6ac18c26affd0234b1bfbf3e65b19b",
     "id": null,
     "metadata": {},
-    "name": "TeamNavigationQuery",
+    "name": "TeamNavigationTeamsQuery",
     "operationKind": "query",
-    "text": "query TeamNavigationQuery {\n  me {\n    currentTeam {\n      id\n    }\n    id\n  }\n  teams {\n    id\n    name\n  }\n}\n"
+    "text": "query TeamNavigationTeamsQuery(\n  $companyId: String!\n) {\n  me {\n    currentTeam {\n      id\n    }\n    id\n  }\n  teams(companyId: $companyId) {\n    id\n    name\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'd9437e6a2f5c117606650418d56fdbe8';
+(node/*: any*/).hash = '2d3a13dea48b159f3e953deb954c35a2';
 
 module.exports = node;
