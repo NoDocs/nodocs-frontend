@@ -37,7 +37,7 @@ const Onboarding = () => {
 
       const p = {
         top: 50,
-        left: 100,
+        left: 20,
         label: 'Our company',
         id: '#our-company',
         children: [],
@@ -76,7 +76,7 @@ const Onboarding = () => {
         })
         p.children.push({
           top: 200,
-          left: 50,
+          left: 20,
           label: 'welcome message',
           id: '#welcome-message',
           children: [],
@@ -98,13 +98,13 @@ const Onboarding = () => {
         })
         p.children.push({
           top: 200,
-          left: 50,
+          left: 20,
           label: 'welcome message',
           id: '#welcome-message',
           children: [],
         })
         p.children.push({
-          top: 300,
+          top: 150,
           left: 90,
           label: 'Our company',
           id: '#our-company',
@@ -112,7 +112,7 @@ const Onboarding = () => {
         })
         p.children.push({
           top: 210,
-          left: 150,
+          left: 200,
           label: 'About me',
           id: '#about-me',
           children: [],

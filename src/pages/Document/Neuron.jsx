@@ -38,26 +38,6 @@ const Neuron = React.forwardRef(({ id: neuronId, attributes }, ref) => {
   )
 
   return (
-    <StyledNeuronContainer
-      isImported
-      contentEditable={false}
-      data-neuron-id={neuronId}
-      ref={ref}
-      {...attributes}
-    >
-      <Slate
-        editor={editor}
-        value={editorState}
-        onChange={updateEditorState}
-        renderLeaf={renderLeaf}
-        decorate={decorate}
-      >
-        <Editable renderLeaf={renderLeaf} decorate={decorate} />
-      </Slate>
-    </StyledNeuronContainer>
-  )
-
-  return (
     <Popup
       on="hover"
       name={`neuron-${neuronId}-options`}
