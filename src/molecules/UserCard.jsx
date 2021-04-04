@@ -9,7 +9,7 @@ import Avatar from 'atoms/Avatar'
 import Label from 'atoms/Label'
 import ListItem from 'molecules/ListItem'
 import Popup from 'molecules/Popup'
-import { useLazyLoadQuery } from 'react-relay'
+import { useLazyLoadQuery, useMutation } from 'react-relay'
 import { graphql } from 'graphql'
 
 const StyledContainer = styled.div`
@@ -52,17 +52,47 @@ const MeQuery = graphql`
   }
 `
 
+const switchCompanyMutation = graphql`
+  mutation UserCardMutation($input: SwitchCompanyInput!) {
+    switchCompany(input: $input) {
+      company {
+        id
+      }
+    }
+  }
+`
+
 const UserCard = () => {
+  const [switchCompany] = useMutation(switchCompanyMutation)
   const { me, availableCompanies } = useLazyLoadQuery(MeQuery)
   const { closePortal } = React.useContext(PortalContext)
   const dispatch = useDispatch()
 
-  const switchCompany = company => () => {
-    dispatch(notificationActions.notify({
-      type: 'success',
-      message: `Switched to ${company.get('name')} company`
-    }))
-    closePortal('switch-company-popup')
+  const onSwitchCompany = company => () => {
+    switchCompany({
+      variables: {
+        input: {
+          companyId: company.id,
+        }
+      },
+      updater: (store) => {
+        const newCompany = store
+          .getRootField('switchCompany')
+          .getLinkedRecord('company')
+
+        store
+          .getRoot()
+          .getLinkedRecord('me')
+          .setLinkedRecord(newCompany, 'currentCompany')
+      },
+      onCompleted: () => {
+        dispatch(notificationActions.notify({
+          type: 'success',
+          message: `Switched to ${company.name} company`
+        }))
+        closePortal('switch-company-popup')
+      }
+    })
   }
 
   return (
@@ -83,7 +113,7 @@ const UserCard = () => {
             <ListItem
               key={company.id}
               label={company.name}
-              onClick={switchCompany(company)}
+              onClick={onSwitchCompany(company)}
               color="black"
             />
           ))}

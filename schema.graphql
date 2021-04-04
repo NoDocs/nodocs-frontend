@@ -13,7 +13,7 @@ type Query {
   me: User
   users(orderBy: String, after: String, first: Int): UserConnection
   document(id: String): Document
-  documents(orderBy: String, teamId: String, userId: String, after: String, first: Int): [Document]
+  documents(orderBy: String, teamId: String, userId: String, after: String, first: Int): DocumentConnection
   teams(companyId: String): [Team]
   currentTeam: Team
   neuron(neuronId: String!): Neuron
@@ -133,6 +133,25 @@ type Page implements Node {
   updatedAt(format: String): String
 }
 
+# A connection to a list of items.
+type DocumentConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [DocumentEdge]
+  count: Int!
+}
+
+# An edge in a connection.
+type DocumentEdge {
+  # The item at the end of the edge
+  node: Document
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
 type Neuron implements Node {
   # The ID of an object
   id: ID!
@@ -160,6 +179,9 @@ type Mutation {
 
   # Update company member information mutation
   updateCompanyMemberInformation(input: UpdateCompanyMemberInformationInput!): UpdateCompanyMemberInformationPayload
+
+  # Switch company
+  switchCompany(input: SwitchCompanyInput!): SwitchCompanyPayload
 
   # Create neuron
   createNeuron(input: CreateNeuronInput!): CreateNeuronPayload
@@ -227,6 +249,16 @@ input UpdateCompanyMemberInformationInput {
   name: String!
   department: String!
   departmentDescription: String!
+  clientMutationId: String
+}
+
+type SwitchCompanyPayload {
+  company: Company
+  clientMutationId: String
+}
+
+input SwitchCompanyInput {
+  companyId: String!
   clientMutationId: String
 }
 
@@ -305,4 +337,17 @@ input CreateTeamInput {
   name: String!
   industry: String!
   clientMutationId: String
+}
+
+type Subscription {
+  createDocument(input: CreateDocumentSubscriptionInput!): CreateDocumentSubscriptionPayload
+}
+
+type CreateDocumentSubscriptionPayload {
+  document: Document
+  clientSubscriptionId: String
+}
+
+input CreateDocumentSubscriptionInput {
+  clientSubscriptionId: String
 }

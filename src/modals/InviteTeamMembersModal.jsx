@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { List } from 'immutable'
+import { graphql, useMutation } from 'react-relay'
 
 import Label from 'atoms/Label'
 import Input from 'atoms/Input'
@@ -33,21 +33,36 @@ const StyledInputsContainer = styled.div`
   display: grid;
   grid-row-gap: 5px;
   width: 100%;
+  margin-bottom: 50px;
 `
 
-const StyledCaption = styled(Label)`
-  margin-top: 20px;
-  margin-bottom: 100px;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
+const sendInvitesMutation = graphql`
+  mutation InviteTeamMembersModalMutation($input: SendInvitationsInput!) {
+    sendInvitations(input: $input) {
+      teamMembers {
+        id
+        user {
+          email
+        }
+      }
+    }
+  }
 `
 
 const InviteTeamMembers = ({ closePortal }) => {
-  const [emails, updateEmails] = React.useState(new List(['']))
+  const [email, updateEmail] = React.useState('')
+  const [sendInvites] = useMutation(sendInvitesMutation)
 
   const inviteUsers = (e) => {
     e.preventDefault()
+
+    sendInvites({
+      variables: {
+        input: {
+          emails: email
+        }
+      }
+    })
   }
 
   return (
@@ -57,19 +72,14 @@ const InviteTeamMembers = ({ closePortal }) => {
         <StyledDescription color="active">Send invitation links to team members</StyledDescription>
 
         <StyledInputsContainer>
-          {emails.map((email, index) => (
-            <Input
-              key={index}
-              placeholder="i.e team member email"
-              value={email}
-              onChange={event => updateEmails(emails.set(index, event.target.value))}
-            />
-          ))}
+          <Input
+            placeholder="i.e team member email"
+            value={email}
+            onChange={event => updateEmail(event.target.value)}
+          />
         </StyledInputsContainer>
 
-        <StyledCaption onClick={() => updateEmails(emails.push(''))}>+ Add another</StyledCaption>
-
-        <Button type="submit">Invite to TEAM</Button>
+        <Button type="submit">Invite to Team</Button>
       </StyledForm>
     </FullScreenModal>
   )

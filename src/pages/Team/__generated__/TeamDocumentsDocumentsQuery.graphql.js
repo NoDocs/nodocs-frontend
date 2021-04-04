@@ -12,17 +12,22 @@ export type TeamDocumentsDocumentsQueryVariables = {|
   teamId: string
 |};
 export type TeamDocumentsDocumentsQueryResponse = {|
-  +documents: ?$ReadOnlyArray<?{|
-    +id: string,
-    +name: ?string,
-    +createdAt: ?string,
-    +owner: ?{|
-      +id: string,
-      +avatar: ?string,
-      +color: ?string,
-      +fullName: ?string,
-    |},
-  |}>
+  +documents: ?{|
+    +__id: string,
+    +edges: ?$ReadOnlyArray<?{|
+      +node: ?{|
+        +id: string,
+        +name: ?string,
+        +createdAt: ?string,
+        +owner: ?{|
+          +id: string,
+          +avatar: ?string,
+          +color: ?string,
+          +fullName: ?string,
+        |},
+      |}
+    |}>,
+  |}
 |};
 export type TeamDocumentsDocumentsQuery = {|
   variables: TeamDocumentsDocumentsQueryVariables,
@@ -35,15 +40,25 @@ export type TeamDocumentsDocumentsQuery = {|
 query TeamDocumentsDocumentsQuery(
   $teamId: String!
 ) {
-  documents(teamId: $teamId) {
-    id
-    name
-    createdAt(format: "MMM D")
-    owner {
-      id
-      avatar
-      color
-      fullName
+  documents(first: 2147483647, teamId: $teamId) {
+    edges {
+      node {
+        id
+        name
+        createdAt(format: "MMM D")
+        owner {
+          id
+          avatar
+          color
+          fullName
+        }
+        __typename
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
     }
   }
 }
@@ -58,84 +73,153 @@ var v0 = [
   }
 ],
 v1 = {
+  "kind": "Variable",
+  "name": "teamId",
+  "variableName": "teamId"
+},
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v2 = [
+v3 = [
   {
     "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "teamId",
-        "variableName": "teamId"
-      }
-    ],
-    "concreteType": "Document",
+    "args": null,
+    "concreteType": "DocumentEdge",
     "kind": "LinkedField",
-    "name": "documents",
+    "name": "edges",
     "plural": true,
     "selections": [
-      (v1/*: any*/),
       {
         "alias": null,
         "args": null,
-        "kind": "ScalarField",
-        "name": "name",
+        "concreteType": "Document",
+        "kind": "LinkedField",
+        "name": "node",
+        "plural": false,
+        "selections": [
+          (v2/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "name",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": [
+              {
+                "kind": "Literal",
+                "name": "format",
+                "value": "MMM D"
+              }
+            ],
+            "kind": "ScalarField",
+            "name": "createdAt",
+            "storageKey": "createdAt(format:\"MMM D\")"
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "User",
+            "kind": "LinkedField",
+            "name": "owner",
+            "plural": false,
+            "selections": [
+              (v2/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "avatar",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "color",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "fullName",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "__typename",
+            "storageKey": null
+          }
+        ],
         "storageKey": null
       },
       {
         "alias": null,
-        "args": [
-          {
-            "kind": "Literal",
-            "name": "format",
-            "value": "MMM D"
-          }
-        ],
-        "kind": "ScalarField",
-        "name": "createdAt",
-        "storageKey": "createdAt(format:\"MMM D\")"
-      },
-      {
-        "alias": null,
         "args": null,
-        "concreteType": "User",
-        "kind": "LinkedField",
-        "name": "owner",
-        "plural": false,
-        "selections": [
-          (v1/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "avatar",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "color",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "fullName",
-            "storageKey": null
-          }
-        ],
+        "kind": "ScalarField",
+        "name": "cursor",
         "storageKey": null
       }
     ],
     "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "PageInfo",
+    "kind": "LinkedField",
+    "name": "pageInfo",
+    "plural": false,
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "endCursor",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "hasNextPage",
+        "storageKey": null
+      }
+    ],
+    "storageKey": null
+  },
+  {
+    "kind": "ClientExtension",
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "__id",
+        "storageKey": null
+      }
+    ]
   }
+],
+v4 = [
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 2147483647
+  },
+  (v1/*: any*/)
 ];
 return {
   "fragment": {
@@ -143,7 +227,20 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "TeamDocumentsDocumentsQuery",
-    "selections": (v2/*: any*/),
+    "selections": [
+      {
+        "alias": "documents",
+        "args": [
+          (v1/*: any*/)
+        ],
+        "concreteType": "DocumentConnection",
+        "kind": "LinkedField",
+        "name": "__Team_documents_connection",
+        "plural": false,
+        "selections": (v3/*: any*/),
+        "storageKey": null
+      }
+    ],
     "type": "Query",
     "abstractKey": null
   },
@@ -152,19 +249,52 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "TeamDocumentsDocumentsQuery",
-    "selections": (v2/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v4/*: any*/),
+        "concreteType": "DocumentConnection",
+        "kind": "LinkedField",
+        "name": "documents",
+        "plural": false,
+        "selections": (v3/*: any*/),
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": (v4/*: any*/),
+        "filters": [
+          "teamId"
+        ],
+        "handle": "connection",
+        "key": "Team_documents",
+        "kind": "LinkedHandle",
+        "name": "documents"
+      }
+    ]
   },
   "params": {
-    "cacheID": "e583a70db83c7c6dea21f1e79298be71",
+    "cacheID": "1d7f0b930097bbcffd6bab087c1b3434",
     "id": null,
-    "metadata": {},
+    "metadata": {
+      "connection": [
+        {
+          "count": null,
+          "cursor": null,
+          "direction": "forward",
+          "path": [
+            "documents"
+          ]
+        }
+      ]
+    },
     "name": "TeamDocumentsDocumentsQuery",
     "operationKind": "query",
-    "text": "query TeamDocumentsDocumentsQuery(\n  $teamId: String!\n) {\n  documents(teamId: $teamId) {\n    id\n    name\n    createdAt(format: \"MMM D\")\n    owner {\n      id\n      avatar\n      color\n      fullName\n    }\n  }\n}\n"
+    "text": "query TeamDocumentsDocumentsQuery(\n  $teamId: String!\n) {\n  documents(first: 2147483647, teamId: $teamId) {\n    edges {\n      node {\n        id\n        name\n        createdAt(format: \"MMM D\")\n        owner {\n          id\n          avatar\n          color\n          fullName\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'f465f4cfd9331b35cb1e73c351dc2b8a';
+(node/*: any*/).hash = '6c86d560985e9c20c4d3c44879f47b19';
 
 module.exports = node;

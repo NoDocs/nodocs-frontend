@@ -1,6 +1,7 @@
-import { Environment, Network, RecordSource, Store } from 'relay-runtime'
+import { Environment, Network, RecordSource, Store, Observable } from 'relay-runtime'
 import jwt_decode from 'jwt-decode'
 import logout from 'utils/logout'
+import { SubscriptionClient } from 'subscriptions-transport-ws'
 
 const requestAccessToken = async () => {
   try {
@@ -61,9 +62,21 @@ const fetchQuery = async (operation, variables, cacheConfig = {}) => {
     .catch(console.log)
 }
 
+const subscriptionClient = new SubscriptionClient(process.env.SUBSCRIPTION_SERVER_WS, { reconnect: true })
+const subscribeQuery = (operation, variables) => {
+  const subscribeObservable = subscriptionClient.request({
+    query: operation.text,
+    operationName: operation.name,
+    variables,
+  })
+
+  // Important: Convert subscriptions-transport-ws observable type to Relay's
+  return Observable.from(subscribeObservable)
+}
+
 const recordSource = new RecordSource()
-export const store = new Store(recordSource)
-const network = Network.create(fetchQuery)
+const store = new Store(recordSource)
+const network = Network.create(fetchQuery, subscribeQuery)
 
 const relay = new Environment({ store, network })
 

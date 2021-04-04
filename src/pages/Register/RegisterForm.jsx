@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { graphql, useMutation } from 'react-relay'
+import { useHistory } from 'react-router-dom'
 
 import NoDocsIcon from 'assets/noDocs.svg'
 import MentionIcon from 'assets/mention.svg'
@@ -8,7 +9,6 @@ import LockIcon from 'assets/lock.svg'
 import Label from 'atoms/Label'
 import Input from 'atoms/Input'
 import Button from 'atoms/Button'
-import history from 'utils/history'
 
 const StyledContentContainer = styled.div`
   background: #FFFFFF;
@@ -59,6 +59,7 @@ const registerMutation = graphql`
 
 const RegisterForm = React.forwardRef((_, ref) => {
   const [register] = useMutation(registerMutation)
+  const history = useHistory()
 
   const handleRegister = (event) => {
     event.preventDefault()
@@ -120,7 +121,7 @@ const RegisterForm = React.forwardRef((_, ref) => {
           placeholder="Confirm Password"
         />
 
-        <Button>Sign up</Button>
+        <Button type="submit">Sign up</Button>
 
         <StyledRegisterLabel
           onClick={() => history.push('/login')}
