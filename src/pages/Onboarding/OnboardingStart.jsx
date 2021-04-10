@@ -25,6 +25,12 @@ const StyledButton = styled(Button)`
 const OnboardingStart = React.forwardRef((_, ref) => {
   const history = useHistory()
 
+  const handleStart = () => {
+    history.push(localStorage.getItem('currentCompany')
+      ? '/onboarding/about-you'
+      : '/onboarding/about-company')
+  }
+
   return (
     <StyledOnboardingContainer ref={ref}>
       <StyledBox>
@@ -35,7 +41,7 @@ const OnboardingStart = React.forwardRef((_, ref) => {
         </Label>
       </StyledBox>
 
-      <StyledButton onClick={() => history.push('/onboarding/about-company')}>Start</StyledButton>
+      <StyledButton onClick={handleStart}>Start</StyledButton>
     </StyledOnboardingContainer>
   )
 })

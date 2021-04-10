@@ -1,27 +1,15 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import NeuronIcon from 'assets/neuron.svg'
-import withRenderPortal from 'molecules/withRenderPortal'
+import FullScreenModal from 'molecules/FullScreenModal'
+import withRenderPortal from 'hocs/withRenderPortal'
 import LoadingNeuronModal from 'loadings/LoadingNeuronModal'
-import NeuronHeader from './NeuronHeader'
-import NeuronContent from './NeuronContent'
+import NeuronModalHeader from './NeuronModalHeader'
+import NeuronModalContent from './NeuronModalContent'
 
-const StyledOverlay = styled.div`
-  background-color: rgba(0, 0, 0, 0.9);
-  position: absolute;
-  z-index: 10;
-  width: 100%;
-  height: 100%;
-  top: 0px;
-  left: 0px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-`
-
-const StyledModalContainer = styled.div`
+const StyledFullScreenModal = styled(FullScreenModal)`
   width: 740px;
   display: flex;
   align-items: flex-start;
@@ -37,22 +25,25 @@ const StyledModal = styled.div`
   padding: 20px 30px;
 `
 
-const NeuronModal = () => {
-  return ReactDOM.createPortal(
-    <StyledOverlay>
-      <StyledModalContainer>
-        <NeuronIcon width={51} />
+const NeuronModal = ({ name, closePortal }) => {
+  return (
+    <StyledFullScreenModal containerStyles={{ justifyContent: 'flex-end' }} close={() => closePortal(name)}>
+      <NeuronIcon size={50} />
 
-        <StyledModal>
-          <NeuronHeader />
-          <React.Suspense fallback={<LoadingNeuronModal />}>
-            <NeuronContent />
-          </React.Suspense>
-        </StyledModal>
-      </StyledModalContainer>
-    </StyledOverlay>,
-    document.getElementById('portals')
+      <StyledModal>
+        <NeuronModalHeader />
+
+        <React.Suspense fallback={<LoadingNeuronModal />}>
+          <NeuronModalContent />
+        </React.Suspense>
+      </StyledModal>
+    </StyledFullScreenModal>
   )
+}
+
+NeuronModal.propTypes = {
+  name: PropTypes.string,
+  closePortal: PropTypes.func,
 }
 
 export default withRenderPortal(() => 'neuron-modal')(NeuronModal)

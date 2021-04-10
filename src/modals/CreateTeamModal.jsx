@@ -7,7 +7,7 @@ import { useMutation } from 'react-relay'
 import { industries } from 'constants'
 import Label from 'atoms/Label'
 import FullScreenModal from 'molecules/FullScreenModal'
-import withRenderPortal from 'molecules/withRenderPortal'
+import withRenderPortal from 'hocs/withRenderPortal'
 import Button from 'atoms/Button'
 
 const StyledCreateTeamContainer = styled.div`

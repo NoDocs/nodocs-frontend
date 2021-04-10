@@ -12,6 +12,7 @@
       "molecules/*": ["./molecules/*"],
       "services": ["./services/*"],
       "logic/*": ["./redux/*"],
+      "hocs/*": ["./hocs/*"],
       "socket/*": ["./socket/*"],
       "contexts": ["./contexts/*"],
       "modals/*": ["./modals/*"],

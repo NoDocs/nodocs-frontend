@@ -24,6 +24,9 @@ export type signInMutationResponse = {|
       +fullName: ?string,
       +token: ?string,
       +email: ?string,
+      +currentCompany: ?{|
+        +id: string
+      |},
     |},
   |}
 |};
@@ -45,6 +48,9 @@ mutation signInMutation(
       fullName
       token
       email
+      currentCompany {
+        id
+      }
     }
   }
 }
@@ -58,7 +64,14 @@ var v0 = [
     "name": "input"
   }
 ],
-v1 = [
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v2 = [
   {
     "alias": null,
     "args": [
@@ -88,13 +101,7 @@ v1 = [
         "name": "user",
         "plural": false,
         "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "id",
-            "storageKey": null
-          },
+          (v1/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -115,6 +122,18 @@ v1 = [
             "kind": "ScalarField",
             "name": "email",
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Company",
+            "kind": "LinkedField",
+            "name": "currentCompany",
+            "plural": false,
+            "selections": [
+              (v1/*: any*/)
+            ],
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -129,7 +148,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "signInMutation",
-    "selections": (v1/*: any*/),
+    "selections": (v2/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
@@ -138,19 +157,19 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "signInMutation",
-    "selections": (v1/*: any*/)
+    "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "0c9f33f6f5510083aa6f7a43f0d6ab8d",
+    "cacheID": "890dea6c4b634d301b23eaa83d21c84f",
     "id": null,
     "metadata": {},
     "name": "signInMutation",
     "operationKind": "mutation",
-    "text": "mutation signInMutation(\n  $input: SignInInput!\n) {\n  signIn(input: $input) {\n    clientMutationId\n    user {\n      id\n      fullName\n      token\n      email\n    }\n  }\n}\n"
+    "text": "mutation signInMutation(\n  $input: SignInInput!\n) {\n  signIn(input: $input) {\n    clientMutationId\n    user {\n      id\n      fullName\n      token\n      email\n      currentCompany {\n        id\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '198736c931382786b2283e7e4201175a';
+(node/*: any*/).hash = '3221a70669176c5444e9d405181ec8b9';
 
 module.exports = node;

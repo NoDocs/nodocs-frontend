@@ -40,16 +40,16 @@ const StyledContentContainer = styled.div`
   z-index: 101;
 `
 
-const FullScreenModal = ({ close, children }) => {
+const FullScreenModal = ({ close, containerStyles, className, children }) => {
   return ReactDOM.createPortal(
-    <StyledContainer>
+    <StyledContainer style={containerStyles}>
       <StyledOverlay onClick={close} />
 
       <StyledCloseIconButton onClick={close}>
         <CloseIcon color="white" />
       </StyledCloseIconButton>
 
-      <StyledContentContainer>
+      <StyledContentContainer className={className}>
         {children}
       </StyledContentContainer>
     </StyledContainer>,
@@ -59,6 +59,8 @@ const FullScreenModal = ({ close, children }) => {
 
 FullScreenModal.propTypes = {
   close: PropTypes.func,
+  containerStyles: PropTypes.object,
+  className: PropTypes.string,
   children: PropTypes.any,
 }
 

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Route, Redirect } from 'react-router-dom'
 
-const ProtectedRoute = ({ component: RouteComponent, Layout, isTeamError, ...rest }) => (
+const ProtectedRoute = ({ component: RouteComponent, fallback, Layout, ...rest }) => (
   <Route
     {...rest}
     render={({ location }) => {
@@ -10,13 +10,19 @@ const ProtectedRoute = ({ component: RouteComponent, Layout, isTeamError, ...res
         return <Redirect to={{ pathname: '/login', state: { from: location } }} />
       }
 
-      if (!Layout) return <RouteComponent />
+      const ReturnedComponent = !Layout
+        ? <RouteComponent />
+        : <Layout><RouteComponent /></Layout>
 
-      return (
-        <Layout isTeamError={isTeamError}>
-          <RouteComponent />
-        </Layout>
-      )
+      if (fallback) {
+        return (
+          <React.Suspense fallback={fallback}>
+            {ReturnedComponent}
+          </React.Suspense>
+        )
+      }
+
+      return ReturnedComponent
     }}
   />
 )
@@ -24,6 +30,7 @@ const ProtectedRoute = ({ component: RouteComponent, Layout, isTeamError, ...res
 ProtectedRoute.propTypes = {
   component: PropTypes.any,
   Layout: PropTypes.any,
+  fallback: PropTypes.element,
   isTeamError: PropTypes.bool
 }
 

@@ -6,7 +6,7 @@ import { graphql, useMutation } from 'react-relay'
 import Label from 'atoms/Label'
 import Input from 'atoms/Input'
 import Button from 'atoms/Button'
-import withRenderPortal from 'molecules/withRenderPortal'
+import withRenderPortal from 'hocs/withRenderPortal'
 import FullScreenModal from 'molecules/FullScreenModal'
 
 const StyledForm = styled.form`

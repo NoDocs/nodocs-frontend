@@ -25,6 +25,9 @@ export type RegisterFormMutationResponse = {|
       +fullName: ?string,
       +token: ?string,
       +email: ?string,
+      +currentCompany: ?{|
+        +id: string
+      |},
     |},
   |}
 |};
@@ -46,6 +49,9 @@ mutation RegisterFormMutation(
       fullName
       token
       email
+      currentCompany {
+        id
+      }
     }
   }
 }
@@ -59,7 +65,14 @@ var v0 = [
     "name": "input"
   }
 ],
-v1 = [
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v2 = [
   {
     "alias": null,
     "args": [
@@ -89,13 +102,7 @@ v1 = [
         "name": "user",
         "plural": false,
         "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "id",
-            "storageKey": null
-          },
+          (v1/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -116,6 +123,18 @@ v1 = [
             "kind": "ScalarField",
             "name": "email",
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Company",
+            "kind": "LinkedField",
+            "name": "currentCompany",
+            "plural": false,
+            "selections": [
+              (v1/*: any*/)
+            ],
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -130,7 +149,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "RegisterFormMutation",
-    "selections": (v1/*: any*/),
+    "selections": (v2/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
@@ -139,19 +158,19 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "RegisterFormMutation",
-    "selections": (v1/*: any*/)
+    "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "58bf2985683f0a5f2a9c01e0465b003e",
+    "cacheID": "bf5615267e11027f3f2a67289414c630",
     "id": null,
     "metadata": {},
     "name": "RegisterFormMutation",
     "operationKind": "mutation",
-    "text": "mutation RegisterFormMutation(\n  $input: SignUpInput!\n) {\n  signUp(input: $input) {\n    clientMutationId\n    user {\n      id\n      fullName\n      token\n      email\n    }\n  }\n}\n"
+    "text": "mutation RegisterFormMutation(\n  $input: SignUpInput!\n) {\n  signUp(input: $input) {\n    clientMutationId\n    user {\n      id\n      fullName\n      token\n      email\n      currentCompany {\n        id\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '51241165848735e8dde5c8bdd7f16420';
+(node/*: any*/).hash = 'adc4aa2fe6f40ed2ac11a7dd2cdc23b7';
 
 module.exports = node;

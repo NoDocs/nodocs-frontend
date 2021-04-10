@@ -12,6 +12,9 @@ function commit(environment, input) {
               fullName
               token
               email
+              currentCompany {
+                id
+              }
             }
           }
         }
@@ -38,8 +41,14 @@ function commit(environment, input) {
           .getRoot()
           .getLinkedRecord('me')
           .getValue('token')
+        const currentCompanyId = store
+          .getRoot()
+          .getLinkedRecord('me')
+          .getLinkedRecord('currentCompany')
+          .getValue('id')
 
         localStorage.setItem('token', token)
+        localStorage.setItem('currentCompany', currentCompanyId)
       },
     })
   })

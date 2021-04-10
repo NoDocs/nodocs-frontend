@@ -7,6 +7,7 @@ import OnboardingStart from './OnboardingStart'
 import OnboardingAboutCompany from './OnboardingAboutCompany'
 import OnboardingAboutYou from './OnboardingAboutYou'
 import OnboardingSendInvites from './OnboardingSendInvites'
+import ProtectedRoute from 'atoms/ProtectedRoute'
 
 const StyledContainer = styled.div`
   min-height: 100vh;
@@ -31,6 +32,8 @@ const Onboarding = () => {
 
   React.useEffect(
     () => {
+      if (!boxRef.current) return
+
       const boxCoords = boxRef.current.getBoundingClientRect()
       const offsetLeft = (window.innerWidth - 1250) / 2
       const offsetTop = (window.innerHeight - (boxCoords.height)) / 2
@@ -121,14 +124,15 @@ const Onboarding = () => {
 
       updateParticle(p)
     },
-    [location.pathname]
+    [location.pathname, boxRef]
   )
 
   return (
     <StyledContainer>
       <StyledContentContainer>
         <Switch>
-          <Route path="/onboarding/start" component={() => <OnboardingStart ref={boxRef} />} />
+          <ProtectedRoute path="/onboarding/start" component={() => <OnboardingStart ref={boxRef} />} />
+
           <Route path="/onboarding/about-company" component={() => <OnboardingAboutCompany ref={boxRef} />} />
           <Route path="/onboarding/about-you" component={() => <OnboardingAboutYou ref={boxRef} />} />
           <Route path="/onboarding/send-invites" component={() => <OnboardingSendInvites ref={boxRef} />} />

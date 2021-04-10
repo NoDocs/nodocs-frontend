@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
+import withOpenPortal from 'hocs/withOpenPortal'
+
 const StyledButtonContainer = styled.button`
   border: none;
   padding: 6px;
@@ -36,4 +38,4 @@ IconButton.propTypes = {
   onClick: PropTypes.func,
 }
 
-export default IconButton
+export default withOpenPortal(IconButton)

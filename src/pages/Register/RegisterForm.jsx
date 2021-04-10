@@ -52,6 +52,9 @@ const registerMutation = graphql`
         fullName
         token
         email
+        currentCompany {
+          id
+        }
       }
     }
   }
@@ -82,8 +85,14 @@ const RegisterForm = React.forwardRef((_, ref) => {
           .getRoot()
           .getLinkedRecord('me')
           .getValue('token')
+        const currentCompanyId = store
+          .getRoot()
+          .getLinkedRecord('me')
+          .getLinkedRecord('currentCompany')
+          .getValue('id')
 
         localStorage.setItem('token', token)
+        localStorage.setItem('currentCompany', currentCompanyId)
         history.push('/onboarding/start')
       }
     })

@@ -65,7 +65,7 @@ const TeamMembers = () => {
         ))}
       </StyledMembersContainer>
 
-      <StyledAddButton variant="white">
+      <StyledAddButton opens="invite-team-members" variant="white">
         <AddIcon fill="black" />
       </StyledAddButton>
     </StyledGridContainer>

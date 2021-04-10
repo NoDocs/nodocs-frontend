@@ -35,11 +35,8 @@ const App = () => {
         <ProtectedRoute
           path="/d/:documentId"
           Layout={MainLayout}
-          component={() => (
-            <React.Suspense fallback={<LoadingDocument />}>
-              <Document />
-            </React.Suspense>
-          )}
+          fallback={<LoadingDocument />}
+          component={Document}
         />
 
         <ProtectedRoute path="/create-company" component={CreateCompany} />

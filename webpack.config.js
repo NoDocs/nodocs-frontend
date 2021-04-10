@@ -121,6 +121,7 @@ module.exports = {
       logic: path.resolve(__dirname, 'src/redux'),
       socket: path.resolve(__dirname, 'src/socket'),
       contexts: path.resolve(__dirname, 'src/contexts'),
+      hocs: path.resolve(__dirname, 'src/hocs'),
       modals: path.resolve(__dirname, 'src/modals'),
       shared: path.resolve(__dirname, 'src/shared'),
       loadings: path.resolve(__dirname, 'src/loadings'),

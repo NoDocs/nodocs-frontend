@@ -5,16 +5,13 @@ import { useCursors } from 'slate-yjs'
 
 import useNeuronModal from 'hooks/useNeuronModal'
 import Leaf from 'shared/Leaf'
+import NeuronTitle from './NeuronTitle'
 
 const StyledEditable = styled(Editable)`
   grid-area: document-content;
-  margin-right: 20px;
   background: #FFFFFF;
   min-height: 540px;
-  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-  padding: 20px 30px;
-  border-left: 0px;
+  margin-top: 20px;
 `
 
 const NeuronContent = () => {
@@ -46,17 +43,22 @@ const NeuronContent = () => {
   )
 
   return (
-    <Slate
-      editor={editor}
-      value={editorState}
-      onChange={updateEditorState}
-    >
-      <StyledEditable
-        renderElement={renderElement}
-        renderLeaf={renderLeaf}
-        decorate={decorate}
-      />
-    </Slate>
+    <React.Fragment>
+      <NeuronTitle />
+
+      <Slate
+        editor={editor}
+        value={editorState}
+        onChange={updateEditorState}
+      >
+        <StyledEditable
+          renderElement={renderElement}
+          renderLeaf={renderLeaf}
+          placeholder="✍🏼 Start typing something..."
+          decorate={decorate}
+        />
+      </Slate>
+    </React.Fragment>
   )
 }
 
