@@ -46,11 +46,11 @@ const NeuronTitle = () => {
   const [value, updateValue] = React.useState(get('name', neuron) || '')
   const [updateNeuron] = useMutation(mutation)
 
-  const saveTitle = () => {
+  const saveTitle = name => {
     updateNeuron({
       variables: {
         input: {
-          name: value,
+          name,
           neuronId: neuron.id,
         }
       }

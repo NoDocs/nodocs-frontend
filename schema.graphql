@@ -17,7 +17,7 @@ type Query {
   teams(companyId: String): [Team]
   currentTeam: Team
   neuron(neuronId: String!): Neuron
-  neurons(teamId: String): [Neuron]
+  neurons(orderBy: String, teamId: String, userId: String, after: String, first: Int): NeuronConnection
   availableCompanies: [Company]
 }
 
@@ -158,13 +158,32 @@ type Neuron implements Node {
   name: String
   neuronId: String
   content: String
-  creator: User
+  owner: User
   pages: [Page]
   teams: [Team]
   companies: [Company]
   createdAt(format: String): String
   updatedAt(format: String): String
   deletedAt(format: String): String
+}
+
+# A connection to a list of items.
+type NeuronConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [NeuronEdge]
+  count: Int!
+}
+
+# An edge in a connection.
+type NeuronEdge {
+  # The item at the end of the edge
+  node: Neuron
+
+  # A cursor for use in pagination
+  cursor: String!
 }
 
 type Mutation {
