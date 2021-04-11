@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useHistory, useLocation } from 'react-router-dom'
 
 import NeuronIcon from 'assets/neuron.svg'
 import FullScreenModal from 'molecules/FullScreenModal'
@@ -26,8 +27,18 @@ const StyledModal = styled.div`
 `
 
 const NeuronModal = ({ name, closePortal }) => {
+  const history = useHistory()
+  const { pathname, search } = useLocation()
+
+  const handleNeuronClose = () => {
+    closePortal(name)
+    const params = new URLSearchParams(search)
+    params.delete('neuronId')
+    history.push(`${pathname}?${params.toString()}`)
+  }
+
   return (
-    <StyledFullScreenModal containerStyles={{ justifyContent: 'flex-end' }} close={() => closePortal(name)}>
+    <StyledFullScreenModal containerStyles={{ justifyContent: 'flex-end' }} close={handleNeuronClose}>
       <NeuronIcon size={50} />
 
       <StyledModal>

@@ -160,8 +160,8 @@ type Neuron implements Node {
   content: String
   owner: User
   pages: [Page]
-  teams: [Team]
-  companies: [Company]
+  team: [Team]
+  company: [Company]
   createdAt(format: String): String
   updatedAt(format: String): String
   deletedAt(format: String): String
@@ -374,6 +374,7 @@ input CreateTeamInput {
 
 type Subscription {
   createDocument(input: CreateDocumentSubscriptionInput!): CreateDocumentSubscriptionPayload
+  createNeuron(input: CreateNeuronSubscriptionInput!): CreateNeuronSubscriptionPayload
 }
 
 type CreateDocumentSubscriptionPayload {
@@ -382,5 +383,14 @@ type CreateDocumentSubscriptionPayload {
 }
 
 input CreateDocumentSubscriptionInput {
+  clientSubscriptionId: String
+}
+
+type CreateNeuronSubscriptionPayload {
+  neuron: Neuron
+  clientSubscriptionId: String
+}
+
+input CreateNeuronSubscriptionInput {
   clientSubscriptionId: String
 }

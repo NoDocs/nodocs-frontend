@@ -14,6 +14,7 @@ import { documentActions } from 'logic/document'
 import withNodeId from '../plugins/withNodeId'
 import withDetectNeuronInsert from '../plugins/withDetectNeuronInsert'
 import withEditableNeuronVoid from '../plugins/withEditableNeuronVoid'
+import useIsMounted from 'hooks/useIsMounted'
 
 const query = graphql`
   query useDocumentQuery ($id: String!) {
@@ -60,6 +61,7 @@ const getEditorContent = ({ document, activeSectionId, activePageId }) => JSON.p
 const useDocument = () => {
   const { documentId } = useParams()
   const { me, document } = useLazyLoadQuery(query, { id: documentId })
+  const { isMounted } = useIsMounted()
   const [activeSectionId] = React.useState(getFirstSectionId(document))
   const [activePageId] = React.useState(getFirstPageId(document))
 
@@ -120,7 +122,7 @@ const useDocument = () => {
         }
       }
 
-      provider.on('status', ({ status }) => { toggleIsOnline(status === 'connected') })
+      provider.on('status', ({ status }) => { if (isMounted) toggleIsOnline(status === 'connected') })
       provider.on('sync', sync)
 
       provider.awareness.setLocalState({
@@ -132,7 +134,7 @@ const useDocument = () => {
 
       return () => provider.disconnect()
     },
-    [provider]
+    [provider, isMounted]
   )
 
   return {

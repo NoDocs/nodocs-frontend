@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { graphql, useLazyLoadQuery } from 'react-relay'
+import { ConnectionHandler, graphql, useLazyLoadQuery, useSubscription } from 'react-relay'
 
 import NeuronIcon from 'assets/neuron.svg'
 import DocumentElement from 'molecules/DocumentElement'
@@ -44,10 +44,44 @@ const neuronsQuery = graphql`
   }
 `
 
+const neuronCreatedSubscription = graphql`
+  subscription TeamNeuronsSubscription($input: CreateNeuronSubscriptionInput!) {
+    createNeuron(input: $input) {
+      neuron {
+        id
+        name
+        createdAt (format: "MMM D")
+        owner {
+          id
+          avatar
+          color
+          fullName
+        }
+      }
+      clientSubscriptionId
+    }
+  }
+`
+
 const TeamNeurons = () => {
   const { me } = useLazyLoadQuery(currTeamQuery)
   const { neurons } = useLazyLoadQuery(neuronsQuery, { teamId: me.currentTeam.id })
   const history = useHistory()
+
+  useSubscription({
+    subscription: neuronCreatedSubscription,
+    variables: { input: {} },
+    updater: store => {
+      console.log('heree !!!')
+      const neuron = store
+        .getRootField('createNeuron')
+        .getLinkedRecord('neuron')
+
+      const neuronsConnection = store.get(neurons.__id)
+      const edge = ConnectionHandler.createEdge(store, neuronsConnection, neuron)
+      ConnectionHandler.insertEdgeAfter(neuronsConnection, edge)
+    }
+  })
 
   const onNeuronClick = (neuron) => () => {
     history.push(`?neuronId=${neuron.neuronId}`)

@@ -9,6 +9,7 @@ import { withHistory } from 'slate-history'
 import { useLazyLoadQuery } from 'react-relay'
 import { graphql } from 'graphql'
 import { useLocation } from 'react-router'
+import useIsMounted from './useIsMounted'
 
 const WEBSOCKET_ENDPOINT = process.env.BASE_SHAREDB_WS
 
@@ -31,6 +32,7 @@ const useNeuronModal = () => {
   const { search } = useLocation()
   const params = new URLSearchParams(search)
 
+  const { isMounted } = useIsMounted()
   const { neuron, me } = useLazyLoadQuery(query, { neuronId: params.get('neuronId') })
   const [editorState, updateEditorState] = React.useState(JSON.parse(neuron.content))
   const [isOnline, toggleIsOnline] = React.useState(false)
@@ -64,14 +66,14 @@ const useNeuronModal = () => {
       }
     }
 
-    provider.on('status', ({ status }) => { toggleIsOnline(status === 'connected') })
+    provider.on('status', ({ status }) => { if (isMounted) toggleIsOnline(status === 'connected') })
     provider.awareness.setLocalState({ alphaColor: me.color, color: me.color, name: me.fullName })
     provider.on('sync', sync)
 
     provider.connect()
 
     return () => provider.disconnect()
-  }, [provider])
+  }, [provider, isMounted])
 
   return {
     editor,
