@@ -42,7 +42,7 @@ const NeuronModal = ({ name, closePortal }) => {
       <NeuronIcon size={50} />
 
       <StyledModal>
-        <NeuronModalHeader />
+        <NeuronModalHeader handleNeuronClose={handleNeuronClose} />
 
         <React.Suspense fallback={<LoadingNeuronModal />}>
           <NeuronModalContent />
