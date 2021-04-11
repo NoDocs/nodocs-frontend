@@ -74,10 +74,7 @@ const CreateTeamModal = ({ closePortal }) => {
           industry,
         }
       },
-      onCompleted: ({ createTeam: { team } }) => {
-        console.log(team)
-        closePortal()
-      },
+      onCompleted: () => { closePortal() },
       updater: store => store.invalidateStore()
     })
   }

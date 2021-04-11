@@ -72,7 +72,6 @@ const TeamNeurons = () => {
     subscription: neuronCreatedSubscription,
     variables: { input: {} },
     updater: store => {
-      console.log('heree !!!')
       const neuron = store
         .getRootField('createNeuron')
         .getLinkedRecord('neuron')
