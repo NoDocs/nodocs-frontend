@@ -51,18 +51,6 @@ const DocumentPanel = () => {
       <StyledSeparator />
 
       <IconButton variant="white">
-        <SimilarityIcon size={24} />
-      </IconButton>
-
-      <IconButton variant="white">
-        <SynapsesIcon size={24} />
-      </IconButton>
-
-      <StyledSeparator />
-
-      <CreateComponent />
-
-      <IconButton variant="white">
         <ChatIcon size={24} />
       </IconButton>
     </StyledDocumentPanelContainer>

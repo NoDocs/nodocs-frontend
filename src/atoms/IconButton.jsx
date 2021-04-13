@@ -21,9 +21,14 @@ const StyledButtonContainer = styled.button`
   }
 `
 
-const IconButton = ({ className, title, size, variant = 'black', children, onClick }) => {
+const IconButton = ({ title, size, variant = 'black', children, ...rest }) => {
   return (
-    <StyledButtonContainer size={size} title={title} className={className} variant={variant} onClick={onClick}>
+    <StyledButtonContainer
+      size={size}
+      title={title}
+      variant={variant}
+      {...rest}
+    >
       {children}
     </StyledButtonContainer>
   )

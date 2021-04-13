@@ -34,6 +34,7 @@ const Input = ({
   type,
   onChange,
   value,
+  ...rest
 }) => {
   return (
     <StyledInputContainer className={className}>
@@ -44,6 +45,7 @@ const Input = ({
         type={type}
         value={value}
         onChange={onChange}
+        {...rest}
       />
 
       {icon && (

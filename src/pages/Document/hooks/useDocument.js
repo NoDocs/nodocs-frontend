@@ -63,26 +63,43 @@ const useDocument = () => {
   const { me, document } = useLazyLoadQuery(query, { id: documentId })
   const { isMounted } = useIsMounted()
   const [activeSectionId] = React.useState(getFirstSectionId(document))
-  const [activePageId] = React.useState(getFirstPageId(document))
+  const [activePageId, updateActivePageId] = React.useState(getFirstPageId(document))
+  const [editorState, updateEditorState] = React.useState(getEditorContent({
+    document,
+    activeSectionId,
+    activePageId
+  }))
 
   const [isOnline, toggleIsOnline] = React.useState(false)
-  const [editorState, updateEditorState] = React.useState(getEditorContent({ document, activeSectionId, activePageId }))
   const dispatch = useDispatch()
 
   const [sharedType, provider] = React.useMemo(
     () => {
+      console.log('activePageId', activePageId)
+
       const doc = new Yjs.Doc()
-      const sharedType = doc.getArray('content')
-      const provider = new WebsocketProvider(
+      const newSharedType = doc.getArray('content')
+      const newProvider = new WebsocketProvider(
         process.env.BASE_SHAREDB_WS,
-        document.id,
+        activePageId,
         doc,
         { connect: false }
       )
 
-      return [sharedType, provider]
+      return [newSharedType, newProvider]
     },
-    [document]
+    [activePageId]
+  )
+  
+  React.useEffect(
+    () => {
+      updateEditorState(getEditorContent({
+        document,
+        activeSectionId,
+        activePageId,
+      }))
+    },
+    [activePageId]
   )
 
   const editor = React.useMemo(
@@ -99,11 +116,9 @@ const useDocument = () => {
         )
       )
 
-      return !provider
-        ? enhancedEditor
-        : withCursor(withYjs(enhancedEditor, sharedType), provider.awareness)
+      return withCursor(withYjs(enhancedEditor, sharedType), provider.awareness)
     },
-    [sharedType, provider]
+    []
   )
 
   React.useEffect(
@@ -134,7 +149,7 @@ const useDocument = () => {
 
       return () => provider.disconnect()
     },
-    [provider, isMounted]
+    [provider, activePageId, isMounted]
   )
 
   return {
@@ -143,6 +158,7 @@ const useDocument = () => {
     updateEditorState,
     activeSectionId,
     activePageId,
+    updateActivePageId,
     isOnline,
   }
 }

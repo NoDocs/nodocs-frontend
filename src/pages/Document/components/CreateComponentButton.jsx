@@ -36,11 +36,7 @@ const CreateComponent = () => {
     copyToClipboard(`[[component=${componentId}]]`)
   }
 
-  return (
-    <IconButton variant="white">
-      <NeuronIcon size={24} />
-    </IconButton>
-  )
+  return null
 }
 
 export default CreateComponent

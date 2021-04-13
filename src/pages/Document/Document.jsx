@@ -8,6 +8,8 @@ import useDocument from './hooks/useDocument'
 import DocumentPanel from './DocumentPanel'
 import DocumentLeftPanel from './DocumentLeftPanel'
 import Neuron from './Neuron'
+import InlineToolbar from 'shared/plugins/InlineToolbar'
+import { DocumentContext } from 'contexts'
 
 const StyledDocumentContainer = styled.div`
   display: grid;
@@ -33,7 +35,7 @@ const StyledEditable = styled(Editable)`
 `
 
 const Document = () => {
-  const { editor, editorState, updateEditorState } = useDocument()
+  const { editor, activePageId, updateActivePageId, editorState, updateEditorState } = useDocument()
   const { decorate } = useCursors(editor)
 
   const renderElement = React.useCallback(
@@ -66,27 +68,31 @@ const Document = () => {
 
   const renderLeaf = React.useCallback(
     (props) => <Leaf {...props} />,
-    [decorate]
+    []
   )
 
   return (
-    <StyledDocumentContainer>
-      <Slate
-        editor={editor}
-        value={editorState}
-        onChange={updateEditorState}
-      >
-        <DocumentPanel />
-        <DocumentLeftPanel />
+    <DocumentContext.Provider value={{ activePageId, updateActivePageId }}>
+      <StyledDocumentContainer>
+        <Slate
+          editor={editor}
+          value={editorState}
+          onChange={updateEditorState}
+        >
+          <DocumentPanel />
+          <DocumentLeftPanel />
 
-        <StyledEditable
-          data-start="selection"
-          renderElement={renderElement}
-          renderLeaf={renderLeaf}
-          decorate={decorate}
-        />
-      </Slate>
-    </StyledDocumentContainer>
+          <StyledEditable
+            data-start="selection"
+            renderElement={renderElement}
+            renderLeaf={renderLeaf}
+            decorate={decorate}
+          />
+
+          <InlineToolbar />
+        </Slate>
+      </StyledDocumentContainer>
+    </DocumentContext.Provider>
   )
 }
 
