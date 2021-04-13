@@ -75,8 +75,6 @@ const useDocument = () => {
 
   const [sharedType, provider] = React.useMemo(
     () => {
-      console.log('activePageId', activePageId)
-
       const doc = new Yjs.Doc()
       const newSharedType = doc.getArray('content')
       const newProvider = new WebsocketProvider(
@@ -90,7 +88,7 @@ const useDocument = () => {
     },
     [activePageId]
   )
-  
+
   React.useEffect(
     () => {
       updateEditorState(getEditorContent({
@@ -118,7 +116,7 @@ const useDocument = () => {
 
       return withCursor(withYjs(enhancedEditor, sharedType), provider.awareness)
     },
-    []
+    [provider]
   )
 
   React.useEffect(

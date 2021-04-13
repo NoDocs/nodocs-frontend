@@ -73,7 +73,7 @@ const Document = () => {
 
   return (
     <DocumentContext.Provider value={{ activePageId, updateActivePageId }}>
-      <StyledDocumentContainer>
+      <StyledDocumentContainer key={activePageId}>
         <Slate
           editor={editor}
           value={editorState}
