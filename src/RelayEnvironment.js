@@ -2,6 +2,10 @@ import { Environment, Network, RecordSource, Store, Observable } from 'relay-run
 import jwt_decode from 'jwt-decode'
 import logout from 'utils/logout'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
+import size from 'lodash/fp/size'
+
+import { notificationActions } from 'logic/notification'
+import reduxStore from './store'
 
 const requestAccessToken = async () => {
   try {
@@ -35,6 +39,10 @@ const getAccessToken = async () => {
   }
 }
 
+const errorDescriptions = {
+  'USER_NOT_WHITELISTED': 'Application is in Beta, so you must be invited in order to access the platform. Please contact faraday@nodocs.app',
+}
+
 const fetchQuery = async (operation, variables, cacheConfig = {}) => {
   const accessToken = await getAccessToken()
 
@@ -59,7 +67,19 @@ const fetchQuery = async (operation, variables, cacheConfig = {}) => {
     credentials: 'include',
   })
     .then(res => res.json())
-    .catch(console.log)
+    .then((response) => {
+      if (size(response.errors)) {
+        const [{ message }] = response.errors
+        const errorDescription = errorDescriptions[message] || message
+        throw new Error(errorDescription)
+      }
+
+      return response
+    })
+    .catch(error => reduxStore.dispatch(notificationActions.notify({
+      type: 'error',
+      message: error.toString()
+    })))
 }
 
 const subscriptionClient = new SubscriptionClient(process.env.SUBSCRIPTION_SERVER_WS, { reconnect: true })

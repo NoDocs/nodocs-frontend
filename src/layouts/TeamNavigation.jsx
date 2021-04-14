@@ -44,17 +44,15 @@ const currentCompanyQuery = graphql`
       currentCompany {
         id
       }
+      currentTeam {
+        id
+      }
     }
   }
 `
 
 const teamsQuery = graphql`
   query TeamNavigationTeamsQuery($companyId: String!) {
-    me {
-      currentTeam {
-        id
-      }
-    }
     teams (companyId: $companyId) {
       id
       name
@@ -74,11 +72,11 @@ const createTeamMutation = graphql`
 
 const TeamNavigation = () => {
   const [createTeam] = useMutation(createTeamMutation)
-  const { me: { currentCompany } } = useLazyLoadQuery(currentCompanyQuery)
-  const { teams, me } = useLazyLoadQuery(teamsQuery, { companyId: currentCompany.id })
+  const { me: { currentCompany, currentTeam } } = useLazyLoadQuery(currentCompanyQuery, {}, { fetchPolicy: localStorage.getItem('meFetchPolicy') })
+  const { teams } = useLazyLoadQuery(teamsQuery, { companyId: currentCompany.id })
 
   const chooseTeam = (team) => () => {
-    if (me.currentTeam.id === team.id) {
+    if (currentTeam.id === team.id) {
       return
     }
 
@@ -101,13 +99,18 @@ const TeamNavigation = () => {
     })
   }
 
+  React.useEffect(
+    () => { localStorage.removeItem('meFetchPolicy') },
+    []
+  )
+
   return (
     <StyledTeamNavigationContainer>
       <StyledGridContainer>
         {teams.map(team => (
           <StyledTeam
             key={team.id}
-            active={me.currentTeam.id === team.id}
+            active={currentTeam.id === team.id}
             onClick={chooseTeam(team)}
           >
             <Title color="active">{team.name.slice(0, 1)}</Title>

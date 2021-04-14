@@ -13,7 +13,10 @@ export type TeamNavigationCompanyQueryResponse = {|
   +me: ?{|
     +currentCompany: ?{|
       +id: string
-    |}
+    |},
+    +currentTeam: ?{|
+      +id: string
+    |},
   |}
 |};
 export type TeamNavigationCompanyQuery = {|
@@ -29,6 +32,9 @@ query TeamNavigationCompanyQuery {
     currentCompany {
       id
     }
+    currentTeam {
+      id
+    }
     id
   }
 }
@@ -42,16 +48,27 @@ var v0 = {
   "name": "id",
   "storageKey": null
 },
-v1 = {
+v1 = [
+  (v0/*: any*/)
+],
+v2 = {
   "alias": null,
   "args": null,
   "concreteType": "Company",
   "kind": "LinkedField",
   "name": "currentCompany",
   "plural": false,
-  "selections": [
-    (v0/*: any*/)
-  ],
+  "selections": (v1/*: any*/),
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "Team",
+  "kind": "LinkedField",
+  "name": "currentTeam",
+  "plural": false,
+  "selections": (v1/*: any*/),
   "storageKey": null
 };
 return {
@@ -69,7 +86,8 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
-          (v1/*: any*/)
+          (v2/*: any*/),
+          (v3/*: any*/)
         ],
         "storageKey": null
       }
@@ -91,7 +109,8 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
-          (v1/*: any*/),
+          (v2/*: any*/),
+          (v3/*: any*/),
           (v0/*: any*/)
         ],
         "storageKey": null
@@ -99,16 +118,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "f89657004045ad1add7cf774981892a6",
+    "cacheID": "321b75a3d5a1d7dfb5a5ac55eda123d3",
     "id": null,
     "metadata": {},
     "name": "TeamNavigationCompanyQuery",
     "operationKind": "query",
-    "text": "query TeamNavigationCompanyQuery {\n  me {\n    currentCompany {\n      id\n    }\n    id\n  }\n}\n"
+    "text": "query TeamNavigationCompanyQuery {\n  me {\n    currentCompany {\n      id\n    }\n    currentTeam {\n      id\n    }\n    id\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '02edfe47e4caf2761f9537533006df6e';
+(node/*: any*/).hash = 'ab50d716847daa100f9fa6596b17a54f';
 
 module.exports = node;

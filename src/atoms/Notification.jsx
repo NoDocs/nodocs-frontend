@@ -10,6 +10,7 @@ const StyledContainer = styled.div`
   background-color: ${({ error }) => error ? 'red' : 'green'};
   padding: 10px;
   border-radius: 5px;
+  max-width: 300px;
   margin-top: 10px;
   color: #fff;
 `
@@ -18,9 +19,10 @@ const Notification = ({ type, message, id }) => {
   const dispatch = useDispatch()
 
   React.useEffect(() => {
-    const timer = setTimeout(() => {
-      dispatch(notificationActions.deleteNotification({ id }))
-    }, 2000)
+    const timer = setTimeout(
+      () => { dispatch(notificationActions.deleteNotification({ id })) },
+      3000
+    )
 
     return () => clearTimeout(timer)
   }, [])

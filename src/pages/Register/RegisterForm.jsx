@@ -85,14 +85,15 @@ const RegisterForm = React.forwardRef((_, ref) => {
           .getRoot()
           .getLinkedRecord('me')
           .getValue('token')
-        const currentCompanyId = store
+        const currentCompany = store
           .getRoot()
           .getLinkedRecord('me')
           .getLinkedRecord('currentCompany')
-          .getValue('id')
 
+        currentCompany
+          ? localStorage.setItem('currentCompany', currentCompany.getValue('id'))
+          : localStorage.setItem('meFetchPolicy', 'network-only')
         localStorage.setItem('token', token)
-        localStorage.setItem('currentCompany', currentCompanyId)
         history.push('/onboarding/start')
       }
     })
