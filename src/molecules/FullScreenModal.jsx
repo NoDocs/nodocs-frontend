@@ -7,8 +7,9 @@ import CloseIcon from 'assets/close.svg'
 import IconButton from 'atoms/IconButton'
 
 const StyledContainer = styled.div`
-  min-height: 100vh;
-  overflow: auto;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,7 +17,6 @@ const StyledContainer = styled.div`
   position: absolute;
   top: 0px;
   left: 0px;
-  width: 100%;
   z-index: 100;
 `
 

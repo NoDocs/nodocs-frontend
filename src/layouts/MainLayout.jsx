@@ -29,6 +29,10 @@ const StyledContainer = styled.div`
   height: 100vh;
 `
 
+const StyledChildContainer = styled.div`
+  overflow-y: auto;
+`
+
 const MainLayout = ({ children }) => {
   const [toggled, toggle] = React.useState(false)
   const { openPortal } = React.useContext(PortalContext)
@@ -51,7 +55,10 @@ const MainLayout = ({ children }) => {
         {toggled && <LeftMenu toggleNavbar={toggle} />}
 
         <NavBar toggleNavbar={toggle} navbarToggled={toggled} />
-        <div>{children}</div>
+
+        <StyledChildContainer>
+          {children}
+        </StyledChildContainer>
       </StyledContainer>
 
       <GlobalStyles />

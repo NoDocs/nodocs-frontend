@@ -24,6 +24,7 @@ const StyledModal = styled.div`
   flex: 1;
   height: 100%;
   padding: 20px 30px;
+  box-sizing: border-box;
 `
 
 const NeuronModal = ({ name, closePortal }) => {
