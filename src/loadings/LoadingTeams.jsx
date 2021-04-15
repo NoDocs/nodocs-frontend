@@ -1,6 +1,7 @@
 import React from 'react'
-import ContentLoader from 'react-content-loader'
 import styled from 'styled-components'
+
+import LoaderLight from 'assets/loader-light.svg'
 
 const StyledTeamNavigationContainer = styled.div`
   width: 72px;
@@ -16,17 +17,7 @@ const StyledTeamNavigationContainer = styled.div`
 const LoadingTeams = () => {
   return (
     <StyledTeamNavigationContainer>
-      <ContentLoader 
-        speed={1}
-        width={40}
-        height={90}
-        viewBox="0 0 40 90"
-        backgroundColor="gray"
-        foregroundColor="white"
-      >
-        <rect x="0" y="0" width="40" height="40" />
-        <rect x="0" y="50" width="40" height="40" />
-      </ContentLoader>
+      <LoaderLight size={24} />
     </StyledTeamNavigationContainer>
   )
 }
