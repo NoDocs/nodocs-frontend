@@ -15,7 +15,6 @@ import withNodeId from '../plugins/withNodeId'
 import withDetectNeuronInsert from '../plugins/withDetectNeuronInsert'
 import withEditableNeuronVoid from '../plugins/withEditableNeuronVoid'
 import useIsMounted from 'hooks/useIsMounted'
-import shortid from 'shortid'
 
 const query = graphql`
   query useDocumentQuery ($id: String!) {
@@ -132,12 +131,7 @@ const useDocument = () => {
     () => {
       const sync = (synced) => {
         if (synced && sharedType.length === 0) {
-          const initialState = [{
-            type: 'paragraph',
-            id: shortid.generate(),
-            children: [{ text: '' }]
-          }]
-          toSharedType(sharedType, initialState)
+          toSharedType(sharedType, editorState)
         }
       }
 
