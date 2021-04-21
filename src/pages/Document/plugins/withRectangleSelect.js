@@ -5,7 +5,6 @@ const withSelectRectangle = (editor) => {
 
   const onStart = () => {
     if (editor.selectedNodeIds) {
-      console.log(editor.selectedNodeIds)
       editor
         .selectedNodeIds
         .map(nodeId => document.querySelector(`[data-node-id="${nodeId}"]`))

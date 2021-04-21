@@ -43,7 +43,7 @@ const errorDescriptions = {
   'USER_NOT_WHITELISTED': 'Application is in Beta, so you must be invited in order to access the platform. Please contact faraday@nodocs.app',
 }
 
-const fetchQuery = async (operation, variables, cacheConfig = {}) => {
+const fetchQuery = async (operation, variables, cacheConfig = {}, uploadables) => {
   const accessToken = await getAccessToken()
 
   // Instead of making an actual HTTP request to the API, use
@@ -57,13 +57,25 @@ const fetchQuery = async (operation, variables, cacheConfig = {}) => {
     return Promise.resolve(cacheConfig.payload)
   }
 
+  let body = JSON.stringify({ query: operation.text, variables })
+
+  if (uploadables) {
+    body = new FormData()
+    body.append('query', operation.text)
+    body.append('variables', JSON.stringify(variables))
+
+    Object
+      .keys(uploadables)
+      .forEach(key => { body.append(key, uploadables[key]) })
+  }
+
   return fetch(`${process.env.BASE_API_URL}/graphql`, {
     method: 'POST',
     headers: {
-      'content-type': 'application/json',
+      ...(uploadables ? {} : { 'content-type': 'application/json' }),
       'Authorization': `Bearer ${accessToken}`
     },
-    body: JSON.stringify({ query: operation.text, variables }),
+    body,
     credentials: 'include',
   })
     .then(res => res.json())

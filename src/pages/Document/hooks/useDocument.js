@@ -14,6 +14,7 @@ import { documentActions } from 'logic/document'
 import withNodeId from '../plugins/withNodeId'
 import withDetectNeuronInsert from '../plugins/withDetectNeuronInsert'
 import withEditableNeuronVoid from '../plugins/withEditableNeuronVoid'
+import withInsertImage from '../plugins/withInsertImage'
 import useIsMounted from 'hooks/useIsMounted'
 
 const query = graphql`
@@ -104,10 +105,12 @@ const useDocument = () => {
     () => {
       const enhancedEditor = withDetectNeuronInsert(
         withEditableNeuronVoid(
-          withNodeId(
-            withReact(
-              withHistory(
-                createEditor()
+          withInsertImage(
+            withNodeId(
+              withReact(
+                withHistory(
+                  createEditor()
+                )
               )
             )
           )

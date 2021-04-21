@@ -228,6 +228,9 @@ type Mutation {
 
   # Create team
   createTeam(input: CreateTeamInput!): CreateTeamPayload
+
+  # Upload file
+  uploadFile(input: UploadFileInput!): UploadFilePayload
 }
 
 type SignInPayload {
@@ -387,6 +390,28 @@ input CreateTeamInput {
   industry: String!
   clientMutationId: String
 }
+
+type UploadFilePayload {
+  file: File
+  clientMutationId: String
+}
+
+type File implements Node {
+  # The ID of an object
+  id: ID!
+  name: String
+  url: String
+  createdAt(format: String): String
+  updatedAt(format: String): String
+}
+
+input UploadFileInput {
+  documentId: String!
+  file: file
+  clientMutationId: String
+}
+
+scalar file
 
 type Subscription {
   createDocument(input: CreateDocumentSubscriptionInput!): CreateDocumentSubscriptionPayload
