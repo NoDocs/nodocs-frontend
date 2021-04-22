@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Editable, ReactEditor, Slate } from 'slate-react'
+import { Editable, Slate } from 'slate-react'
 import { useCursors } from 'slate-yjs'
 
 import DeleteIcon from 'assets/delete.svg'
@@ -32,6 +32,32 @@ const Neuron = React.forwardRef(({ id: neuronId, attributes }, ref) => {
   } = useNeuron({ neuronId })
   const { decorate } = useCursors(editor)
 
+  const renderElement = React.useCallback(
+    ({ attributes, element, children }) => {
+      if (element.type === 'image') {
+        return (
+          <img
+            src={`https://storage.googleapis.com/dev-nodocs-files/${element.src}`}
+            alt={element.name}
+            width="100%"
+            {...attributes}
+          />
+        )
+      }
+
+      return (
+        <div
+          data-node-id={element.id}
+          style={{ position: 'relative', margin: 0 }}
+          {...attributes}
+        >
+          {children}
+        </div>
+      )
+    },
+    []
+  )
+
   const renderLeaf = React.useCallback(
     (props) => <Leaf {...props} />,
     [decorate]
@@ -59,7 +85,11 @@ const Neuron = React.forwardRef(({ id: neuronId, attributes }, ref) => {
             renderLeaf={renderLeaf}
             decorate={decorate}
           >
-            <Editable renderLeaf={renderLeaf} decorate={decorate} />
+            <Editable
+              renderElement={renderElement}
+              renderLeaf={renderLeaf}
+              decorate={decorate}
+            />
           </Slate>
         </StyledNeuronContainer>
       )}

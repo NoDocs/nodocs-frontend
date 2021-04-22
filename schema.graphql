@@ -156,6 +156,7 @@ type Neuron implements Node {
   # The ID of an object
   id: ID!
   name: String
+  type: String
   neuronId: String
   content: String
   owner: User
@@ -229,8 +230,8 @@ type Mutation {
   # Create team
   createTeam(input: CreateTeamInput!): CreateTeamPayload
 
-  # Upload file
-  uploadFile(input: UploadFileInput!): UploadFilePayload
+  # create asset neuron
+  createAsset(input: CreateAssetInput!): CreateAssetPayload
 }
 
 type SignInPayload {
@@ -391,22 +392,13 @@ input CreateTeamInput {
   clientMutationId: String
 }
 
-type UploadFilePayload {
-  file: File
+type CreateAssetPayload {
+  neuron: Neuron
   clientMutationId: String
 }
 
-type File implements Node {
-  # The ID of an object
-  id: ID!
-  name: String
-  url: String
-  createdAt(format: String): String
-  updatedAt(format: String): String
-}
-
-input UploadFileInput {
-  documentId: String!
+input CreateAssetInput {
+  pageId: String!
   file: file
   clientMutationId: String
 }

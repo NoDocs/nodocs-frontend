@@ -4,12 +4,12 @@ function commit(environment, input, file) {
   return new Promise((resolve, reject) => {
     commitMutation(environment, {
       mutation: graphql`
-        mutation attachFileToPageMutation($input: UploadFileInput!) {
-          uploadFile(input: $input) {
+        mutation createAssetMutation($input: CreateAssetInput!) {
+          createAsset(input: $input) {
             clientMutationId
-            file {
-              name
-              url
+            neuron {
+              id
+              neuronId
             }
           }
         }

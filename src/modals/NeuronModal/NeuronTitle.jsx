@@ -16,6 +16,7 @@ const StyledInput = styled.input`
   border: none;
   outline: none;
   color: rgba(0, 0, 0, 0.5);
+  width: 100%;
 `
 
 const mutation = graphql`

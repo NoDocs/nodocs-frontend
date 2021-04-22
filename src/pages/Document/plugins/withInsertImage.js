@@ -1,16 +1,17 @@
 import { Transforms } from 'slate'
+import { ReactEditor } from 'slate-react'
+
+import store from 'store'
 import RelayEnvironment from '../../../RelayEnvironment'
-import attachFileToPage from '../mutations/attachFileToPage'
+import createAssetMutation from '../mutations/createAssetMutation'
 
 const withInsertImage = (editor) => {
   const { insertData } = editor
 
   editor.insertData = (data) => {
-    const documentId = window
-      .location
-      .pathname
-      .replace('/d/', '')
-    const text = data.getData('text/plain')
+    const pageId = store
+      .getState()
+      .getIn(['document', 'activePageId'])
     const { files } = data
 
     if (files && files.length > 0) {
@@ -24,9 +25,15 @@ const withInsertImage = (editor) => {
               return
             }
 
-            const { uploadFile: { file: uploadedFile } } = await attachFileToPage.commit(RelayEnvironment, { documentId }, file)
+            const response = await createAssetMutation.commit(RelayEnvironment, { pageId }, file)
+            const { createAsset: { neuron: neuron } } = response
 
-            Transforms.insertNodes(editor, { type: 'image', url: uploadedFile.url, children: [{ text: '' }] })
+            Transforms.insertNodes(editor, {
+              type: 'neuron',
+              id: neuron.neuronId,
+              children: [{ text: '' }],
+            })
+            ReactEditor.blur(editor)
           })
 
           reader.readAsDataURL(file)
