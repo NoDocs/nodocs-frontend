@@ -29,6 +29,16 @@ const NeuronContent = () => {
           )
         }
 
+        case 'image': {
+          return (
+            <img
+              src={`https://storage.googleapis.com/dev-nodocs-files/${element.src}`}
+              alt={element.name}
+              width="100%"
+            />
+          )
+        }
+
         default: {
           return <p {...attributes}>{children}</p>
         }

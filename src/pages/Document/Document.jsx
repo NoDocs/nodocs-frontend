@@ -15,8 +15,7 @@ const StyledDocumentContainer = styled.div`
   display: grid;
   grid-template-areas:
     "document-panel document-panel"
-    "document-left-panel document-content"
-  ;
+    "document-left-panel document-content";
   grid-template-rows: 45px;
   grid-template-columns: 250px auto;
   grid-row-gap: 20px;
@@ -40,16 +39,6 @@ const Document = () => {
 
   const renderElement = React.useCallback(
     ({ attributes: { ref, ...otherAttributes }, element, children }) => {
-      if (element.type === 'image') {
-        return (
-          <img
-            src={`https://storage.googleapis.com/dev-nodocs-files/${element.url}`}
-            alt={element.name}
-            width="100%"
-          />
-        )
-      }
-
       if (element.type === 'neuron') {
         return (
           <React.Suspense fallback={<div>Loading...</div>}>
