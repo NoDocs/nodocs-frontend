@@ -20,6 +20,9 @@ const query = graphql`
       content
       neuronId
       name
+      file {
+        url
+      }
     }
     me {
       color
@@ -80,6 +83,7 @@ const useNeuronModal = () => {
     editorState,
     updateEditorState,
     isOnline,
+    neuron,
   }
 }
 

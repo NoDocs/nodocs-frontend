@@ -8,6 +8,7 @@ import DeleteIcon from 'assets/delete.svg'
 import UndoIcon from 'assets/undo.svg'
 import RedoIcon from 'assets/redo.svg'
 import IconButton from 'atoms/IconButton'
+import FileUploaderButton from 'atoms/FileUploaderButton'
 import Leaf from 'shared/Leaf'
 import Popup from 'molecules/Popup'
 import useNeuron from './hooks/useNeuron'
@@ -18,10 +19,21 @@ const StyledNeuronContainer = styled.div`
   display: flex;
   border-radius: 0 5px 5px 0;
   border: 2px solid rgb(123 97 255 / 50%);
+  position: relative;
+`
 
-  & div:first-child {
-    width: 100%;
-  }
+const StyledPopup = styled(Popup)`
+  padding: 0px;
+  borderRadius: 5px 10px;
+`
+
+const StyledFileUploaderButton = styled(FileUploaderButton)`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  background-color: white;
+  display: inline-block;
 `
 
 const Neuron = React.forwardRef(({ id: neuronId, attributes }, ref) => {
@@ -29,6 +41,8 @@ const Neuron = React.forwardRef(({ id: neuronId, attributes }, ref) => {
     editorState,
     updateEditorState,
     editor,
+    neuron,
+    switchImage
   } = useNeuron({ neuronId })
   const { decorate } = useCursors(editor)
 
@@ -36,12 +50,18 @@ const Neuron = React.forwardRef(({ id: neuronId, attributes }, ref) => {
     ({ attributes, element, children }) => {
       if (element.type === 'image') {
         return (
-          <img
-            src={`https://storage.googleapis.com/dev-nodocs-files/${element.src}`}
-            alt={element.name}
-            width="100%"
+          <div
+            contentEditable={false}
+            style={{ position: 'relative', userSelect: 'none' }}
             {...attributes}
-          />
+          >
+            <StyledFileUploaderButton onChange={switchImage}>Switch image</StyledFileUploaderButton>
+            <img
+              src={`https://storage.googleapis.com/dev-nodocs-files/${neuron.file.url}`}
+              alt={element.name}
+              width="100%"
+            />
+          </div>
         )
       }
 
@@ -55,7 +75,7 @@ const Neuron = React.forwardRef(({ id: neuronId, attributes }, ref) => {
         </div>
       )
     },
-    []
+    [neuron]
   )
 
   const renderLeaf = React.useCallback(
@@ -64,10 +84,9 @@ const Neuron = React.forwardRef(({ id: neuronId, attributes }, ref) => {
   )
 
   return (
-    <Popup
+    <StyledPopup
       on="hover"
       name={`neuron-${neuronId}-options`}
-      style={{ padding: 0, borderRadius: '5px 10px' }}
       fullWidth={false}
       direction="TOP_RIGHT_INNER"
       trigger={(
@@ -85,27 +104,27 @@ const Neuron = React.forwardRef(({ id: neuronId, attributes }, ref) => {
             renderLeaf={renderLeaf}
             decorate={decorate}
           >
-            <Editable
-              renderElement={renderElement}
-              renderLeaf={renderLeaf}
-              decorate={decorate}
-            />
+            <Editable renderElement={renderElement} renderLeaf={renderLeaf} decorate={decorate} />
           </Slate>
         </StyledNeuronContainer>
       )}
     >
-      <IconButton title="Add empty line before" variant="white">
-        <UndoIcon />
-      </IconButton>
+      {neuron.type === 'text' && (
+        <React.Fragment>
+          <IconButton title="Add empty line before" variant="white">
+            <UndoIcon />
+          </IconButton>
 
-      <IconButton title="Add empty line after" variant="white">
-        <RedoIcon />
-      </IconButton>
+          <IconButton title="Add empty line after" variant="white">
+            <RedoIcon />
+          </IconButton>
 
-      <IconButton variant="white">
-        <DeleteIcon />
-      </IconButton>
-    </Popup>
+          <IconButton variant="white">
+            <DeleteIcon />
+          </IconButton>
+        </React.Fragment>
+      )}
+    </StyledPopup>
   )
 })
 

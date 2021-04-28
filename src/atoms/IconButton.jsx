@@ -39,7 +39,7 @@ IconButton.propTypes = {
   variant: PropTypes.string,
   size: PropTypes.number,
   title: PropTypes.string,
-  children: PropTypes.element,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   onClick: PropTypes.func,
 }
 

@@ -3,7 +3,9 @@ const withEditableNeuronVoid = (editor) => {
 
   editor.isVoid = element => element.type === 'neuron'
     ? true
-    : isVoid(element)
+    : element.type === 'image'
+      ? true
+      : isVoid(element)
 
   return editor
 }

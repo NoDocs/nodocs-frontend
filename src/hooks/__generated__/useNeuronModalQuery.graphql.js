@@ -17,6 +17,9 @@ export type useNeuronModalQueryResponse = {|
     +content: ?string,
     +neuronId: ?string,
     +name: ?string,
+    +file: ?{|
+      +url: ?string
+    |},
   |},
   +me: ?{|
     +color: ?string,
@@ -39,6 +42,10 @@ query useNeuronModalQuery(
     content
     neuronId
     name
+    file {
+      url
+      id
+    }
   }
   me {
     color
@@ -56,60 +63,56 @@ var v0 = [
     "name": "neuronId"
   }
 ],
-v1 = {
+v1 = [
+  {
+    "kind": "Variable",
+    "name": "neuronId",
+    "variableName": "neuronId"
+  }
+],
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v2 = {
+v3 = {
   "alias": null,
-  "args": [
-    {
-      "kind": "Variable",
-      "name": "neuronId",
-      "variableName": "neuronId"
-    }
-  ],
-  "concreteType": "Neuron",
-  "kind": "LinkedField",
-  "name": "neuron",
-  "plural": false,
-  "selections": [
-    (v1/*: any*/),
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "content",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "neuronId",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "name",
-      "storageKey": null
-    }
-  ],
+  "args": null,
+  "kind": "ScalarField",
+  "name": "content",
   "storageKey": null
 },
-v3 = {
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "neuronId",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "name",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "url",
+  "storageKey": null
+},
+v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "color",
   "storageKey": null
 },
-v4 = {
+v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -123,7 +126,33 @@ return {
     "metadata": null,
     "name": "useNeuronModalQuery",
     "selections": [
-      (v2/*: any*/),
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "Neuron",
+        "kind": "LinkedField",
+        "name": "neuron",
+        "plural": false,
+        "selections": [
+          (v2/*: any*/),
+          (v3/*: any*/),
+          (v4/*: any*/),
+          (v5/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "File",
+            "kind": "LinkedField",
+            "name": "file",
+            "plural": false,
+            "selections": [
+              (v6/*: any*/)
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      },
       {
         "alias": null,
         "args": null,
@@ -132,8 +161,8 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
-          (v3/*: any*/),
-          (v4/*: any*/)
+          (v7/*: any*/),
+          (v8/*: any*/)
         ],
         "storageKey": null
       }
@@ -147,7 +176,34 @@ return {
     "kind": "Operation",
     "name": "useNeuronModalQuery",
     "selections": [
-      (v2/*: any*/),
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "Neuron",
+        "kind": "LinkedField",
+        "name": "neuron",
+        "plural": false,
+        "selections": [
+          (v2/*: any*/),
+          (v3/*: any*/),
+          (v4/*: any*/),
+          (v5/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "File",
+            "kind": "LinkedField",
+            "name": "file",
+            "plural": false,
+            "selections": [
+              (v6/*: any*/),
+              (v2/*: any*/)
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      },
       {
         "alias": null,
         "args": null,
@@ -156,25 +212,25 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
-          (v3/*: any*/),
-          (v4/*: any*/),
-          (v1/*: any*/)
+          (v7/*: any*/),
+          (v8/*: any*/),
+          (v2/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "1aec69fe8e371cb61acd799ad731a3a7",
+    "cacheID": "aa9bc594c3e852b32da049b167db00c2",
     "id": null,
     "metadata": {},
     "name": "useNeuronModalQuery",
     "operationKind": "query",
-    "text": "query useNeuronModalQuery(\n  $neuronId: String!\n) {\n  neuron(neuronId: $neuronId) {\n    id\n    content\n    neuronId\n    name\n  }\n  me {\n    color\n    fullName\n    id\n  }\n}\n"
+    "text": "query useNeuronModalQuery(\n  $neuronId: String!\n) {\n  neuron(neuronId: $neuronId) {\n    id\n    content\n    neuronId\n    name\n    file {\n      url\n      id\n    }\n  }\n  me {\n    color\n    fullName\n    id\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'd3511fc34136301e869aeb1feb5c55c1';
+(node/*: any*/).hash = '7dfdd1686df417c15c3ef360aca94ca1';
 
 module.exports = node;

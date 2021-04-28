@@ -14,9 +14,14 @@ export type useNeuronQueryVariables = {|
 export type useNeuronQueryResponse = {|
   +neuron: ?{|
     +id: string,
+    +type: ?string,
     +content: ?string,
     +neuronId: ?string,
     +name: ?string,
+    +file: ?{|
+      +id: string,
+      +url: ?string,
+    |},
   |},
   +me: ?{|
     +color: ?string,
@@ -36,9 +41,14 @@ query useNeuronQuery(
 ) {
   neuron(neuronId: $neuronId) {
     id
+    type
     content
     neuronId
     name
+    file {
+      id
+      url
+    }
   }
   me {
     color
@@ -82,6 +92,13 @@ v2 = {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
+      "name": "type",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
       "name": "content",
       "storageKey": null
     },
@@ -97,6 +114,25 @@ v2 = {
       "args": null,
       "kind": "ScalarField",
       "name": "name",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "File",
+      "kind": "LinkedField",
+      "name": "file",
+      "plural": false,
+      "selections": [
+        (v1/*: any*/),
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "url",
+          "storageKey": null
+        }
+      ],
       "storageKey": null
     }
   ],
@@ -165,16 +201,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "d0334d8e69cd881449ba51330122c6a5",
+    "cacheID": "02e120210bbd3cfe71d488d989a56514",
     "id": null,
     "metadata": {},
     "name": "useNeuronQuery",
     "operationKind": "query",
-    "text": "query useNeuronQuery(\n  $neuronId: String!\n) {\n  neuron(neuronId: $neuronId) {\n    id\n    content\n    neuronId\n    name\n  }\n  me {\n    color\n    fullName\n    id\n  }\n}\n"
+    "text": "query useNeuronQuery(\n  $neuronId: String!\n) {\n  neuron(neuronId: $neuronId) {\n    id\n    type\n    content\n    neuronId\n    name\n    file {\n      id\n      url\n    }\n  }\n  me {\n    color\n    fullName\n    id\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '044f063612caab233726866f82a93951';
+(node/*: any*/).hash = '7d2cfdf888ee55ea7e9b6fd2c361dc48';
 
 module.exports = node;

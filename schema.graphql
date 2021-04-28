@@ -163,9 +163,19 @@ type Neuron implements Node {
   pages: [Page]
   team: [Team]
   company: [Company]
+  file: File
   createdAt(format: String): String
   updatedAt(format: String): String
   deletedAt(format: String): String
+}
+
+type File implements Node {
+  # The ID of an object
+  id: ID!
+  name: String
+  url: String
+  createdAt(format: String): String
+  updatedAt(format: String): String
 }
 
 # A connection to a list of items.
@@ -232,6 +242,9 @@ type Mutation {
 
   # create asset neuron
   createAsset(input: CreateAssetInput!): CreateAssetPayload
+
+  # switch asset
+  switchAsset(input: SwitchAssetInput!): SwitchAssetPayload
 }
 
 type SignInPayload {
@@ -405,9 +418,23 @@ input CreateAssetInput {
 
 scalar file
 
+type SwitchAssetPayload {
+  neuron: Neuron
+  clientMutationId: String
+}
+
+input SwitchAssetInput {
+  neuronId: String!
+  file: newFile
+  clientMutationId: String
+}
+
+scalar newFile
+
 type Subscription {
   createDocument(input: CreateDocumentSubscriptionInput!): CreateDocumentSubscriptionPayload
   createNeuron(input: CreateNeuronSubscriptionInput!): CreateNeuronSubscriptionPayload
+  switchAsset(input: SwitchAssetSubscriptionInput!): SwitchAssetSubscriptionPayload
 }
 
 type CreateDocumentSubscriptionPayload {
@@ -425,5 +452,14 @@ type CreateNeuronSubscriptionPayload {
 }
 
 input CreateNeuronSubscriptionInput {
+  clientSubscriptionId: String
+}
+
+type SwitchAssetSubscriptionPayload {
+  neuron: Neuron
+  clientSubscriptionId: String
+}
+
+input SwitchAssetSubscriptionInput {
   clientSubscriptionId: String
 }

@@ -15,7 +15,7 @@ const StyledEditable = styled(Editable)`
 `
 
 const NeuronContent = () => {
-  const { editor, editorState, updateEditorState } = useNeuronModal()
+  const { editor, editorState, updateEditorState, neuron } = useNeuronModal()
   const { decorate } = useCursors(editor)
 
   const renderElement = React.useCallback(
@@ -32,7 +32,7 @@ const NeuronContent = () => {
         case 'image': {
           return (
             <img
-              src={`https://storage.googleapis.com/dev-nodocs-files/${element.src}`}
+              src={`https://storage.googleapis.com/dev-nodocs-files/${neuron.file.url}`}
               alt={element.name}
               width="100%"
             />
