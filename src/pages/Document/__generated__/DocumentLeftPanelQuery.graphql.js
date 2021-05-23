@@ -13,13 +13,9 @@ export type DocumentLeftPanelQueryVariables = {|
 |};
 export type DocumentLeftPanelQueryResponse = {|
   +document: ?{|
-    +sections: ?$ReadOnlyArray<?{|
+    +pages: ?$ReadOnlyArray<?{|
       +id: string,
       +title: ?string,
-      +pages: ?$ReadOnlyArray<?{|
-        +id: string,
-        +title: ?string,
-      |}>,
     |}>
   |}
 |};
@@ -35,13 +31,9 @@ query DocumentLeftPanelQuery(
   $id: String!
 ) {
   document(id: $id) {
-    sections {
+    pages {
       id
       title
-      pages {
-        id
-        title
-      }
     }
     id
   }
@@ -73,31 +65,17 @@ v2 = {
 v3 = {
   "alias": null,
   "args": null,
-  "kind": "ScalarField",
-  "name": "title",
-  "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "Section",
+  "concreteType": "Page",
   "kind": "LinkedField",
-  "name": "sections",
+  "name": "pages",
   "plural": true,
   "selections": [
     (v2/*: any*/),
-    (v3/*: any*/),
     {
       "alias": null,
       "args": null,
-      "concreteType": "Page",
-      "kind": "LinkedField",
-      "name": "pages",
-      "plural": true,
-      "selections": [
-        (v2/*: any*/),
-        (v3/*: any*/)
-      ],
+      "kind": "ScalarField",
+      "name": "title",
       "storageKey": null
     }
   ],
@@ -118,7 +96,7 @@ return {
         "name": "document",
         "plural": false,
         "selections": [
-          (v4/*: any*/)
+          (v3/*: any*/)
         ],
         "storageKey": null
       }
@@ -140,7 +118,7 @@ return {
         "name": "document",
         "plural": false,
         "selections": [
-          (v4/*: any*/),
+          (v3/*: any*/),
           (v2/*: any*/)
         ],
         "storageKey": null
@@ -148,16 +126,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "748edac3fdc2251ed11b2a1ab05ab011",
+    "cacheID": "8d1865456d5405d56e1c2438137fdad7",
     "id": null,
     "metadata": {},
     "name": "DocumentLeftPanelQuery",
     "operationKind": "query",
-    "text": "query DocumentLeftPanelQuery(\n  $id: String!\n) {\n  document(id: $id) {\n    sections {\n      id\n      title\n      pages {\n        id\n        title\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query DocumentLeftPanelQuery(\n  $id: String!\n) {\n  document(id: $id) {\n    pages {\n      id\n      title\n    }\n    id\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '1c4a34b08bf85e72d7bdad5ec75af6c8';
+(node/*: any*/).hash = '6929bc83ec1bd2b3125886caead55fb6';
 
 module.exports = node;

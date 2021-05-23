@@ -115,6 +115,7 @@ module.exports = {
       hooks: path.resolve(__dirname, 'src/hooks'),
       utils: path.resolve(__dirname, 'src/utils'),
       store: path.resolve(__dirname, 'src/store'),
+      RelayEnvironment: path.resolve(__dirname, 'src/RelayEnvironment'),
       atoms: path.resolve(__dirname, 'src/atoms'),
       molecules: path.resolve(__dirname, 'src/molecules'),
       services: path.resolve(__dirname, 'src/services'),

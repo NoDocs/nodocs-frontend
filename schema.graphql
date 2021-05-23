@@ -104,7 +104,7 @@ type UserEdge {
 type Document implements Node {
   # The ID of an object
   id: ID!
-  sections: [Section]
+  pages: [Page]
   name: String
   owner: User
   company: Company
@@ -113,20 +113,11 @@ type Document implements Node {
   updatedAt(format: String): String
 }
 
-type Section implements Node {
-  # The ID of an object
-  id: ID!
-  sectionId: String
-  pages: [Page]
-  title: String
-}
-
 type Page implements Node {
   # The ID of an object
   id: ID!
   pageId: String
   title: String
-  section: Section
   content: String
   creator: User
   createdAt(format: String): String
@@ -216,8 +207,8 @@ type Mutation {
   # Create neuron
   createNeuron(input: CreateNeuronInput!): CreateNeuronPayload
 
-  # Attach neuron to page
-  attachNeuronToPage(input: AttachNeuronToPageInput!): AttachNeuronToPagePayload
+  # Attach neuron to document
+  attachNeuronToDocument(input: AttachNeuronToDocumentInput!): AttachNeuronToDocumentPayload
 
   # Update neuron
   updateNeuron(input: UpdateNeuronInput!): UpdateNeuronPayload
@@ -316,14 +307,14 @@ input CreateNeuronInput {
   clientMutationId: String
 }
 
-type AttachNeuronToPagePayload {
+type AttachNeuronToDocumentPayload {
   neuron: Neuron
   clientMutationId: String
 }
 
-input AttachNeuronToPageInput {
+input AttachNeuronToDocumentInput {
   neuronId: String!
-  pageId: String!
+  documentId: String!
   clientMutationId: String
 }
 
@@ -367,7 +358,7 @@ type CreatePagePayload {
 }
 
 input CreatePageInput {
-  sectionId: String!
+  documentId: String!
   pageId: String!
   title: String
   content: String

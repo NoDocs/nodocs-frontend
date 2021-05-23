@@ -31,6 +31,9 @@ const neuronsQuery = graphql`
           id
           neuronId
           name
+          file {
+            url
+          }
           createdAt (format: "MMM D")
           owner {
             id

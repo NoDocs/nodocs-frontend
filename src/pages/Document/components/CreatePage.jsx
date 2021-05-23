@@ -1,22 +1,11 @@
 import React from 'react'
-import styled from 'styled-components'
+import PropTypes from 'prop-types'
 import { graphql, useMutation } from 'react-relay'
 
-import PlusIcon from 'assets/components/PlusIcon'
-import Label from 'atoms/Label'
 import Input from 'atoms/Input'
 import shortid from 'shortid'
 import { useDispatch, useSelector } from 'react-redux'
 import { documentActions } from 'logic/document'
-
-const StyledCreatePageContainer = styled.div`
-  display: grid;
-  align-items: center;
-  grid-auto-flow: column;
-  grid-template-columns: 17px auto;
-  margin-left: 20px;
-  margin-top: 5px;
-`
 
 const mutation = graphql`
   mutation CreatePageMutation($input: CreatePageInput!) {
@@ -28,8 +17,7 @@ const mutation = graphql`
   }
 `
 
-const CreatePage = () => {
-  const [mode, updateMode] = React.useState('view')
+const CreatePage = ({ onDone }) => {
   const [createPage] = useMutation(mutation)
   const dispatch = useDispatch()
   const activeSectionId = useSelector(state => state.getIn(['document', 'activeSectionId']))
@@ -47,27 +35,22 @@ const CreatePage = () => {
         },
         onCompleted: ({ createPage: { page } }) => {
           dispatch(documentActions.setActivePageId({ activePageId: page.id }))
-          updateMode('view')
+          onDone()
         }
       })
     }
   }
 
-  if (mode === 'view') {
-    return (
-      <StyledCreatePageContainer>
-        <PlusIcon fill="black" size={14} />
-        <Label hoverable color="black" onClick={() => updateMode('add')}>Create Page</Label>
-      </StyledCreatePageContainer>
-    )
-  }
-
   return (
     <Input
-      onBlur={() => updateMode('view')}
+      onBlur={onDone}
       onKeyDown={handleCreatePage}
     />
   )
+}
+
+CreatePage.propTypes = {
+  onDone: PropTypes.func,
 }
 
 export default CreatePage

@@ -8,20 +8,20 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-export type TeamNeuronsNeuronsQueryVariables = {|
+export type GraphModalNeuronsQueryVariables = {|
   teamId: string
 |};
-export type TeamNeuronsNeuronsQueryResponse = {|
+export type GraphModalNeuronsQueryResponse = {|
   +neurons: ?{|
     +__id: string,
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
         +id: string,
         +neuronId: ?string,
-        +name: ?string,
         +file: ?{|
           +url: ?string
         |},
+        +name: ?string,
         +createdAt: ?string,
         +owner: ?{|
           +id: string,
@@ -33,15 +33,15 @@ export type TeamNeuronsNeuronsQueryResponse = {|
     |}>,
   |}
 |};
-export type TeamNeuronsNeuronsQuery = {|
-  variables: TeamNeuronsNeuronsQueryVariables,
-  response: TeamNeuronsNeuronsQueryResponse,
+export type GraphModalNeuronsQuery = {|
+  variables: GraphModalNeuronsQueryVariables,
+  response: GraphModalNeuronsQueryResponse,
 |};
 */
 
 
 /*
-query TeamNeuronsNeuronsQuery(
+query GraphModalNeuronsQuery(
   $teamId: String!
 ) {
   neurons(first: 2147483647, teamId: $teamId) {
@@ -49,11 +49,11 @@ query TeamNeuronsNeuronsQuery(
       node {
         id
         neuronId
-        name
         file {
           url
           id
         }
+        name
         createdAt(format: "MMM D")
         owner {
           id
@@ -104,14 +104,14 @@ v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "name",
+  "name": "url",
   "storageKey": null
 },
 v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "url",
+  "name": "name",
   "storageKey": null
 },
 v6 = {
@@ -224,7 +224,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "TeamNeuronsNeuronsQuery",
+    "name": "GraphModalNeuronsQuery",
     "selections": [
       {
         "alias": "neurons",
@@ -254,7 +254,6 @@ return {
                 "selections": [
                   (v2/*: any*/),
                   (v3/*: any*/),
-                  (v4/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -263,10 +262,11 @@ return {
                     "name": "file",
                     "plural": false,
                     "selections": [
-                      (v5/*: any*/)
+                      (v4/*: any*/)
                     ],
                     "storageKey": null
                   },
+                  (v5/*: any*/),
                   (v6/*: any*/),
                   (v7/*: any*/),
                   (v8/*: any*/)
@@ -290,7 +290,7 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "TeamNeuronsNeuronsQuery",
+    "name": "GraphModalNeuronsQuery",
     "selections": [
       {
         "alias": null,
@@ -318,7 +318,6 @@ return {
                 "selections": [
                   (v2/*: any*/),
                   (v3/*: any*/),
-                  (v4/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -327,11 +326,12 @@ return {
                     "name": "file",
                     "plural": false,
                     "selections": [
-                      (v5/*: any*/),
+                      (v4/*: any*/),
                       (v2/*: any*/)
                     ],
                     "storageKey": null
                   },
+                  (v5/*: any*/),
                   (v6/*: any*/),
                   (v7/*: any*/),
                   (v8/*: any*/)
@@ -361,7 +361,7 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ead8dce5da697d44830a1df5c0a6611a",
+    "cacheID": "b7b3497326e0fa6bbc078bb1d2dcd226",
     "id": null,
     "metadata": {
       "connection": [
@@ -375,13 +375,13 @@ return {
         }
       ]
     },
-    "name": "TeamNeuronsNeuronsQuery",
+    "name": "GraphModalNeuronsQuery",
     "operationKind": "query",
-    "text": "query TeamNeuronsNeuronsQuery(\n  $teamId: String!\n) {\n  neurons(first: 2147483647, teamId: $teamId) {\n    edges {\n      node {\n        id\n        neuronId\n        name\n        file {\n          url\n          id\n        }\n        createdAt(format: \"MMM D\")\n        owner {\n          id\n          avatar\n          color\n          fullName\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query GraphModalNeuronsQuery(\n  $teamId: String!\n) {\n  neurons(first: 2147483647, teamId: $teamId) {\n    edges {\n      node {\n        id\n        neuronId\n        file {\n          url\n          id\n        }\n        name\n        createdAt(format: \"MMM D\")\n        owner {\n          id\n          avatar\n          color\n          fullName\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'c20f7c2434f3c71d3beef0d8bb5bec29';
+(node/*: any*/).hash = '60a204e9b6fc848e10268a9fbbfc0989';
 
 module.exports = node;

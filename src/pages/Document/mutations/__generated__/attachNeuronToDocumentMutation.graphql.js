@@ -8,34 +8,34 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-export type AttachNeuronToPageInput = {|
+export type AttachNeuronToDocumentInput = {|
   neuronId: string,
-  pageId: string,
+  documentId: string,
   clientMutationId?: ?string,
 |};
-export type attachNeuronToPageMutationVariables = {|
-  input: AttachNeuronToPageInput
+export type attachNeuronToDocumentMutationVariables = {|
+  input: AttachNeuronToDocumentInput
 |};
-export type attachNeuronToPageMutationResponse = {|
-  +attachNeuronToPage: ?{|
+export type attachNeuronToDocumentMutationResponse = {|
+  +attachNeuronToDocument: ?{|
     +clientMutationId: ?string,
     +neuron: ?{|
       +content: ?string
     |},
   |}
 |};
-export type attachNeuronToPageMutation = {|
-  variables: attachNeuronToPageMutationVariables,
-  response: attachNeuronToPageMutationResponse,
+export type attachNeuronToDocumentMutation = {|
+  variables: attachNeuronToDocumentMutationVariables,
+  response: attachNeuronToDocumentMutationResponse,
 |};
 */
 
 
 /*
-mutation attachNeuronToPageMutation(
-  $input: AttachNeuronToPageInput!
+mutation attachNeuronToDocumentMutation(
+  $input: AttachNeuronToDocumentInput!
 ) {
-  attachNeuronToPage(input: $input) {
+  attachNeuronToDocument(input: $input) {
     clientMutationId
     neuron {
       content
@@ -79,14 +79,14 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "attachNeuronToPageMutation",
+    "name": "attachNeuronToDocumentMutation",
     "selections": [
       {
         "alias": null,
         "args": (v1/*: any*/),
-        "concreteType": "AttachNeuronToPagePayload",
+        "concreteType": "AttachNeuronToDocumentPayload",
         "kind": "LinkedField",
-        "name": "attachNeuronToPage",
+        "name": "attachNeuronToDocument",
         "plural": false,
         "selections": [
           (v2/*: any*/),
@@ -113,14 +113,14 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "attachNeuronToPageMutation",
+    "name": "attachNeuronToDocumentMutation",
     "selections": [
       {
         "alias": null,
         "args": (v1/*: any*/),
-        "concreteType": "AttachNeuronToPagePayload",
+        "concreteType": "AttachNeuronToDocumentPayload",
         "kind": "LinkedField",
-        "name": "attachNeuronToPage",
+        "name": "attachNeuronToDocument",
         "plural": false,
         "selections": [
           (v2/*: any*/),
@@ -149,16 +149,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3c4d04630dd7387b940c6aaac9b1efd6",
+    "cacheID": "89020d6429cc8e991d622c1edd2cff6b",
     "id": null,
     "metadata": {},
-    "name": "attachNeuronToPageMutation",
+    "name": "attachNeuronToDocumentMutation",
     "operationKind": "mutation",
-    "text": "mutation attachNeuronToPageMutation(\n  $input: AttachNeuronToPageInput!\n) {\n  attachNeuronToPage(input: $input) {\n    clientMutationId\n    neuron {\n      content\n      id\n    }\n  }\n}\n"
+    "text": "mutation attachNeuronToDocumentMutation(\n  $input: AttachNeuronToDocumentInput!\n) {\n  attachNeuronToDocument(input: $input) {\n    clientMutationId\n    neuron {\n      content\n      id\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '0135124160339e63fb21e63049a94e4c';
+(node/*: any*/).hash = '4ac03b67ccef4b8c80ef125f4571a9f6';
 
 module.exports = node;

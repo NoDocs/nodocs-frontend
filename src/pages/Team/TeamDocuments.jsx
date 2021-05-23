@@ -11,6 +11,7 @@ const currTeamQuery = graphql`
     me {
       currentTeam {
         id
+        name
       }
     }
   }

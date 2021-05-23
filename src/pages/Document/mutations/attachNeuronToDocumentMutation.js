@@ -4,8 +4,8 @@ function commit(environment, input) {
   return new Promise((resolve, reject) => {
     commitMutation(environment, {
       mutation: graphql`
-        mutation attachNeuronToPageMutation($input: AttachNeuronToPageInput!) {
-          attachNeuronToPage(input: $input) {
+        mutation attachNeuronToDocumentMutation($input: AttachNeuronToDocumentInput!) {
+          attachNeuronToDocument(input: $input) {
             clientMutationId
             neuron {
               content

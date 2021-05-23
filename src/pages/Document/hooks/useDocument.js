@@ -22,15 +22,11 @@ const query = graphql`
     document(id: $id) {
       id
       name
-      sections {
+      pages {
         id
         title
-        pages {
-          id
-          title
-          pageId
-          content
-        }
+        pageId
+        content
       }
     }
 
@@ -41,19 +37,12 @@ const query = graphql`
   }
 `
 
-const getFirstSectionId = document => document
-  .sections[0]
-  .id
-
 const getFirstPageId = document => document
-  .sections[0]
   .pages[0]
   .id
 
-const getEditorContent = ({ document, activeSectionId, activePageId }) => JSON.parse(
+const getEditorContent = ({ document, activePageId }) => JSON.parse(
   document
-    .sections
-    .find(section => section.id === activeSectionId)
     .pages
     .find(page => page.id === activePageId)
     .content
@@ -63,13 +52,8 @@ const useDocument = () => {
   const { documentId } = useParams()
   const { me, document } = useLazyLoadQuery(query, { id: documentId })
   const { isMounted } = useIsMounted()
-  const [activeSectionId] = React.useState(getFirstSectionId(document))
   const [activePageId, updateActivePageId] = React.useState(getFirstPageId(document))
-  const [editorState, updateEditorState] = React.useState(getEditorContent({
-    document,
-    activeSectionId,
-    activePageId
-  }))
+  const [editorState, updateEditorState] = React.useState(getEditorContent({ document, activePageId }))
 
   const [isOnline, toggleIsOnline] = React.useState(false)
   const dispatch = useDispatch()
@@ -91,13 +75,7 @@ const useDocument = () => {
   )
 
   React.useEffect(
-    () => {
-      updateEditorState(getEditorContent({
-        document,
-        activeSectionId,
-        activePageId,
-      }))
-    },
+    () => { updateEditorState(getEditorContent({ document, activePageId })) },
     [activePageId]
   )
 
@@ -125,7 +103,6 @@ const useDocument = () => {
   React.useEffect(
     () => {
       dispatch(documentActions.setActivePageId({ activePageId }))
-      dispatch(documentActions.setActiveSectionId({ activeSectionId }))
     },
     [documentId]
   )
@@ -157,7 +134,6 @@ const useDocument = () => {
     editor,
     editorState,
     updateEditorState,
-    activeSectionId,
     activePageId,
     updateActivePageId,
     isOnline,

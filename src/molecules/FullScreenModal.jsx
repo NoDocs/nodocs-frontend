@@ -40,10 +40,10 @@ const StyledContentContainer = styled.div`
   z-index: 101;
 `
 
-const FullScreenModal = ({ close, containerStyles, className, children }) => {
+const FullScreenModal = ({ close, containerStyles, overlayStyles, className, children }) => {
   return ReactDOM.createPortal(
     <StyledContainer style={containerStyles}>
-      <StyledOverlay onClick={close} />
+      <StyledOverlay onClick={close} style={overlayStyles} />
 
       <StyledCloseIconButton onClick={close}>
         <CloseIcon color="white" />

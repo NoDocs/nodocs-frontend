@@ -15,15 +15,11 @@ export type useDocumentQueryResponse = {|
   +document: ?{|
     +id: string,
     +name: ?string,
-    +sections: ?$ReadOnlyArray<?{|
+    +pages: ?$ReadOnlyArray<?{|
       +id: string,
       +title: ?string,
-      +pages: ?$ReadOnlyArray<?{|
-        +id: string,
-        +title: ?string,
-        +pageId: ?string,
-        +content: ?string,
-      |}>,
+      +pageId: ?string,
+      +content: ?string,
     |}>,
   |},
   +me: ?{|
@@ -45,15 +41,11 @@ query useDocumentQuery(
   document(id: $id) {
     id
     name
-    sections {
+    pages {
       id
       title
-      pages {
-        id
-        title
-        pageId
-        content
-      }
+      pageId
+      content
     }
   }
   me {
@@ -81,13 +73,6 @@ v1 = {
 },
 v2 = {
   "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "title",
-  "storageKey": null
-},
-v3 = {
-  "alias": null,
   "args": [
     {
       "kind": "Variable",
@@ -111,38 +96,31 @@ v3 = {
     {
       "alias": null,
       "args": null,
-      "concreteType": "Section",
+      "concreteType": "Page",
       "kind": "LinkedField",
-      "name": "sections",
+      "name": "pages",
       "plural": true,
       "selections": [
         (v1/*: any*/),
-        (v2/*: any*/),
         {
           "alias": null,
           "args": null,
-          "concreteType": "Page",
-          "kind": "LinkedField",
-          "name": "pages",
-          "plural": true,
-          "selections": [
-            (v1/*: any*/),
-            (v2/*: any*/),
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "pageId",
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "content",
-              "storageKey": null
-            }
-          ],
+          "kind": "ScalarField",
+          "name": "title",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "pageId",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "content",
           "storageKey": null
         }
       ],
@@ -151,14 +129,14 @@ v3 = {
   ],
   "storageKey": null
 },
-v4 = {
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "color",
   "storageKey": null
 },
-v5 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -172,7 +150,7 @@ return {
     "metadata": null,
     "name": "useDocumentQuery",
     "selections": [
-      (v3/*: any*/),
+      (v2/*: any*/),
       {
         "alias": null,
         "args": null,
@@ -181,8 +159,8 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
-          (v4/*: any*/),
-          (v5/*: any*/)
+          (v3/*: any*/),
+          (v4/*: any*/)
         ],
         "storageKey": null
       }
@@ -196,7 +174,7 @@ return {
     "kind": "Operation",
     "name": "useDocumentQuery",
     "selections": [
-      (v3/*: any*/),
+      (v2/*: any*/),
       {
         "alias": null,
         "args": null,
@@ -205,8 +183,8 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
+          (v3/*: any*/),
           (v4/*: any*/),
-          (v5/*: any*/),
           (v1/*: any*/)
         ],
         "storageKey": null
@@ -214,16 +192,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "90667965d9b120a299790ea5f117be2e",
+    "cacheID": "4ef6bc07da5e8cdde7ebe8be7bcddbbc",
     "id": null,
     "metadata": {},
     "name": "useDocumentQuery",
     "operationKind": "query",
-    "text": "query useDocumentQuery(\n  $id: String!\n) {\n  document(id: $id) {\n    id\n    name\n    sections {\n      id\n      title\n      pages {\n        id\n        title\n        pageId\n        content\n      }\n    }\n  }\n  me {\n    color\n    fullName\n    id\n  }\n}\n"
+    "text": "query useDocumentQuery(\n  $id: String!\n) {\n  document(id: $id) {\n    id\n    name\n    pages {\n      id\n      title\n      pageId\n      content\n    }\n  }\n  me {\n    color\n    fullName\n    id\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'be5a50aa10bfaf77dfb8690a35286940';
+(node/*: any*/).hash = '701d0db6032a38c01945e557c94a09c1';
 
 module.exports = node;

@@ -2,14 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 import { graphql } from 'relay-runtime'
 import { useParams } from 'react-router-dom'
+import { useLazyLoadQuery } from 'react-relay'
 
 import PlusIcon from 'assets/components/PlusIcon'
 import IconButton from 'atoms/IconButton'
 import Label from 'atoms/Label'
-import Section from './components/Section'
-import CreateSection from './components/CreateSection'
 import SectionElements from './components/SectionElements'
-import { useLazyLoadQuery } from 'react-relay'
+import PageItem from './components/PageItem'
+import CreatePage from './components/CreatePage'
 
 const StyledLeftPanelContainer = styled.div`
   margin-left: 20px;
@@ -21,7 +21,7 @@ const StyledFlexContainer = styled.div`
   align-items: center;
 `
 
-const StyledSectionsContainer = styled.div`
+const StyledPagesContainer = styled.div`
   display: grid;
   align-items: start;
   grid-row-gap: 5px;
@@ -43,21 +43,16 @@ const StyledElementsLabel = styled(Label)`
 const query = graphql`
   query DocumentLeftPanelQuery ($id: String!) {
     document(id: $id) {
-      sections {
+      pages {
         id
         title
-
-        pages {
-          id
-          title
-        }
       }
     }
   }
 `
 
 const DocumentLeftPanel = () => {
-  const [newSection, toggleNewSection] = React.useState(false)
+  const [newPage, toggleNewPage] = React.useState(false)
   const params = useParams()
   const { document } = useLazyLoadQuery(
     query,
@@ -68,20 +63,20 @@ const DocumentLeftPanel = () => {
   return (
     <StyledLeftPanelContainer>
       <StyledFlexContainer>
-        <Label weight={500} color="black">Sections</Label>
+        <Label weight={500} color="black">Pages</Label>
 
-        <IconButton onClick={() => toggleNewSection(true)} variant="inverted">
+        <IconButton onClick={() => toggleNewPage(true)} variant="inverted">
           <PlusIcon variant="inverted" />
         </IconButton>
       </StyledFlexContainer>
 
-      <StyledSectionsContainer>
+      <StyledPagesContainer>
         {document
-          .sections
-          .map(section => <Section key={section.id} section={section} />)}
+          .pages
+          .map(page => <PageItem key={page.id} page={page} />)}
 
-        {newSection && <CreateSection onDone={() => toggleNewSection(false)} />}
-      </StyledSectionsContainer>
+        {newPage && <CreatePage />}
+      </StyledPagesContainer>
 
       <StyledSeparator />
 

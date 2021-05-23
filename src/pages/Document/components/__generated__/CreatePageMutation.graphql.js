@@ -9,7 +9,7 @@
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
 export type CreatePageInput = {|
-  sectionId: string,
+  documentId: string,
   pageId: string,
   title?: ?string,
   content?: ?string,

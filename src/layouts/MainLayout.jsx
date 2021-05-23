@@ -6,11 +6,13 @@ import { useLocation } from 'react-router-dom'
 import { PortalContext } from 'contexts'
 import InviteTeamMembersModal from 'modals/InviteTeamMembersModal'
 import CreateTeamModal from 'modals/CreateTeamModal'
+import GraphModal from 'modals/GraphModal/GraphModal'
 import GlobalStyles from './GlobalStyles'
 import NavBar from './NavBar'
 import LeftMenu from './LeftMenu'
 import CreateNeuronShortcut from './components/CreateNeuronShortcut'
 import CreateTeamShortcut from './components/CreateTeamShortcut'
+import OpenGraphShortcut from './components/OpenGraphShortcut'
 
 const StyledContainer = styled.div`
   display: grid;
@@ -51,6 +53,8 @@ const MainLayout = ({ children }) => {
 
   return (
     <React.Fragment>
+      <GlobalStyles />
+
       <StyledContainer toggled={toggled}>
         {toggled && <LeftMenu toggleNavbar={toggle} />}
 
@@ -61,9 +65,11 @@ const MainLayout = ({ children }) => {
         </StyledChildContainer>
       </StyledContainer>
 
-      <GlobalStyles />
-      <InviteTeamMembersModal />
+      <GraphModal />
       <CreateTeamModal />
+      <InviteTeamMembersModal />
+
+      <OpenGraphShortcut />
       <CreateNeuronShortcut />
       <CreateTeamShortcut />
     </React.Fragment>

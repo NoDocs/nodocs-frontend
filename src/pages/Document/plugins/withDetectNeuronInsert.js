@@ -1,8 +1,9 @@
 import { Transforms } from 'slate'
 import { ReactEditor } from 'slate-react'
+
 import store from 'store'
-import RelayEnvironment from '../../../RelayEnvironment'
-import attachNeuronToPage from '../mutations/attachNeuronToPageMutation'
+import RelayEnvironment from 'RelayEnvironment'
+import attachNeuronToPage from '../mutations/attachNeuronToDocumentMutation'
 
 const withDetectNeuronInsert = (editor) => {
   const { apply } = editor

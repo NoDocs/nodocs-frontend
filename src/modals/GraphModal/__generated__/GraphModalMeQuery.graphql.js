@@ -8,8 +8,8 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-export type TeamDocumentsMeQueryVariables = {||};
-export type TeamDocumentsMeQueryResponse = {|
+export type GraphModalMeQueryVariables = {||};
+export type GraphModalMeQueryResponse = {|
   +me: ?{|
     +currentTeam: ?{|
       +id: string,
@@ -17,15 +17,15 @@ export type TeamDocumentsMeQueryResponse = {|
     |}
   |}
 |};
-export type TeamDocumentsMeQuery = {|
-  variables: TeamDocumentsMeQueryVariables,
-  response: TeamDocumentsMeQueryResponse,
+export type GraphModalMeQuery = {|
+  variables: GraphModalMeQueryVariables,
+  response: GraphModalMeQueryResponse,
 |};
 */
 
 
 /*
-query TeamDocumentsMeQuery {
+query GraphModalMeQuery {
   me {
     currentTeam {
       id
@@ -68,7 +68,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "TeamDocumentsMeQuery",
+    "name": "GraphModalMeQuery",
     "selections": [
       {
         "alias": null,
@@ -90,7 +90,7 @@ return {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "TeamDocumentsMeQuery",
+    "name": "GraphModalMeQuery",
     "selections": [
       {
         "alias": null,
@@ -108,16 +108,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "de5f7b9d81b0c483f42687d8ccb0908c",
+    "cacheID": "eeef1779294d3d0cf98b230993870f8f",
     "id": null,
     "metadata": {},
-    "name": "TeamDocumentsMeQuery",
+    "name": "GraphModalMeQuery",
     "operationKind": "query",
-    "text": "query TeamDocumentsMeQuery {\n  me {\n    currentTeam {\n      id\n      name\n    }\n    id\n  }\n}\n"
+    "text": "query GraphModalMeQuery {\n  me {\n    currentTeam {\n      id\n      name\n    }\n    id\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '94a79a43191baec32953096d71e174a3';
+(node/*: any*/).hash = '243698ff1f06b7f920e3ff2ba4d94aa1';
 
 module.exports = node;
