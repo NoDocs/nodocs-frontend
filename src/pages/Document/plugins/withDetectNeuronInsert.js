@@ -19,9 +19,9 @@ const withDetectNeuronInsert = (editor) => {
         const id = splitted.replace(']]', '')
 
         const state = store.getState()
-        const pageId = state.getIn(['document', 'activePageId'])
+        const documentId = state.getIn(['document', 'id'])
 
-        await attachNeuronToPage.commit(RelayEnvironment, { pageId, neuronId: id })
+        await attachNeuronToPage.commit(RelayEnvironment, { documentId, neuronId: id })
         Transforms.insertNodes(editor, { type: 'neuron', id, children: [{ text: '' }] })
         ReactEditor.blur(editor)
 

@@ -19,7 +19,10 @@ export type useNeuronMutationVariables = {|
 export type useNeuronMutationResponse = {|
   +switchAsset: ?{|
     +neuron: ?{|
-      +id: string
+      +id: string,
+      +file: ?{|
+        +url: ?string
+      |},
     |}
   |}
 |};
@@ -37,6 +40,10 @@ mutation useNeuronMutation(
   switchAsset(input: $input) {
     neuron {
       id
+      file {
+        url
+        id
+      }
     }
   }
 }
@@ -52,48 +59,68 @@ var v0 = [
 ],
 v1 = [
   {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "input",
-        "variableName": "input"
-      }
-    ],
-    "concreteType": "SwitchAssetPayload",
-    "kind": "LinkedField",
-    "name": "switchAsset",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "Neuron",
-        "kind": "LinkedField",
-        "name": "neuron",
-        "plural": false,
-        "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "id",
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
+    "kind": "Variable",
+    "name": "input",
+    "variableName": "input"
   }
-];
+],
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "url",
+  "storageKey": null
+};
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
     "name": "useNeuronMutation",
-    "selections": (v1/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "SwitchAssetPayload",
+        "kind": "LinkedField",
+        "name": "switchAsset",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Neuron",
+            "kind": "LinkedField",
+            "name": "neuron",
+            "plural": false,
+            "selections": [
+              (v2/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "File",
+                "kind": "LinkedField",
+                "name": "file",
+                "plural": false,
+                "selections": [
+                  (v3/*: any*/)
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -102,19 +129,56 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "useNeuronMutation",
-    "selections": (v1/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "SwitchAssetPayload",
+        "kind": "LinkedField",
+        "name": "switchAsset",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Neuron",
+            "kind": "LinkedField",
+            "name": "neuron",
+            "plural": false,
+            "selections": [
+              (v2/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "File",
+                "kind": "LinkedField",
+                "name": "file",
+                "plural": false,
+                "selections": [
+                  (v3/*: any*/),
+                  (v2/*: any*/)
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "cfb9abbe5584097bc9da79b1b517c3cb",
+    "cacheID": "44e2844d24350a8d500416079049713e",
     "id": null,
     "metadata": {},
     "name": "useNeuronMutation",
     "operationKind": "mutation",
-    "text": "mutation useNeuronMutation(\n  $input: SwitchAssetInput!\n) {\n  switchAsset(input: $input) {\n    neuron {\n      id\n    }\n  }\n}\n"
+    "text": "mutation useNeuronMutation(\n  $input: SwitchAssetInput!\n) {\n  switchAsset(input: $input) {\n    neuron {\n      id\n      file {\n        url\n        id\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'b5145a966b24676f31716dbfb0d5de90';
+(node/*: any*/).hash = '17486daac73dd0564f356ec246453452';
 
 module.exports = node;

@@ -51,6 +51,9 @@ const mutation = graphql`
     switchAsset(input: $input) {
       neuron {
         id
+        file {
+          url
+        }
       }
     }
   }

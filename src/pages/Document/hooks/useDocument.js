@@ -102,6 +102,7 @@ const useDocument = () => {
 
   React.useEffect(
     () => {
+      dispatch(documentActions.setActiveDocumentId({ documentId }))
       dispatch(documentActions.setActivePageId({ activePageId }))
     },
     [documentId]

@@ -13,3 +13,10 @@ export const setActiveSectionId = ({ activeSectionId }) => ({
     activeSectionId,
   }
 })
+
+export const setActiveDocumentId = ({ documentId }) => ({
+  type: documentActionTypes.SET_ACTIVE_DOCUMENT_ID,
+  payload: {
+    documentId,
+  }
+})

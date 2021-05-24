@@ -18,6 +18,10 @@ const activeDocumentReducer = (state = initialState, action) => {
       return state.set('activeSectionId', action.payload.activeSectionId)
     }
 
+    case documentActionTypes.SET_ACTIVE_DOCUMENT_ID: {
+      return state.set('id', action.payload.documentId)
+    }
+
     default:
       return state
   }
