@@ -13,6 +13,7 @@ import LeftMenu from './LeftMenu'
 import CreateNeuronShortcut from './components/CreateNeuronShortcut'
 import CreateTeamShortcut from './components/CreateTeamShortcut'
 import OpenGraphShortcut from './components/OpenGraphShortcut'
+import OpenSpotlightShortcut from './components/OpenSpotlightShortcut'
 
 const StyledContainer = styled.div`
   display: grid;
@@ -69,6 +70,7 @@ const MainLayout = ({ children }) => {
       <CreateTeamModal />
       <InviteTeamMembersModal />
 
+      <OpenSpotlightShortcut />
       <OpenGraphShortcut />
       <CreateNeuronShortcut />
       <CreateTeamShortcut />
