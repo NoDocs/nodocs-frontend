@@ -5,6 +5,7 @@ import debounce from 'lodash/debounce'
 
 import withRenderPortal from 'hocs/withRenderPortal'
 import FullScreenModal from 'molecules/FullScreenModal'
+import Typography from 'molecules/Typography/Typography'
 
 const StyledSpotlightContainer = styled.div`
   width: 600px;
@@ -28,6 +29,29 @@ const StyledInput = styled.input`
   border: none;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   font-family: Inter;
+`
+
+const StyledSpotlightBodyContainer = styled.div`
+  padding: 16px;
+`
+
+const StyledButtonsContainer = styled.div`
+  margin-top: 8px;
+  display: grid;
+  justify-content: start;
+  grid-auto-flow: column;
+  grid-column-gap: 8px;
+`
+
+const StyledButton = styled.button`
+  border: none;
+  background-color: #222222;
+  padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.4);
+  box-sizing: border-box;
+  border-radius: 16px;
+  cursor: pointer;
 `
 
 const SpotlightModal = ({ closePortal }) => {
@@ -59,6 +83,16 @@ const SpotlightModal = ({ closePortal }) => {
           value={search}
           onChange={onInputChange}
         />
+
+        <StyledSpotlightBodyContainer>
+          <Typography variant="caption">I&apos;m looking for</Typography>
+
+          <StyledButtonsContainer>
+            <StyledButton>Images</StyledButton>
+            <StyledButton>Videos</StyledButton>
+            <StyledButton>Components</StyledButton>
+          </StyledButtonsContainer>
+        </StyledSpotlightBodyContainer>
       </StyledSpotlightContainer>
     </FullScreenModal>
   )
