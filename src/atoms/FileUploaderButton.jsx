@@ -10,12 +10,17 @@ const StyledFileInput = styled.input`
   display: none;
 `
 
-const FileUploaderButton = ({ className, onChange, children }) => {
-  const inputRef = React.useRef()
-
+const FileUploaderButton = React.forwardRef(({ className, trigger, onChange, children }, inputRef) => {
   const openFilePicker = () => {
     inputRef.current.click()
   }
+
+  const enhancedTrigger = React.useMemo(
+    () => trigger
+      ? React.cloneElement(trigger, { onClick: openFilePicker })
+      : <IconButton onClick={openFilePicker}>{children}</IconButton>,
+    []
+  )
 
   return (
     <StyledFileUploaderButtonContainer className={className}>
@@ -27,15 +32,15 @@ const FileUploaderButton = ({ className, onChange, children }) => {
         ref={inputRef}
       />
 
-      <IconButton onClick={openFilePicker}>
-        {children}
-      </IconButton>
+      {enhancedTrigger}
     </StyledFileUploaderButtonContainer>
   )
-}
+})
 
+FileUploaderButton.displayName = 'FileUploaderButton'
 FileUploaderButton.propTypes = {
   onChange: PropTypes.func,
+  trigger: PropTypes.element,
   className: PropTypes.string,
   children: PropTypes.string,
 }

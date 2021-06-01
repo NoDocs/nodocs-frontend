@@ -18,7 +18,7 @@ const variants = [
   'caption',
 ]
 
-const Typography = ({ variant, children }) => {
+const Typography = ({ variant, children, ...rest }) => {
   switch (variant) {
     case 'h1':
     case 'h2':
@@ -29,7 +29,7 @@ const Typography = ({ variant, children }) => {
       return <Heading as={variant} />
 
     case 'caption':
-      return <Caption>{children}</Caption>
+      return <Caption {...rest}>{children}</Caption>
 
     default:
       return children

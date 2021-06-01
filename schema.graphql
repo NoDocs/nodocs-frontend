@@ -151,7 +151,6 @@ type Neuron implements Node {
   neuronId: String
   content: String
   owner: User
-  pages: [Page]
   team: [Team]
   company: [Company]
   file: File
@@ -402,7 +401,6 @@ type CreateAssetPayload {
 }
 
 input CreateAssetInput {
-  pageId: String!
   file: file
   clientMutationId: String
 }

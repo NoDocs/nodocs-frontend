@@ -7,7 +7,7 @@ const Caption = styled.span`
   font-size: 0.85rem;
   line-height: 16px;
   letter-spacing: 0.005em;
-  color: rgba(255, 255, 255, 0.4);
+  color: ${props => props.color || 'rgba(255, 255, 255, 0.4)'};
 `
 
 export default Caption

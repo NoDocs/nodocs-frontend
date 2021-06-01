@@ -13,6 +13,8 @@ const Label = styled.p`
   text-align: ${({ textAlign = 'left' }) => textAlign};
   line-height: 17px;
   font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   ${props => props.ml && `margin-left: ${props.ml}px;`}
   ${props => props.mr && `margin-right: ${props.mr}px;`}
