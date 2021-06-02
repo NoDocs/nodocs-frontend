@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "nodocs-298317"
+  },
+  "targets": {
+    "nodocs-298317": {
+      "hosting": {
+        "dev-nodocs-app": [
+          "dev-nodocs-app"
+        ]
+      }
+    }
   }
 }
