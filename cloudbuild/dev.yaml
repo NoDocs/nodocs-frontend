@@ -8,4 +8,4 @@ steps:
     name: 'gcr.io/cloud-builders/yarn'
     args: ['build-develop']
   - name: gcr.io/$PROJECT_ID/firebase
-    args: ['deploy', '--project=$PROJECT_ID', '--only=hosting:dev.nodocs.app']
+    args: ['deploy', '--project=$PROJECT_ID', '--only=hosting:dev-nodocs-app']
