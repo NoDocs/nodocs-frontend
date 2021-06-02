@@ -7,7 +7,5 @@ steps:
   - id: "build"
     name: 'gcr.io/cloud-builders/yarn'
     args: ['build-develop']
-  - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['-m', 'rsync', '-d', '-r', 'dist/','gs://dev.nodocs.app']
-  - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['setmeta', '-h', 'Cache-Control: no-cache', 'gs://dev.nodocs.app/index.html']
+  - name: gcr.io/$PROJECT_ID/firebase
+    args: ['deploy', '--project=$PROJECT_ID', '--only=hosting:dev.nodocs.app']
