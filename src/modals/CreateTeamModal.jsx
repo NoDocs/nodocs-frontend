@@ -56,6 +56,10 @@ const createTeamMutation = graphql`
     createTeam(input: $input) {
       team {
         id
+        name
+        company {
+          id
+        }
       }
     }
   }
@@ -75,7 +79,29 @@ const CreateTeamModal = ({ closePortal }) => {
         }
       },
       onCompleted: () => { closePortal() },
-      updater: store => store.invalidateStore()
+      updater: store => {
+        const team = store
+          .getRootField('createTeam')
+          .getLinkedRecord('team')
+        const companyId = team
+          .getLinkedRecord('company')
+          .getValue('id')
+        const teams = store
+          .getRoot()
+          .getLinkedRecords('teams', { companyId })
+
+        store
+          .getRoot()
+          .setLinkedRecords(
+            teams.concat([team]),
+            'teams',
+            { companyId }
+          )
+        store
+          .getRoot()
+          .getLinkedRecord('me')
+          .setLinkedRecord(team, 'currentTeam')
+      }
     })
   }
 

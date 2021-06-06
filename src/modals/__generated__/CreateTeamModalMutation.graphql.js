@@ -19,7 +19,11 @@ export type CreateTeamModalMutationVariables = {|
 export type CreateTeamModalMutationResponse = {|
   +createTeam: ?{|
     +team: ?{|
-      +id: string
+      +id: string,
+      +name: ?string,
+      +company: ?{|
+        +id: string
+      |},
     |}
   |}
 |};
@@ -37,6 +41,10 @@ mutation CreateTeamModalMutation(
   createTeam(input: $input) {
     team {
       id
+      name
+      company {
+        id
+      }
     }
   }
 }
@@ -50,7 +58,14 @@ var v0 = [
     "name": "input"
   }
 ],
-v1 = [
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v2 = [
   {
     "alias": null,
     "args": [
@@ -73,11 +88,24 @@ v1 = [
         "name": "team",
         "plural": false,
         "selections": [
+          (v1/*: any*/),
           {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "id",
+            "name": "name",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Company",
+            "kind": "LinkedField",
+            "name": "company",
+            "plural": false,
+            "selections": [
+              (v1/*: any*/)
+            ],
             "storageKey": null
           }
         ],
@@ -93,7 +121,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "CreateTeamModalMutation",
-    "selections": (v1/*: any*/),
+    "selections": (v2/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
@@ -102,19 +130,19 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "CreateTeamModalMutation",
-    "selections": (v1/*: any*/)
+    "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "6f5b3edc3282e792bf86ed0648c893a5",
+    "cacheID": "07f408a1009ac39aa20790b4506a2bff",
     "id": null,
     "metadata": {},
     "name": "CreateTeamModalMutation",
     "operationKind": "mutation",
-    "text": "mutation CreateTeamModalMutation(\n  $input: CreateTeamInput!\n) {\n  createTeam(input: $input) {\n    team {\n      id\n    }\n  }\n}\n"
+    "text": "mutation CreateTeamModalMutation(\n  $input: CreateTeamInput!\n) {\n  createTeam(input: $input) {\n    team {\n      id\n      name\n      company {\n        id\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '500892803dabf65d5a6230bc6af6b6fa';
+(node/*: any*/).hash = 'a8bbcc0a412d59534c33a13c2938bf52';
 
 module.exports = node;
