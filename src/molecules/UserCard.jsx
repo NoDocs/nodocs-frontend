@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
+import { useLazyLoadQuery, useMutation } from 'react-relay'
+import { graphql } from 'graphql'
 
 import { PortalContext } from 'contexts'
 import { notificationActions } from 'logic/notification'
@@ -9,8 +11,6 @@ import Avatar from 'atoms/Avatar'
 import Label from 'atoms/Label'
 import ListItem from 'molecules/ListItem'
 import Popup from 'molecules/Popup'
-import { useLazyLoadQuery, useMutation } from 'react-relay'
-import { graphql } from 'graphql'
 
 const StyledContainer = styled.div`
   display: grid;
@@ -41,6 +41,7 @@ const MeQuery = graphql`
       email
 
       currentCompany {
+        id
         name
       }
     }
@@ -109,14 +110,9 @@ const UserCard = () => {
           trigger={<StyledLabel color="active">{me.currentCompany.name}</StyledLabel>}
           disabled={!availableCompanies.length}
         >
-          {availableCompanies.map(company => (
-            <ListItem
-              key={company.id}
-              label={company.name}
-              onClick={onSwitchCompany(company)}
-              color="black"
-            />
-          ))}
+          {availableCompanies
+            .filter(company => company.id !== me.currentCompany.id)
+            .map(company => <ListItem key={company.id} label={company.name} onClick={onSwitchCompany(company)} color="black" />)}
         </StyledPopup>
       </div>
     </StyledContainer>

@@ -23,7 +23,7 @@ import LoadingUserCard from 'loadings/LoadingUserCard'
 const StyledLeftMenuContainer = styled.div`
   grid-area: left;
   width: 352px;
-  background-color: black;
+  background-color: #1E1F23;
   display: flex;
   align-items: flex-start;
 `

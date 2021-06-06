@@ -16,7 +16,8 @@ export type UserCardQueryResponse = {|
     +color: ?string,
     +email: ?string,
     +currentCompany: ?{|
-      +name: ?string
+      +id: string,
+      +name: ?string,
     |},
   |},
   +availableCompanies: ?$ReadOnlyArray<?{|
@@ -39,8 +40,8 @@ query UserCardQuery {
     color
     email
     currentCompany {
-      name
       id
+      name
     }
   }
   availableCompanies {
@@ -58,83 +59,78 @@ var v0 = {
   "name": "id",
   "storageKey": null
 },
-v1 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "fullName",
-  "storageKey": null
-},
-v2 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "color",
-  "storageKey": null
-},
-v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "email",
-  "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "name",
-  "storageKey": null
-},
-v5 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "Company",
-  "kind": "LinkedField",
-  "name": "availableCompanies",
-  "plural": true,
-  "selections": [
-    (v0/*: any*/),
-    (v4/*: any*/)
-  ],
-  "storageKey": null
-};
+v1 = [
+  (v0/*: any*/),
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "name",
+    "storageKey": null
+  }
+],
+v2 = [
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "User",
+    "kind": "LinkedField",
+    "name": "me",
+    "plural": false,
+    "selections": [
+      (v0/*: any*/),
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "fullName",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "color",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "email",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "Company",
+        "kind": "LinkedField",
+        "name": "currentCompany",
+        "plural": false,
+        "selections": (v1/*: any*/),
+        "storageKey": null
+      }
+    ],
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "Company",
+    "kind": "LinkedField",
+    "name": "availableCompanies",
+    "plural": true,
+    "selections": (v1/*: any*/),
+    "storageKey": null
+  }
+];
 return {
   "fragment": {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
     "name": "UserCardQuery",
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "User",
-        "kind": "LinkedField",
-        "name": "me",
-        "plural": false,
-        "selections": [
-          (v0/*: any*/),
-          (v1/*: any*/),
-          (v2/*: any*/),
-          (v3/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "Company",
-            "kind": "LinkedField",
-            "name": "currentCompany",
-            "plural": false,
-            "selections": [
-              (v4/*: any*/)
-            ],
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      },
-      (v5/*: any*/)
-    ],
+    "selections": (v2/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -143,49 +139,19 @@ return {
     "argumentDefinitions": [],
     "kind": "Operation",
     "name": "UserCardQuery",
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "User",
-        "kind": "LinkedField",
-        "name": "me",
-        "plural": false,
-        "selections": [
-          (v0/*: any*/),
-          (v1/*: any*/),
-          (v2/*: any*/),
-          (v3/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "Company",
-            "kind": "LinkedField",
-            "name": "currentCompany",
-            "plural": false,
-            "selections": [
-              (v4/*: any*/),
-              (v0/*: any*/)
-            ],
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      },
-      (v5/*: any*/)
-    ]
+    "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "ebd20ae951d5adcebfd59fb5f2544913",
+    "cacheID": "728a73a4c295c57a2d4a05f2c4de2076",
     "id": null,
     "metadata": {},
     "name": "UserCardQuery",
     "operationKind": "query",
-    "text": "query UserCardQuery {\n  me {\n    id\n    fullName\n    color\n    email\n    currentCompany {\n      name\n      id\n    }\n  }\n  availableCompanies {\n    id\n    name\n  }\n}\n"
+    "text": "query UserCardQuery {\n  me {\n    id\n    fullName\n    color\n    email\n    currentCompany {\n      id\n      name\n    }\n  }\n  availableCompanies {\n    id\n    name\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'efb1d297aad981f2e39f2b58b70087eb';
+(node/*: any*/).hash = 'ecf544586aff4509867f0b4bf6b7d91c';
 
 module.exports = node;

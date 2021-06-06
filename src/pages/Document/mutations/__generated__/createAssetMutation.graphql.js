@@ -9,7 +9,6 @@
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
 export type CreateAssetInput = {|
-  pageId: string,
   file?: ?any,
   clientMutationId?: ?string,
 |};

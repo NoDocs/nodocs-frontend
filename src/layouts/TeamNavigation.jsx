@@ -24,7 +24,7 @@ const StyledGridContainer = styled.div`
 `
 
 const StyledTeam = styled.div`
-  border: 2px solid #FFFFFF;
+  border: 2px solid rgba(255,255,255,0.2);
   box-sizing: border-box;
   border-radius: 5px 15px 5px 5px;
   height: 40px;
@@ -35,7 +35,7 @@ const StyledTeam = styled.div`
   justify-content: center;
   cursor: pointer;
 
-  ${props => props.active && 'box-shadow: 0px 0px 10px white;'}
+  ${props => props.active && 'border: 2px solid white;'}
 `
 
 const currentCompanyQuery = graphql`
@@ -86,7 +86,7 @@ const TeamNavigation = () => {
           teamId: team.id,
         }
       },
-      updater: store => {
+      updater: (store) => {
         const newTeam = store
           .getRootField('switchTeam')
           .getLinkedRecord('team')

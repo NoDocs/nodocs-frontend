@@ -25,9 +25,9 @@ const StyledLabel = styled(Label)`
   ${props => props.size && `font-size: ${props.size}px;`}
 `
 
-const MenuItem = ({ className, Icon, fontSize, text }) => {
+const MenuItem = ({ className, Icon, fontSize, text, ...rest }) => {
   return (
-    <StyledMenuItemContainer className={className}>
+    <StyledMenuItemContainer className={className} {...rest}>
       {Icon}
       <StyledLabel size={fontSize}>{text}</StyledLabel>
     </StyledMenuItemContainer>

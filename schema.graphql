@@ -230,6 +230,9 @@ type Mutation {
   # Create team
   createTeam(input: CreateTeamInput!): CreateTeamPayload
 
+  # Delete team
+  deleteTeam(input: DeleteTeamInput!): DeleteTeamPayload
+
   # create asset neuron
   createAsset(input: CreateAssetInput!): CreateAssetPayload
 
@@ -392,6 +395,17 @@ type CreateTeamPayload {
 input CreateTeamInput {
   name: String!
   industry: String!
+  clientMutationId: String
+}
+
+type DeleteTeamPayload {
+  deletedTeam: Team
+  switchedTeam: Team
+  clientMutationId: String
+}
+
+input DeleteTeamInput {
+  teamId: String!
   clientMutationId: String
 }
 

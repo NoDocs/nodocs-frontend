@@ -3,10 +3,9 @@ import styled from 'styled-components'
 
 import LoadingTeamMembers from 'loadings/LoadingTeamMembers'
 import TeamMembers from './TeamMembers'
-import TeamFilterAction from './TeamFilterAction'
 import TeamGroupByAction from './TeamGroupByAction'
-import TeamSortAction from './TeamSortAction'
 import TeamPropertiesAction from './TeamPropertiesAction'
+import DeleteTeamAction from './DeleteTeamAction'
 
 const StyledTeamConfigurationBarContainer = styled.div`
   height: 45px;
@@ -41,10 +40,12 @@ const TeamConfigurationBar = () => {
 
         <StyledSeparator />
 
-        <TeamFilterAction />
         <TeamGroupByAction />
-        <TeamSortAction />
         <TeamPropertiesAction />
+
+        <StyledSeparator />
+
+        <DeleteTeamAction />
       </LeftContainer>
     </StyledTeamConfigurationBarContainer>
   )
