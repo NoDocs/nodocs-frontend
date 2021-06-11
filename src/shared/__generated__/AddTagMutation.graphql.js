@@ -8,41 +8,37 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-export type CreatePageInput = {|
+export type CreateTagInput = {|
+  name: string,
   documentId: string,
-  pageId: string,
-  title?: ?string,
-  content?: ?string,
   clientMutationId?: ?string,
 |};
-export type CreatePageMutationVariables = {|
-  input: CreatePageInput
+export type AddTagMutationVariables = {|
+  input: CreateTagInput
 |};
-export type CreatePageMutationResponse = {|
-  +createPage: ?{|
-    +page: ?{|
+export type AddTagMutationResponse = {|
+  +createTag: ?{|
+    +tag: ?{|
       +id: string,
-      +title: ?string,
-      +content: ?string,
+      +name: ?string,
     |}
   |}
 |};
-export type CreatePageMutation = {|
-  variables: CreatePageMutationVariables,
-  response: CreatePageMutationResponse,
+export type AddTagMutation = {|
+  variables: AddTagMutationVariables,
+  response: AddTagMutationResponse,
 |};
 */
 
 
 /*
-mutation CreatePageMutation(
-  $input: CreatePageInput!
+mutation AddTagMutation(
+  $input: CreateTagInput!
 ) {
-  createPage(input: $input) {
-    page {
+  createTag(input: $input) {
+    tag {
       id
-      title
-      content
+      name
     }
   }
 }
@@ -66,17 +62,17 @@ v1 = [
         "variableName": "input"
       }
     ],
-    "concreteType": "CreatePagePayload",
+    "concreteType": "CreateTagPayload",
     "kind": "LinkedField",
-    "name": "createPage",
+    "name": "createTag",
     "plural": false,
     "selections": [
       {
         "alias": null,
         "args": null,
-        "concreteType": "Page",
+        "concreteType": "Tag",
         "kind": "LinkedField",
-        "name": "page",
+        "name": "tag",
         "plural": false,
         "selections": [
           {
@@ -90,14 +86,7 @@ v1 = [
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "title",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "content",
+            "name": "name",
             "storageKey": null
           }
         ],
@@ -112,7 +101,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "CreatePageMutation",
+    "name": "AddTagMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -121,20 +110,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "CreatePageMutation",
+    "name": "AddTagMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "2e26c2c5dfc0725ca3687d3d53f85f04",
+    "cacheID": "39490a42f675ed09ec6dc375af75d4c6",
     "id": null,
     "metadata": {},
-    "name": "CreatePageMutation",
+    "name": "AddTagMutation",
     "operationKind": "mutation",
-    "text": "mutation CreatePageMutation(\n  $input: CreatePageInput!\n) {\n  createPage(input: $input) {\n    page {\n      id\n      title\n      content\n    }\n  }\n}\n"
+    "text": "mutation AddTagMutation(\n  $input: CreateTagInput!\n) {\n  createTag(input: $input) {\n    tag {\n      id\n      name\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'da90f672aab937c7122588d5d0938807';
+(node/*: any*/).hash = '80db501b0382eebaa5928613306cb4e0';
 
 module.exports = node;

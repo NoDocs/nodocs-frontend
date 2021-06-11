@@ -1,26 +1,38 @@
 import React from 'react'
+import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { graphql, useMutation } from 'react-relay'
-
-import Input from 'atoms/Input'
 import shortid from 'shortid'
+import { graphql, useMutation } from 'react-relay'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { documentActions } from 'logic/document'
+import Input from 'atoms/Input'
+import Typography from 'molecules/Typography'
+
+const StyledCreatePageLabel = styled(Typography)`
+  color: rgba(0,0,0,0.4);
+  margin-top: 4px;
+  margin-left: 4px;
+  cursor: pointer;
+`
 
 const mutation = graphql`
   mutation CreatePageMutation($input: CreatePageInput!) {
     createPage(input: $input) {
       page {
         id
+        title
+        content
       }
     }
   }
 `
 
-const CreatePage = ({ onDone }) => {
+const CreatePage = () => {
+  const [showLabel, toggleShowLabel] = React.useState(true)
   const [createPage] = useMutation(mutation)
   const dispatch = useDispatch()
-  const activeSectionId = useSelector(state => state.getIn(['document', 'activeSectionId']))
+  const activeDocumentId = useSelector(state => state.getIn(['document', 'id']))
 
   const handleCreatePage = (event) => {
     if (event.keyCode === 13) {
@@ -28,23 +40,61 @@ const CreatePage = ({ onDone }) => {
         variables: {
           input: {
             title: event.target.value,
-            sectionId: activeSectionId,
+            documentId: activeDocumentId,
             pageId: shortid.generate(),
-            content: JSON.stringify([{ type: 'paragraph', id: shortid.generate(), children: [{ text: '' }] }]),
+            content: JSON.stringify([{
+              type: 'paragraph',
+              id: shortid.generate(),
+              children: [{ text: '' }] },
+            ]),
           }
         },
         onCompleted: ({ createPage: { page } }) => {
           dispatch(documentActions.setActivePageId({ activePageId: page.id }))
-          onDone()
+          toggleShowLabel(true)
+        },
+        updater: store => {
+          const page = store
+            .getRootField('createPage')
+            .getLinkedRecord('page')
+          const document = store
+            .getRoot()
+            .getLinkedRecord('document', { id: activeDocumentId })
+          const pages = document
+            .getLinkedRecords('pages')
+            .concat([page])
+
+          console.log(pages)
+
+          document.setLinkedRecords(pages, 'pages')
         }
       })
     }
   }
 
+  if (showLabel) {
+    return (
+      <StyledCreatePageLabel
+        color="rgba(0,0,0,0.4)"
+        variant="caption"
+        onClick={() => toggleShowLabel(false)}
+      >
+        + Add page
+      </StyledCreatePageLabel>
+    )
+  }
+
   return (
     <Input
-      onBlur={onDone}
+      autoFocus
+      onBlur={() => toggleShowLabel(true)}
       onKeyDown={handleCreatePage}
+      style={{
+        borderWidth: 1,
+        paddingLeft: 8,
+        borderColor: 'rgba(0,0,0,0.4)',
+        borderRadius: '2px 8px 8px 2px',
+      }}
     />
   )
 }

@@ -34,7 +34,13 @@ const StyledEditable = styled(Editable)`
 `
 
 const Document = () => {
-  const { editor, activePageId, updateActivePageId, editorState, updateEditorState } = useDocument()
+  const {
+    editor,
+    activePageId,
+    updateActivePageId,
+    editorState,
+    updateEditorState,
+  } = useDocument()
   const { decorate } = useCursors(editor)
 
   const renderElement = React.useCallback(

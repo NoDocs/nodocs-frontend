@@ -4,8 +4,6 @@ import { graphql } from 'relay-runtime'
 import { useParams } from 'react-router-dom'
 import { useLazyLoadQuery } from 'react-relay'
 
-import PlusIcon from 'assets/components/PlusIcon'
-import IconButton from 'atoms/IconButton'
 import Label from 'atoms/Label'
 import SectionElements from './components/SectionElements'
 import PageItem from './components/PageItem'
@@ -13,12 +11,6 @@ import CreatePage from './components/CreatePage'
 
 const StyledLeftPanelContainer = styled.div`
   margin-left: 20px;
-`
-
-const StyledFlexContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 `
 
 const StyledPagesContainer = styled.div`
@@ -52,7 +44,6 @@ const query = graphql`
 `
 
 const DocumentLeftPanel = () => {
-  const [newPage, toggleNewPage] = React.useState(false)
   const params = useParams()
   const { document } = useLazyLoadQuery(
     query,
@@ -62,20 +53,14 @@ const DocumentLeftPanel = () => {
 
   return (
     <StyledLeftPanelContainer>
-      <StyledFlexContainer>
-        <Label weight={500} color="black">Pages</Label>
-
-        <IconButton onClick={() => toggleNewPage(true)} variant="inverted">
-          <PlusIcon variant="inverted" />
-        </IconButton>
-      </StyledFlexContainer>
+      <Label weight={500} color="black">Pages</Label>
 
       <StyledPagesContainer>
         {document
           .pages
           .map(page => <PageItem key={page.id} page={page} />)}
 
-        {newPage && <CreatePage />}
+        <CreatePage />
       </StyledPagesContainer>
 
       <StyledSeparator />

@@ -1,18 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import AddTag from 'shared/AddTag'
 import ImageIcon from 'assets/image.svg'
 import EmbedIcon from 'assets/embed.svg'
 import OrderedListIcon from 'assets/ordered-list.svg'
 import LinkIcon from 'assets/link.svg'
-import SimilarityIcon from 'assets/similarity.svg'
-import SynapsesIcon from 'assets/synapses.svg'
 import ChatIcon from 'assets/chat.svg'
-import subscribersIcon from 'assets/eyeopen.svg'
 import IconButton from 'atoms/IconButton'
 
-import CreateComponent from './components/CreateComponentButton'
-import CreateTag from './components/CreateTag'
+import Tags from './components/Tags'
 
 const StyledDocumentPanelContainer = styled.div`
   display: flex;
@@ -53,6 +50,11 @@ const DocumentPanel = () => {
       <IconButton variant="white">
         <ChatIcon size={24} />
       </IconButton>
+
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <Tags />
+      </React.Suspense>
+      <AddTag />
     </StyledDocumentPanelContainer>
   )
 }

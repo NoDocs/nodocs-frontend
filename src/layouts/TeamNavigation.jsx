@@ -75,8 +75,6 @@ const TeamNavigation = () => {
   const { me: { currentCompany, currentTeam } } = useLazyLoadQuery(currentCompanyQuery, {}, { fetchPolicy: localStorage.getItem('meFetchPolicy') })
   const { teams } = useLazyLoadQuery(teamsQuery, { companyId: currentCompany.id })
 
-  console.log(teams)
-
   const chooseTeam = (team) => () => {
     if (currentTeam.id === team.id) {
       return

@@ -37,6 +37,7 @@ const StyledFileUploaderButton = styled(FileUploaderButton)`
 `
 
 const Neuron = React.forwardRef(({ id: neuronId, attributes }, ref) => {
+  const inputRef = React.useRef()
   const {
     editorState,
     updateEditorState,
@@ -55,7 +56,9 @@ const Neuron = React.forwardRef(({ id: neuronId, attributes }, ref) => {
             style={{ position: 'relative', userSelect: 'none' }}
             {...attributes}
           >
-            <StyledFileUploaderButton onChange={switchImage}>Switch image</StyledFileUploaderButton>
+            <StyledFileUploaderButton ref={inputRef} onChange={switchImage}>
+              Switch image
+            </StyledFileUploaderButton>
             <img
               src={`https://storage.googleapis.com/dev-nodocs-files/${neuron.file.url}`}
               alt={element.name}

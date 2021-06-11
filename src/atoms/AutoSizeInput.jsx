@@ -9,10 +9,10 @@ const StyledInput = styled.input`
   line-height: 17px;
   font-size: 14px;
   border: none;
-  outline: none;
-  color: rgba(255,255,255,0.5);
   background-color: transparent;
 
+  outline: green;
+  color: ${props => props.color || 'rgba(255,255,255,0.5)'};
   width: ${props => props.width}px;
 `
 
@@ -40,7 +40,7 @@ const getInputWidth = (value) => {
   return Math.max(width, 14)
 }
 
-const AutoSizeInput = ({ value, onChange, onBlur }) => {
+const AutoSizeInput = ({ value, onChange, onBlur, ...rest }) => {
   const [width, updateWidth] = React.useState(getInputWidth(value))
 
   const onInputChange = (event) => {
@@ -61,6 +61,7 @@ const AutoSizeInput = ({ value, onChange, onBlur }) => {
       width={width}
       onChange={onInputChange}
       onBlur={onBlur}
+      {...rest}
     />
   )
 }

@@ -19,6 +19,7 @@ type Query {
   neuron(neuronId: String!): Neuron
   neurons(orderBy: String, teamId: String, userId: String, after: String, first: Int): NeuronConnection
   availableCompanies: [Company]
+  documentTags(documentId: String): [Tag]
 }
 
 # An object with an ID
@@ -106,6 +107,7 @@ type Document implements Node {
   # The ID of an object
   id: ID!
   pages: [Page]
+  tags: [Tag]
   name: String
   owner: User
   company: Company
@@ -121,6 +123,14 @@ type Page implements Node {
   title: String
   content: String
   creator: User
+  createdAt(format: String): String
+  updatedAt(format: String): String
+}
+
+type Tag implements Node {
+  # The ID of an object
+  id: ID!
+  name: String
   createdAt(format: String): String
   updatedAt(format: String): String
 }
@@ -222,6 +232,9 @@ type Mutation {
   # Create page
   createPage(input: CreatePageInput!): CreatePagePayload
 
+  # Update page
+  updatePage(input: UpdatePageInput!): UpdatePagePayload
+
   # Send team invitations
   sendInvitations(input: SendInvitationsInput!): SendInvitationsPayload
 
@@ -239,6 +252,9 @@ type Mutation {
 
   # switch asset
   switchAsset(input: SwitchAssetInput!): SwitchAssetPayload
+
+  # create tag
+  createTag(input: CreateTagInput!): CreateTagPayload
 }
 
 type SignInPayload {
@@ -368,6 +384,17 @@ input CreatePageInput {
   clientMutationId: String
 }
 
+type UpdatePagePayload {
+  page: Page
+  clientMutationId: String
+}
+
+input UpdatePageInput {
+  id: String!
+  title: String
+  clientMutationId: String
+}
+
 type SendInvitationsPayload {
   teamMembers: [TeamMember]
   clientMutationId: String
@@ -434,6 +461,17 @@ input SwitchAssetInput {
 }
 
 scalar newFile
+
+type CreateTagPayload {
+  tag: Tag
+  clientMutationId: String
+}
+
+input CreateTagInput {
+  name: String!
+  documentId: String!
+  clientMutationId: String
+}
 
 type Subscription {
   createDocument(input: CreateDocumentSubscriptionInput!): CreateDocumentSubscriptionPayload

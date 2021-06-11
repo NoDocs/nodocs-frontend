@@ -69,6 +69,8 @@ const UserCard = () => {
   const { closePortal } = React.useContext(PortalContext)
   const dispatch = useDispatch()
 
+  console.log(availableCompanies)
+
   const onSwitchCompany = company => () => {
     switchCompany({
       variables: {
