@@ -10,11 +10,7 @@
       ],
       "rewrites": [
         {
-          "source": "*public",
-          "destination": "/public"
-        },
-        {
-          "source": "**",
+          "source": "*",
           "destination": "/index.html"
         }
       ]
