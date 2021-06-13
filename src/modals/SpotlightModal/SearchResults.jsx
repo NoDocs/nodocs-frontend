@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { usePreloadedQuery } from 'react-relay'
 
 import DocumentIcon from 'assets/document.svg'
-import NeuronIcon from 'assets/neuron.svg'
 
 import SearchQuery from './graphql/SearchQuery'
 import SearchResultItem from './components/SearchResultItem'

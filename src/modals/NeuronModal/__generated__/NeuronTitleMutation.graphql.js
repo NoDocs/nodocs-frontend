@@ -19,7 +19,8 @@ export type NeuronTitleMutationVariables = {|
 export type NeuronTitleMutationResponse = {|
   +updateNeuron: ?{|
     +neuron: ?{|
-      +name: ?string
+      +id: string,
+      +name: ?string,
     |}
   |}
 |};
@@ -36,8 +37,8 @@ mutation NeuronTitleMutation(
 ) {
   updateNeuron(input: $input) {
     neuron {
-      name
       id
+      name
     }
   }
 }
@@ -53,49 +54,55 @@ var v0 = [
 ],
 v1 = [
   {
-    "kind": "Variable",
-    "name": "input",
-    "variableName": "input"
-  }
-],
-v2 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "name",
-  "storageKey": null
-};
-return {
-  "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "NeuronTitleMutation",
+    "alias": null,
+    "args": [
+      {
+        "kind": "Variable",
+        "name": "input",
+        "variableName": "input"
+      }
+    ],
+    "concreteType": "UpdateNeuronPayload",
+    "kind": "LinkedField",
+    "name": "updateNeuron",
+    "plural": false,
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
-        "concreteType": "UpdateNeuronPayload",
+        "args": null,
+        "concreteType": "Neuron",
         "kind": "LinkedField",
-        "name": "updateNeuron",
+        "name": "neuron",
         "plural": false,
         "selections": [
           {
             "alias": null,
             "args": null,
-            "concreteType": "Neuron",
-            "kind": "LinkedField",
-            "name": "neuron",
-            "plural": false,
-            "selections": [
-              (v2/*: any*/)
-            ],
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "name",
             "storageKey": null
           }
         ],
         "storageKey": null
       }
     ],
+    "storageKey": null
+  }
+];
+return {
+  "fragment": {
+    "argumentDefinitions": (v0/*: any*/),
+    "kind": "Fragment",
+    "metadata": null,
+    "name": "NeuronTitleMutation",
+    "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
@@ -104,50 +111,19 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "NeuronTitleMutation",
-    "selections": [
-      {
-        "alias": null,
-        "args": (v1/*: any*/),
-        "concreteType": "UpdateNeuronPayload",
-        "kind": "LinkedField",
-        "name": "updateNeuron",
-        "plural": false,
-        "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "Neuron",
-            "kind": "LinkedField",
-            "name": "neuron",
-            "plural": false,
-            "selections": [
-              (v2/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "id",
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      }
-    ]
+    "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "aa5bf262bd2d47fc693a064784d00233",
+    "cacheID": "5edd6b54bfe20acfdbc72ff9d7bb81e0",
     "id": null,
     "metadata": {},
     "name": "NeuronTitleMutation",
     "operationKind": "mutation",
-    "text": "mutation NeuronTitleMutation(\n  $input: UpdateNeuronInput!\n) {\n  updateNeuron(input: $input) {\n    neuron {\n      name\n      id\n    }\n  }\n}\n"
+    "text": "mutation NeuronTitleMutation(\n  $input: UpdateNeuronInput!\n) {\n  updateNeuron(input: $input) {\n    neuron {\n      id\n      name\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'a28819ea8ee395cd82136a12b5ab491c';
+(node/*: any*/).hash = 'f404959119a9d32117a9bd3400270b5f';
 
 module.exports = node;

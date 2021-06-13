@@ -23,6 +23,7 @@ const mutation = graphql`
   mutation NeuronTitleMutation ($input: UpdateNeuronInput!) {
     updateNeuron (input: $input) {
       neuron {
+        id
         name
       }
     }

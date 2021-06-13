@@ -22,8 +22,8 @@ const SearchCommands = ({ search }) => {
   const history = useHistory()
 
   const handleCommandClick = command => () => {
-    if (command.id === 'open-graph') {
-      closePortal('spotlight-modal')
+    if (command.id === 'graph') {
+      closePortal('spotlight-portal')
       openPortal({ name: 'graph-modal' })
       return
     }
@@ -55,7 +55,7 @@ const SearchCommands = ({ search }) => {
               key={command.id}
               icon={command.icon}
               label={command.name}
-              onClick={handleCommandClick}
+              onClick={handleCommandClick(command)}
             />
           )
 

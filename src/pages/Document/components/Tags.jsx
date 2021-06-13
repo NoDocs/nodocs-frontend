@@ -28,8 +28,6 @@ const Tags = () => {
   const { documentId } = useParams()
   const { documentTags } = useLazyLoadQuery(query, { documentId })
 
-  console.log(documentTags)
-
   return (
     <StyledTagsContainer>
       <Typography variant="caption" color="#333">#</Typography>

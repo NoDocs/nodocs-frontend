@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
+import StyledLoader from 'assets/loader-light.svg'
 import withRenderPortal from 'hocs/withRenderPortal'
 import useDebounce from 'hooks/useDebounce'
 import FullScreenModal from 'molecules/FullScreenModal'
@@ -34,13 +35,25 @@ const StyledInput = styled.input`
   font-family: Inter;
 `
 
-const StyledResultsContainer = styled.div``
+const StyledResultsContainer = styled.div`
+  max-height: 240px;
+  overflow: auto;
+`
+
+const StyledLoaderIcon = styled(StyledLoader)`
+  margin-left: 18px;
+`
 
 const SpotlightModal = ({ closePortal }) => {
   const { formik, queryReference } = useSpotlightModal()
   const { value, handleChange } = useDebounce({
     initialValue: formik.values.search,
+    interval: 500,
     service: debouncedValue => {
+      if (!debouncedValue) {
+        return
+      }
+
       formik.setFieldValue('search', debouncedValue)
       formik.handleSubmit()
     },
@@ -63,7 +76,7 @@ const SpotlightModal = ({ closePortal }) => {
 
         <StyledResultsContainer>
           <SearchCommands search={value} />
-          <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense fallback={<StyledLoaderIcon />}>
             {queryReference && <SearchResults queryReference={queryReference} />}
           </React.Suspense>
         </StyledResultsContainer>

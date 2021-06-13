@@ -54,14 +54,7 @@ const SearchIncludes = ({ setFieldValue, values }) => {
         >
           Images
         </StyledButton>
-  
-        <StyledButton
-          active={values.include.includes('video')}
-          onClick={handleButtonClick('video')}
-        >
-          Videos
-        </StyledButton>
-  
+
         <StyledButton
           active={values.include.includes('document')}
           onClick={handleButtonClick('document')}
