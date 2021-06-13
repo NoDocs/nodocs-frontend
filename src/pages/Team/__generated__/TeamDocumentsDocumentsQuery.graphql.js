@@ -19,6 +19,10 @@ export type TeamDocumentsDocumentsQueryResponse = {|
         +id: string,
         +name: ?string,
         +createdAt: ?string,
+        +neurons: ?$ReadOnlyArray<?{|
+          +id: string,
+          +name: ?string,
+        |}>,
         +owner: ?{|
           +id: string,
           +avatar: ?string,
@@ -46,6 +50,10 @@ query TeamDocumentsDocumentsQuery(
         id
         name
         createdAt(format: "MMM D")
+        neurons {
+          id
+          name
+        }
         owner {
           id
           avatar
@@ -84,7 +92,14 @@ v2 = {
   "name": "id",
   "storageKey": null
 },
-v3 = [
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "name",
+  "storageKey": null
+},
+v4 = [
   {
     "alias": null,
     "args": null,
@@ -102,13 +117,7 @@ v3 = [
         "plural": false,
         "selections": [
           (v2/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "name",
-            "storageKey": null
-          },
+          (v3/*: any*/),
           {
             "alias": null,
             "args": [
@@ -121,6 +130,19 @@ v3 = [
             "kind": "ScalarField",
             "name": "createdAt",
             "storageKey": "createdAt(format:\"MMM D\")"
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Neuron",
+            "kind": "LinkedField",
+            "name": "neurons",
+            "plural": true,
+            "selections": [
+              (v2/*: any*/),
+              (v3/*: any*/)
+            ],
+            "storageKey": null
           },
           {
             "alias": null,
@@ -213,7 +235,7 @@ v3 = [
     ]
   }
 ],
-v4 = [
+v5 = [
   {
     "kind": "Literal",
     "name": "first",
@@ -237,7 +259,7 @@ return {
         "kind": "LinkedField",
         "name": "__Team_documents_connection",
         "plural": false,
-        "selections": (v3/*: any*/),
+        "selections": (v4/*: any*/),
         "storageKey": null
       }
     ],
@@ -252,17 +274,17 @@ return {
     "selections": [
       {
         "alias": null,
-        "args": (v4/*: any*/),
+        "args": (v5/*: any*/),
         "concreteType": "DocumentConnection",
         "kind": "LinkedField",
         "name": "documents",
         "plural": false,
-        "selections": (v3/*: any*/),
+        "selections": (v4/*: any*/),
         "storageKey": null
       },
       {
         "alias": null,
-        "args": (v4/*: any*/),
+        "args": (v5/*: any*/),
         "filters": [
           "teamId"
         ],
@@ -274,7 +296,7 @@ return {
     ]
   },
   "params": {
-    "cacheID": "1d7f0b930097bbcffd6bab087c1b3434",
+    "cacheID": "f88a93691cb921da895ae9311152e8b1",
     "id": null,
     "metadata": {
       "connection": [
@@ -290,11 +312,11 @@ return {
     },
     "name": "TeamDocumentsDocumentsQuery",
     "operationKind": "query",
-    "text": "query TeamDocumentsDocumentsQuery(\n  $teamId: String!\n) {\n  documents(first: 2147483647, teamId: $teamId) {\n    edges {\n      node {\n        id\n        name\n        createdAt(format: \"MMM D\")\n        owner {\n          id\n          avatar\n          color\n          fullName\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query TeamDocumentsDocumentsQuery(\n  $teamId: String!\n) {\n  documents(first: 2147483647, teamId: $teamId) {\n    edges {\n      node {\n        id\n        name\n        createdAt(format: \"MMM D\")\n        neurons {\n          id\n          name\n        }\n        owner {\n          id\n          avatar\n          color\n          fullName\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '6c86d560985e9c20c4d3c44879f47b19';
+(node/*: any*/).hash = '284a21c2c45cb1146b6a6c6941414b6f';
 
 module.exports = node;

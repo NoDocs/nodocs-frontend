@@ -14,7 +14,9 @@ const StyledItemContainer = styled.div`
   align-items: center;
   border-left: 2px solid transparent;
 
-  &:hover {
+  &:hover,
+  &:focus {
+    outline: none;
     border-left: 2px solid white;
     background-color: rgba(255, 255, 255, 0.1);
   }
@@ -26,8 +28,14 @@ const StyledItemContainer = styled.div`
 `
 
 const SearchResultItem = ({ icon, label, onClick }) => {
+  const onKeyDown = (event) => {
+    if (event.keyCode === 13) {
+      onClick(event)
+    }
+  }
+
   return (
-    <StyledItemContainer onClick={onClick}>
+    <StyledItemContainer tabIndex={0} onKeyDown={onKeyDown} onClick={onClick}>
       {icon}
 
       <Typography variant="caption" color="white">

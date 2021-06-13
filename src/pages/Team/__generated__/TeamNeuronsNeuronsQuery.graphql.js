@@ -17,6 +17,10 @@ export type TeamNeuronsNeuronsQueryResponse = {|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
         +id: string,
+        +documents: ?$ReadOnlyArray<?{|
+          +id: string,
+          +name: ?string,
+        |}>,
         +neuronId: ?string,
         +name: ?string,
         +file: ?{|
@@ -48,6 +52,10 @@ query TeamNeuronsNeuronsQuery(
     edges {
       node {
         id
+        documents {
+          id
+          name
+        }
         neuronId
         name
         file {
@@ -97,24 +105,37 @@ v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "neuronId",
+  "name": "name",
   "storageKey": null
 },
 v4 = {
   "alias": null,
   "args": null,
-  "kind": "ScalarField",
-  "name": "name",
+  "concreteType": "Document",
+  "kind": "LinkedField",
+  "name": "documents",
+  "plural": true,
+  "selections": [
+    (v2/*: any*/),
+    (v3/*: any*/)
+  ],
   "storageKey": null
 },
 v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "url",
+  "name": "neuronId",
   "storageKey": null
 },
 v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "url",
+  "storageKey": null
+},
+v7 = {
   "alias": null,
   "args": [
     {
@@ -127,7 +148,7 @@ v6 = {
   "name": "createdAt",
   "storageKey": "createdAt(format:\"MMM D\")"
 },
-v7 = {
+v8 = {
   "alias": null,
   "args": null,
   "concreteType": "User",
@@ -160,21 +181,21 @@ v7 = {
   ],
   "storageKey": null
 },
-v8 = {
+v9 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "__typename",
   "storageKey": null
 },
-v9 = {
+v10 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "cursor",
   "storageKey": null
 },
-v10 = {
+v11 = {
   "alias": null,
   "args": null,
   "concreteType": "PageInfo",
@@ -199,7 +220,7 @@ v10 = {
   ],
   "storageKey": null
 },
-v11 = {
+v12 = {
   "kind": "ClientExtension",
   "selections": [
     {
@@ -211,7 +232,7 @@ v11 = {
     }
   ]
 },
-v12 = [
+v13 = [
   {
     "kind": "Literal",
     "name": "first",
@@ -253,8 +274,9 @@ return {
                 "plural": false,
                 "selections": [
                   (v2/*: any*/),
-                  (v3/*: any*/),
                   (v4/*: any*/),
+                  (v5/*: any*/),
+                  (v3/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -263,22 +285,22 @@ return {
                     "name": "file",
                     "plural": false,
                     "selections": [
-                      (v5/*: any*/)
+                      (v6/*: any*/)
                     ],
                     "storageKey": null
                   },
-                  (v6/*: any*/),
                   (v7/*: any*/),
-                  (v8/*: any*/)
+                  (v8/*: any*/),
+                  (v9/*: any*/)
                 ],
                 "storageKey": null
               },
-              (v9/*: any*/)
+              (v10/*: any*/)
             ],
             "storageKey": null
           },
-          (v10/*: any*/),
-          (v11/*: any*/)
+          (v11/*: any*/),
+          (v12/*: any*/)
         ],
         "storageKey": null
       }
@@ -294,7 +316,7 @@ return {
     "selections": [
       {
         "alias": null,
-        "args": (v12/*: any*/),
+        "args": (v13/*: any*/),
         "concreteType": "NeuronConnection",
         "kind": "LinkedField",
         "name": "neurons",
@@ -317,8 +339,9 @@ return {
                 "plural": false,
                 "selections": [
                   (v2/*: any*/),
-                  (v3/*: any*/),
                   (v4/*: any*/),
+                  (v5/*: any*/),
+                  (v3/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -327,29 +350,29 @@ return {
                     "name": "file",
                     "plural": false,
                     "selections": [
-                      (v5/*: any*/),
+                      (v6/*: any*/),
                       (v2/*: any*/)
                     ],
                     "storageKey": null
                   },
-                  (v6/*: any*/),
                   (v7/*: any*/),
-                  (v8/*: any*/)
+                  (v8/*: any*/),
+                  (v9/*: any*/)
                 ],
                 "storageKey": null
               },
-              (v9/*: any*/)
+              (v10/*: any*/)
             ],
             "storageKey": null
           },
-          (v10/*: any*/),
-          (v11/*: any*/)
+          (v11/*: any*/),
+          (v12/*: any*/)
         ],
         "storageKey": null
       },
       {
         "alias": null,
-        "args": (v12/*: any*/),
+        "args": (v13/*: any*/),
         "filters": [
           "teamId"
         ],
@@ -361,7 +384,7 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ead8dce5da697d44830a1df5c0a6611a",
+    "cacheID": "cfae4c62f507ddec7def70b86898b255",
     "id": null,
     "metadata": {
       "connection": [
@@ -377,11 +400,11 @@ return {
     },
     "name": "TeamNeuronsNeuronsQuery",
     "operationKind": "query",
-    "text": "query TeamNeuronsNeuronsQuery(\n  $teamId: String!\n) {\n  neurons(first: 2147483647, teamId: $teamId) {\n    edges {\n      node {\n        id\n        neuronId\n        name\n        file {\n          url\n          id\n        }\n        createdAt(format: \"MMM D\")\n        owner {\n          id\n          avatar\n          color\n          fullName\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query TeamNeuronsNeuronsQuery(\n  $teamId: String!\n) {\n  neurons(first: 2147483647, teamId: $teamId) {\n    edges {\n      node {\n        id\n        documents {\n          id\n          name\n        }\n        neuronId\n        name\n        file {\n          url\n          id\n        }\n        createdAt(format: \"MMM D\")\n        owner {\n          id\n          avatar\n          color\n          fullName\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'c20f7c2434f3c71d3beef0d8bb5bec29';
+(node/*: any*/).hash = '395932c36be8ad9c9a42112cfa988c29';
 
 module.exports = node;

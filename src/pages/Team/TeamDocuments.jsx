@@ -26,6 +26,10 @@ const documentsQuery = graphql`
           id
           name
           createdAt (format: "MMM D")
+          neurons {
+            id
+            name
+          }
           owner {
             id
             avatar

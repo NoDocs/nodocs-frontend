@@ -43,6 +43,11 @@ const documentsQuery = graphql`
           id
           name
           createdAt (format: "MMM D")
+          neurons {
+            id
+            neuronId
+            name
+          }
           owner {
             id
             avatar
@@ -62,6 +67,10 @@ const neuronsQuery = graphql`
       edges {
         node {
           id
+          documents {
+            id
+            name
+          }
           neuronId
           file {
             url
@@ -101,37 +110,39 @@ const GraphModal = ({ closePortal }) => {
 
       documents
         .map(curr => curr.node)
-        .forEach(document => nodes.push({
-          id: document.id,
-          name: document.name,
-          type: 'document',
-        }))
+        .forEach(document => nodes.push({ id: document.id, name: document.name, type: 'document' }))
+
       neurons
         .map(curr => curr.node)
-        .forEach(neuron => nodes.push({
-          id: neuron.neuronId,
-          name: neuron.name,
-          fileUrl: get('file.url', neuron),
-          type: 'neuron',
-        }))
+        .forEach(neuron => nodes.push({ id: neuron.neuronId, name: neuron.name, fileUrl: get('file.url', neuron), type: 'neuron' }))
+
       nodes.push({
         id: me.currentTeam.id,
         name: me.currentTeam.name,
         type: 'team',
       })
 
-      documents
-        .map(curr => curr.node)
-        .forEach(document => links.push({
-          source: document.id,
-          target: me.currentTeam.id,
-        }))
       neurons
         .map(curr => curr.node)
+        .filter(neuron => !neuron.documents.length)
         .forEach(neuron => links.push({
           source: neuron.neuronId,
           target: me.currentTeam.id,
         }))
+
+      documents
+        .map(curr => curr.node)
+        .forEach(document => {
+          links.push({ source: document.id, target: me.currentTeam.id })
+
+          if (document.neurons) {
+            console.log(document.neurons)
+            document.neurons.forEach(neuron => links.push({
+              source: document.id,
+              target: neuron.neuronId,
+            }))
+          }
+        })
 
       return { nodes, links }
     },

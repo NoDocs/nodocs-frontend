@@ -29,6 +29,10 @@ const neuronsQuery = graphql`
       edges {
         node {
           id
+          documents {
+            id
+            name
+          }
           neuronId
           name
           file {

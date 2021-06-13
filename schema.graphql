@@ -108,6 +108,7 @@ type Document implements Node {
   # The ID of an object
   id: ID!
   pages: [Page]
+  neurons: [Neuron]
   tags: [Tag]
   name: String
   owner: User
@@ -124,6 +125,32 @@ type Page implements Node {
   title: String
   content: String
   creator: User
+  createdAt(format: String): String
+  updatedAt(format: String): String
+}
+
+type Neuron implements Node {
+  # The ID of an object
+  id: ID!
+  name: String
+  type: String
+  neuronId: String
+  documents: [Document]
+  content: String
+  owner: User
+  team: [Team]
+  company: [Company]
+  file: File
+  createdAt(format: String): String
+  updatedAt(format: String): String
+  deletedAt(format: String): String
+}
+
+type File implements Node {
+  # The ID of an object
+  id: ID!
+  name: String
+  url: String
   createdAt(format: String): String
   updatedAt(format: String): String
 }
@@ -153,31 +180,6 @@ type DocumentEdge {
 
   # A cursor for use in pagination
   cursor: String!
-}
-
-type Neuron implements Node {
-  # The ID of an object
-  id: ID!
-  name: String
-  type: String
-  neuronId: String
-  content: String
-  owner: User
-  team: [Team]
-  company: [Company]
-  file: File
-  createdAt(format: String): String
-  updatedAt(format: String): String
-  deletedAt(format: String): String
-}
-
-type File implements Node {
-  # The ID of an object
-  id: ID!
-  name: String
-  url: String
-  createdAt(format: String): String
-  updatedAt(format: String): String
 }
 
 # A connection to a list of items.
