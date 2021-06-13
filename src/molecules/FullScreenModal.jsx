@@ -15,13 +15,13 @@ const StyledContainer = styled.div`
   justify-content: center;
   flex-direction: column;
   position: absolute;
+  background-color: rgba(0, 0, 0, 0.6);
   top: 0px;
   left: 0px;
   z-index: 100;
 `
 
 const StyledOverlay = styled.div`
-  background-color: rgba(0, 0, 0, 0.9);
   position: absolute;
   width: 100%;
   height: 100%;

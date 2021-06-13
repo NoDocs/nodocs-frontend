@@ -45,6 +45,23 @@ const AddTag = () => {
             documentId,
           }
         },
+        updater: store => {
+          const tag = store
+            .getRootField('createTag')
+            .getLinkedRecord('tag')
+          const tags = store
+            .getRoot()
+            .getLinkedRecords('documentTags', { documentId })
+            .concat([tag])
+
+          store
+            .getRoot()
+            .setLinkedRecords(tags, 'documentTags', { documentId })
+        },
+        onCompleted: () => {
+          toggleAddMode(false)
+          updateTag('')
+        },
       })
     }
   }

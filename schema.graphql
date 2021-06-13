@@ -20,6 +20,7 @@ type Query {
   neurons(orderBy: String, teamId: String, userId: String, after: String, first: Int): NeuronConnection
   availableCompanies: [Company]
   documentTags(documentId: String): [Tag]
+  search(search: String): [Search]
 }
 
 # An object with an ID
@@ -196,6 +197,15 @@ type NeuronEdge {
 
   # A cursor for use in pagination
   cursor: String!
+}
+
+type Search implements Node {
+  # The ID of an object
+  id: ID!
+  type: String
+  name: String
+  createdAt(format: String): String
+  updatedAt(format: String): String
 }
 
 type Mutation {

@@ -12,8 +12,9 @@ import IconButton from 'atoms/IconButton'
 import Tags from './components/Tags'
 
 const StyledDocumentPanelContainer = styled.div`
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 300px auto 300px;
   align-items: center;
   border: 1px solid #CFD8DC;
   grid-area: document-panel;
@@ -26,35 +27,47 @@ const StyledSeparator = styled.div`
   height: 30px;
 `
 
+const StyledFlexContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 const DocumentPanel = () => {
   return (
     <StyledDocumentPanelContainer>
-      <IconButton variant="white">
-        <OrderedListIcon size={24} />
-      </IconButton>
+      <div />
 
-      <IconButton variant="white">
-        <ImageIcon size={24} />
-      </IconButton>
+      <StyledFlexContainer>
+        <IconButton variant="white">
+          <OrderedListIcon size={24} />
+        </IconButton>
 
-      <IconButton variant="white">
-        <EmbedIcon size={24} />
-      </IconButton>
+        <IconButton variant="white">
+          <ImageIcon size={24} />
+        </IconButton>
 
-      <IconButton variant="white">
-        <LinkIcon size={24} />
-      </IconButton>
+        <IconButton variant="white">
+          <EmbedIcon size={24} />
+        </IconButton>
 
-      <StyledSeparator />
+        <IconButton variant="white">
+          <LinkIcon size={24} />
+        </IconButton>
 
-      <IconButton variant="white">
-        <ChatIcon size={24} />
-      </IconButton>
+        <StyledSeparator />
 
-      <React.Suspense fallback={<div>Loading...</div>}>
-        <Tags />
-      </React.Suspense>
-      <AddTag />
+        <IconButton variant="white">
+          <ChatIcon size={24} />
+        </IconButton>
+      </StyledFlexContainer>
+
+      <StyledFlexContainer>
+        <React.Suspense fallback={<div>Loading...</div>}>
+          <Tags />
+        </React.Suspense>
+        <AddTag />
+      </StyledFlexContainer>
     </StyledDocumentPanelContainer>
   )
 }

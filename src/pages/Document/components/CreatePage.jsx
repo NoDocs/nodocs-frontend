@@ -64,8 +64,6 @@ const CreatePage = () => {
             .getLinkedRecords('pages')
             .concat([page])
 
-          console.log(pages)
-
           document.setLinkedRecords(pages, 'pages')
         }
       })

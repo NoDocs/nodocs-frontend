@@ -14,7 +14,8 @@ const StyledFullScreenModal = styled(FullScreenModal)`
   width: 740px;
   display: flex;
   align-items: flex-start;
-  height: 85%;
+  margin-top: 15%;
+  min-height: 85%;
 `
 
 const StyledModal = styled.div`
@@ -22,7 +23,7 @@ const StyledModal = styled.div`
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25);
   border-radius: 5px 25px 0px 0px;
   flex: 1;
-  height: 100%;
+  min-height: 100%;
   padding: 20px 30px;
   box-sizing: border-box;
 `
