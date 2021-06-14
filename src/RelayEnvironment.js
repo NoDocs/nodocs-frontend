@@ -94,7 +94,7 @@ const fetchQuery = async (operation, variables, cacheConfig = {}, uploadables) =
     })))
 }
 
-const subscriptionClient = new SubscriptionClient(`ws://${process.env.BASE_API_URL}:1111/graphql/subscribe`, { reconnect: true })
+const subscriptionClient = new SubscriptionClient(`ws://${process.env.BASE_API}:1111/graphql/subscribe`, { reconnect: true })
 const subscribeQuery = (operation, variables) => {
   const subscribeObservable = subscriptionClient.request({
     query: operation.text,
