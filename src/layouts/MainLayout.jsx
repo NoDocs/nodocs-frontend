@@ -14,6 +14,7 @@ import CreateNeuronShortcut from './components/CreateNeuronShortcut'
 import CreateTeamShortcut from './components/CreateTeamShortcut'
 import OpenGraphShortcut from './components/OpenGraphShortcut'
 import OpenSpotlightShortcut from './components/OpenSpotlightShortcut'
+import { graphql, useLazyLoadQuery } from 'react-relay'
 
 const StyledContainer = styled.div`
   display: grid;
@@ -36,9 +37,20 @@ const StyledChildContainer = styled.div`
   overflow-y: auto;
 `
 
+const meQuery = graphql`
+  query MainLayoutQuery {
+    me {
+      currentTeam {
+        id
+      }
+    }
+  }
+`
+
 const MainLayout = ({ children }) => {
   const [toggled, toggle] = React.useState(false)
   const { openPortal } = React.useContext(PortalContext)
+  const { me } = useLazyLoadQuery(meQuery)
   const { search } = useLocation()
 
   React.useEffect(

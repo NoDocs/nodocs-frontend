@@ -13,14 +13,15 @@ type Query {
   me: User
   users(orderBy: String, after: String, first: Int): UserConnection
   document(id: String): Document
-  documents(orderBy: String, teamId: String, userId: String, after: String, first: Int): DocumentConnection
+  documents(orderBy: String, tagId: String, teamId: String, userId: String, after: String, first: Int): DocumentConnection
   teams(companyId: String): [Team]
   currentTeam: Team
   neuron(neuronId: String!): Neuron
   neurons(orderBy: String, teamId: String, userId: String, after: String, first: Int): NeuronConnection
   availableCompanies: [Company]
   documentTags(documentId: String): [Tag]
-  search(search: String): [Search]
+  teamTags(teamId: String): [Tag]
+  search(search: String): [SearchResult]
 }
 
 # An object with an ID
@@ -109,6 +110,7 @@ type Document implements Node {
   id: ID!
   pages: [Page]
   neurons: [Neuron]
+  shortDescription: String
   tags: [Tag]
   name: String
   owner: User
@@ -159,9 +161,12 @@ type Tag implements Node {
   # The ID of an object
   id: ID!
   name: String
+  relations: [relations]
   createdAt(format: String): String
   updatedAt(format: String): String
 }
+
+union relations = Document | Neuron
 
 # A connection to a list of items.
 type DocumentConnection {
@@ -201,14 +206,7 @@ type NeuronEdge {
   cursor: String!
 }
 
-type Search implements Node {
-  # The ID of an object
-  id: ID!
-  type: String
-  name: String
-  createdAt(format: String): String
-  updatedAt(format: String): String
-}
+union SearchResult = Document | Neuron
 
 type Mutation {
   # Sign in mutation

@@ -18,9 +18,13 @@ const getFontSize = (props) => {
 }
 
 const Heading = styled.h1`
-  fontSize: ${props => getFontSize(props)};
+  font-size: ${props => getFontSize(props)};
+  letter-spacing: -0.022em;
   font-weight: 300;
   font-family: Inter;
+
+  ${props => props.mt && `margin-top: ${props.mt * 8}px;`}
+  ${props => props.mb && `margin-bottom: ${props.mb * 8}px;`}
 `
 
 export default Heading

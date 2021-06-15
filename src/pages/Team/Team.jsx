@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import Typography from 'molecules/Typography'
 import TeamConfigurationBar from './TeamConfigurationBar'
 import TeamContent from './TeamContent'
 
@@ -12,7 +13,13 @@ const Team = () => (
   <React.Fragment>
     <StyledContentContainer>
       <TeamConfigurationBar />
-      <TeamContent />
+
+      <Typography variant="h3" mt={2} mb={2}>The product team!</Typography>
+      <Typography variant="body1">We change people’s live through travel</Typography>
+
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <TeamContent />
+      </React.Suspense>
     </StyledContentContainer>
   </React.Fragment>
 )

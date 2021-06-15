@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 
 import Heading from './Heading'
 import Caption from './Caption'
+import TypographyBody from './TypographyBody'
+import TypographySubtitle from './TypographySubTitle'
 
 const variants = [
   'h1',
@@ -26,10 +28,18 @@ const Typography = ({ variant, children, ...rest }) => {
     case 'h4':
     case 'h5':
     case 'h6':
-      return <Heading as={variant} />
+      return <Heading as={variant} {...rest}>{children}</Heading>
 
     case 'caption':
       return <Caption {...rest}>{children}</Caption>
+
+    case 'body1':
+    case 'body2':
+      return <TypographyBody variant={variant}>{children}</TypographyBody>
+
+    case 'subtitle1':
+    case 'subtitle2':
+      return <TypographySubtitle variant={variant}>{children}</TypographySubtitle>
 
     default:
       return children

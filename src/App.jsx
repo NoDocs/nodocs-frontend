@@ -29,6 +29,7 @@ const App = () => {
           path="/"
           exact
           Layout={MainLayout}
+          fallback={<div>Loading...</div>}
           component={Team}
         />
 

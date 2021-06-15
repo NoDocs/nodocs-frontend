@@ -3,9 +3,18 @@ import { graphql } from 'react-relay'
 const SearchQuery = graphql`
   query SearchQuery($search: String!) {
     search (search: $search) {
-      id
-      type
-      name
+      __typename
+
+      ... on Document {
+        name
+        pages {
+          title
+        }
+      }
+
+      ... on Neuron {
+        name
+      }
     }
   }
 `

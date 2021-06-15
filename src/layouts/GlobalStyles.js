@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components'
 
 export default createGlobalStyle`
   body {
-    background-color: #F9F9F9;
+    background-color: white;
   }
 
   .selection-area {
