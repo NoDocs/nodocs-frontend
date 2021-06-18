@@ -17,7 +17,25 @@ export type TeamContentQueryResponse = {|
     +name: ?string,
     +relations: ?$ReadOnlyArray<?({|
       +__typename: "Document",
+      +id: string,
       +name: ?string,
+      +shortDescription: ?string,
+      +owner: ?{|
+        +fullName: ?string,
+        +color: ?string,
+      |},
+      +createdAt: ?string,
+    |} | {|
+      +__typename: "Neuron",
+      +id: string,
+      +name: ?string,
+      +neuronId: ?string,
+      +shortDescription: ?string,
+      +owner: ?{|
+        +fullName: ?string,
+        +color: ?string,
+      |},
+      +createdAt: ?string,
     |} | {|
       // This will never be '%other', but we need some
       // value in case none of the concrete values match.
@@ -42,7 +60,27 @@ query TeamContentQuery(
     relations {
       __typename
       ... on Document {
+        id
         name
+        shortDescription
+        owner {
+          fullName
+          color
+          id
+        }
+        createdAt(format: "MMM D")
+      }
+      ... on Neuron {
+        id
+        name
+        neuronId
+        shortDescription
+        owner {
+          fullName
+          color
+          id
+        }
+        createdAt(format: "MMM D")
       }
       ... on Node {
         __isNode: __typename
@@ -90,12 +128,72 @@ v4 = {
   "storageKey": null
 },
 v5 = {
-  "kind": "InlineFragment",
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "shortDescription",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "fullName",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "color",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "User",
+  "kind": "LinkedField",
+  "name": "owner",
+  "plural": false,
   "selections": [
-    (v3/*: any*/)
+    (v6/*: any*/),
+    (v7/*: any*/)
   ],
-  "type": "Document",
-  "abstractKey": null
+  "storageKey": null
+},
+v9 = {
+  "alias": null,
+  "args": [
+    {
+      "kind": "Literal",
+      "name": "format",
+      "value": "MMM D"
+    }
+  ],
+  "kind": "ScalarField",
+  "name": "createdAt",
+  "storageKey": "createdAt(format:\"MMM D\")"
+},
+v10 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "neuronId",
+  "storageKey": null
+},
+v11 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "User",
+  "kind": "LinkedField",
+  "name": "owner",
+  "plural": false,
+  "selections": [
+    (v6/*: any*/),
+    (v7/*: any*/),
+    (v2/*: any*/)
+  ],
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -123,7 +221,31 @@ return {
             "plural": true,
             "selections": [
               (v4/*: any*/),
-              (v5/*: any*/)
+              {
+                "kind": "InlineFragment",
+                "selections": [
+                  (v2/*: any*/),
+                  (v3/*: any*/),
+                  (v5/*: any*/),
+                  (v8/*: any*/),
+                  (v9/*: any*/)
+                ],
+                "type": "Document",
+                "abstractKey": null
+              },
+              {
+                "kind": "InlineFragment",
+                "selections": [
+                  (v2/*: any*/),
+                  (v3/*: any*/),
+                  (v10/*: any*/),
+                  (v5/*: any*/),
+                  (v8/*: any*/),
+                  (v9/*: any*/)
+                ],
+                "type": "Neuron",
+                "abstractKey": null
+              }
             ],
             "storageKey": null
           }
@@ -159,7 +281,31 @@ return {
             "plural": true,
             "selections": [
               (v4/*: any*/),
-              (v5/*: any*/),
+              {
+                "kind": "InlineFragment",
+                "selections": [
+                  (v2/*: any*/),
+                  (v3/*: any*/),
+                  (v5/*: any*/),
+                  (v11/*: any*/),
+                  (v9/*: any*/)
+                ],
+                "type": "Document",
+                "abstractKey": null
+              },
+              {
+                "kind": "InlineFragment",
+                "selections": [
+                  (v2/*: any*/),
+                  (v3/*: any*/),
+                  (v10/*: any*/),
+                  (v5/*: any*/),
+                  (v11/*: any*/),
+                  (v9/*: any*/)
+                ],
+                "type": "Neuron",
+                "abstractKey": null
+              },
               {
                 "kind": "InlineFragment",
                 "selections": [
@@ -177,16 +323,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "915415fb5ffe915377c278851bdcb977",
+    "cacheID": "62b15624bcb9f7d73245f2481f317fa8",
     "id": null,
     "metadata": {},
     "name": "TeamContentQuery",
     "operationKind": "query",
-    "text": "query TeamContentQuery(\n  $teamId: String\n) {\n  teamTags(teamId: $teamId) {\n    id\n    name\n    relations {\n      __typename\n      ... on Document {\n        name\n      }\n      ... on Node {\n        __isNode: __typename\n        id\n      }\n    }\n  }\n}\n"
+    "text": "query TeamContentQuery(\n  $teamId: String\n) {\n  teamTags(teamId: $teamId) {\n    id\n    name\n    relations {\n      __typename\n      ... on Document {\n        id\n        name\n        shortDescription\n        owner {\n          fullName\n          color\n          id\n        }\n        createdAt(format: \"MMM D\")\n      }\n      ... on Neuron {\n        id\n        name\n        neuronId\n        shortDescription\n        owner {\n          fullName\n          color\n          id\n        }\n        createdAt(format: \"MMM D\")\n      }\n      ... on Node {\n        __isNode: __typename\n        id\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '9c14af89fedbf1c570504369bd60586d';
+(node/*: any*/).hash = 'dfa66f580cf2cecbd86a73b3103a6406';
 
 module.exports = node;

@@ -30,6 +30,7 @@ const StyledLeftMenuContainer = styled.div`
 
 const StyledContainer = styled.div`
   padding: 16px 24px 0px;
+  padding-left: 16px;
   width: 280px;
   box-sizing: border-box;
 `

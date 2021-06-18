@@ -136,6 +136,7 @@ type Neuron implements Node {
   id: ID!
   name: String
   type: String
+  shortDescription: String
   neuronId: String
   documents: [Document]
   content: String

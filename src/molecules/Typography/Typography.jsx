@@ -35,11 +35,11 @@ const Typography = ({ variant, children, ...rest }) => {
 
     case 'body1':
     case 'body2':
-      return <TypographyBody variant={variant}>{children}</TypographyBody>
+      return <TypographyBody variant={variant} {...rest}>{children}</TypographyBody>
 
     case 'subtitle1':
     case 'subtitle2':
-      return <TypographySubtitle variant={variant}>{children}</TypographySubtitle>
+      return <TypographySubtitle variant={variant} {...rest}>{children}</TypographySubtitle>
 
     default:
       return children

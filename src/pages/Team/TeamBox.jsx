@@ -10,16 +10,27 @@ const StyledBoxContainer = styled.div`
   padding: 16px;
 `
 
-const TeamBox = ({ data }) => {
+const StyledCardsContainer = styled.div`
+  display: grid;
+  grid-gap: 8px;
+  grid-template-columns: repeat(auto-fill, 200px);
+`
+
+const TeamBox = ({ data, children }) => {
   return (
     <StyledBoxContainer>
       <Typography variant="subtitle2"># {data.name}</Typography>
+
+      <StyledCardsContainer>
+        {children}
+      </StyledCardsContainer>
     </StyledBoxContainer>
   )
 }
 
 TeamBox.propTypes = {
   data: PropTypes.object,
+  children: PropTypes.any,
 }
 
 export default TeamBox

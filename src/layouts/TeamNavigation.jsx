@@ -7,14 +7,13 @@ import Title from 'atoms/Title'
 import CreateTeamButton from './components/CreateTeamButton'
 
 const StyledTeamNavigationContainer = styled.div`
-  width: 72px;
   height: 100vh;
-  border-right: 2px solid rgba(255, 255, 255, 0.2);
   padding-top: 18px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-left: 16px;
 `
 
 const StyledGridContainer = styled.div`
