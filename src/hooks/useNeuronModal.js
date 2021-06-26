@@ -48,7 +48,7 @@ const useNeuronModal = () => {
 
       return [sharedType, provider]
     },
-    [neuron]
+    [neuron.id]
   )
 
   const editor = React.useMemo(

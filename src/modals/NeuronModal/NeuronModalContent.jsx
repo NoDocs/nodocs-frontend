@@ -59,6 +59,7 @@ const NeuronContent = () => {
       <Slate
         editor={editor}
         value={editorState}
+        key="editor"
         onChange={updateEditorState}
       >
         <StyledEditable
@@ -72,4 +73,4 @@ const NeuronContent = () => {
   )
 }
 
-export default NeuronContent
+export default React.memo(NeuronContent)
