@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Typography from 'molecules/Typography'
+import SpotlightModal from 'modals/SpotlightModal'
 import TeamConfigurationBar from './TeamConfigurationBar'
 import TeamContent from './TeamContent'
 
@@ -21,6 +22,8 @@ const Team = () => (
         <TeamContent />
       </React.Suspense>
     </StyledContentContainer>
+
+    <SpotlightModal />
   </React.Fragment>
 )
 

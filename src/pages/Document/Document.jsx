@@ -4,6 +4,7 @@ import { Slate, Editable } from 'slate-react'
 import { useCursors } from 'slate-yjs'
 
 import Leaf from 'shared/Leaf'
+import SpotlightModal from 'modals/SpotlightModal'
 import useDocument from './hooks/useDocument'
 import DocumentPanel from './DocumentPanel'
 import DocumentLeftPanel from './DocumentLeftPanel'
@@ -95,6 +96,7 @@ const Document = () => {
           />
 
           <InlineToolbar />
+          <SpotlightModal />
         </Slate>
       </StyledDocumentContainer>
     </DocumentContext.Provider>

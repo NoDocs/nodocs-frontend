@@ -14,6 +14,7 @@ const SearchQuery = graphql`
 
       ... on Neuron {
         name
+        neuronId
       }
     }
   }

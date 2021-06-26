@@ -1,8 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useParams } from 'react-router-dom'
+import { Transforms } from 'slate'
+import { useSlate, ReactEditor } from 'slate-react'
+import { useRelayEnvironment } from 'react-relay'
 
 import Typography from 'molecules/Typography'
+import attachNeuronToDocument from '../../../pages/Document/mutations/attachNeuronToDocumentMutation'
+import usePortal from 'hooks/usePortal'
 
 const StyledItemContainer = styled.div`
   padding: 8px;
@@ -27,8 +33,25 @@ const StyledItemContainer = styled.div`
   `}
 `
 
-const SearchResultItem = ({ icon, label, onClick }) => {
-  const onKeyDown = (event) => {
+const SearchResultItem = ({ id, icon, label, onClick }) => {
+  const { documentId } = useParams()
+  const { closePortal } = usePortal()
+  const environment = useRelayEnvironment()
+  const editor = useSlate()
+
+  const onKeyDown = async (event) => {
+    if (event.keyCode === 13 && event.metaKey && documentId) {
+      await attachNeuronToDocument.commit(environment, { documentId, neuronId: id })
+      Transforms.insertNodes(editor, {
+        type: 'neuron',
+        id,
+        children: [{ text: '' }],
+      })
+      ReactEditor.blur(editor)
+      closePortal('spotlight-portal')
+      return
+    }
+
     if (event.keyCode === 13) {
       onClick(event)
     }
@@ -46,6 +69,7 @@ const SearchResultItem = ({ icon, label, onClick }) => {
 }
 
 SearchResultItem.propTypes = {
+  id: PropTypes.string,
   icon: PropTypes.any,
   label: PropTypes.string,
   onClick: PropTypes.func,

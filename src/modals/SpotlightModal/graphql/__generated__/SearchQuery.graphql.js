@@ -21,6 +21,7 @@ export type SearchQueryResponse = {|
   |} | {|
     +__typename: "Neuron",
     +name: ?string,
+    +neuronId: ?string,
   |} | {|
     // This will never be '%other', but we need some
     // value in case none of the concrete values match.
@@ -49,6 +50,7 @@ query SearchQuery(
     }
     ... on Neuron {
       name
+      neuronId
     }
     ... on Node {
       __isNode: __typename
@@ -97,7 +99,14 @@ v4 = {
 v5 = {
   "kind": "InlineFragment",
   "selections": [
-    (v3/*: any*/)
+    (v3/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "neuronId",
+      "storageKey": null
+    }
   ],
   "type": "Neuron",
   "abstractKey": null
@@ -204,16 +213,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "e8279b3feae12fdfce4659e93accf56f",
+    "cacheID": "5ed7b887f095032d0c410f5c30a24fbf",
     "id": null,
     "metadata": {},
     "name": "SearchQuery",
     "operationKind": "query",
-    "text": "query SearchQuery(\n  $search: String!\n) {\n  search(search: $search) {\n    __typename\n    ... on Document {\n      name\n      pages {\n        title\n        id\n      }\n    }\n    ... on Neuron {\n      name\n    }\n    ... on Node {\n      __isNode: __typename\n      id\n    }\n  }\n}\n"
+    "text": "query SearchQuery(\n  $search: String!\n) {\n  search(search: $search) {\n    __typename\n    ... on Document {\n      name\n      pages {\n        title\n        id\n      }\n    }\n    ... on Neuron {\n      name\n      neuronId\n    }\n    ... on Node {\n      __isNode: __typename\n      id\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '8759e80dae1771e9b3cae57a8e58f510';
+(node/*: any*/).hash = 'd31f9e5fc468e6f5a07d8943bd9009b2';
 
 module.exports = node;

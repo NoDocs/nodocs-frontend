@@ -17,6 +17,7 @@ const SearchResults = ({ queryReference }) => {
   return search.map(searchResult => (
     <SearchResultItem
       key={searchResult.id}
+      id={searchResult.neuronId}
       icon={<DocumentIcon color="white" size={24} />}
       label={searchResult.name}
       onClick={handleItemClick(searchResult)}

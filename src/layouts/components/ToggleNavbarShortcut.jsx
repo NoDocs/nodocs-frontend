@@ -6,7 +6,7 @@ import Shortcut from 'atoms/Shortcut'
 const ToggleNavbarShortcut = ({ toggleNavbar }) => {
   return (
     <Shortcut
-      name="open-spotlight-portal"
+      name="toggle-menu"
       hint="b"
       handler={() => toggleNavbar(toggled => !toggled)}
     />

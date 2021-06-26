@@ -76,6 +76,7 @@ const SpotlightModal = ({ closePortal }) => {
 
         <StyledResultsContainer>
           <SearchCommands search={value} />
+
           <React.Suspense fallback={<StyledLoaderIcon />}>
             {queryReference && <SearchResults queryReference={queryReference} />}
           </React.Suspense>
