@@ -8,29 +8,19 @@ import { graphql } from 'graphql'
 import { PortalContext } from 'contexts'
 import { notificationActions } from 'logic/notification'
 import Avatar from 'atoms/Avatar'
-import Label from 'atoms/Label'
-import ListItem from 'molecules/ListItem'
 import Popup from 'molecules/Popup'
+import Typography from 'molecules/Typography'
 
 const StyledContainer = styled.div`
-  display: grid;
-  grid-auto-flow: column;
-  grid-column-gap: 14px;
-  grid-template-columns: 35px auto;
+  display: flex;
+  flex: 1;
   align-items: center;
+  padding-left: 18px;
+  justify-content: space-between;
 `
 
-const StyledUserName = styled(Label)`
-  margin-bottom: 5px;
-`
-
-const StyledPopup = styled(Popup)`
-  width: 150px !important;
-`
-
-const StyledLabel = styled(Label)`
-  cursor: pointer;
-`
+const StyledTeamName = styled(Typography)`color: white;`
+const StyledPopup = styled(Popup)`width: 150px !important;`
 
 const MeQuery = graphql`
   query UserCardQuery {
@@ -39,6 +29,10 @@ const MeQuery = graphql`
       fullName
       color
       email
+
+      currentTeam {
+        name
+      }
 
       currentCompany {
         id
@@ -69,8 +63,6 @@ const UserCard = () => {
   const { closePortal } = React.useContext(PortalContext)
   const dispatch = useDispatch()
 
-  console.log(availableCompanies)
-
   const onSwitchCompany = company => () => {
     switchCompany({
       variables: {
@@ -100,23 +92,16 @@ const UserCard = () => {
 
   return (
     <StyledContainer>
-      <Avatar name={me.fullName} avatar={me.avatar} color={me.color} />
+      <StyledTeamName variant="h6">
+        {me.currentTeam.name}
+      </StyledTeamName>
 
-      <div>
-        <StyledUserName color="active" title={me.email} weight={500}>
-          {me.fullName}
-        </StyledUserName>
-
-        <StyledPopup
-          name="switch-company-popup"
-          trigger={<StyledLabel color="active">{me.currentCompany.name}</StyledLabel>}
-          disabled={!availableCompanies.length}
-        >
-          {availableCompanies
-            .filter(company => company.id !== me.currentCompany.id)
-            .map(company => <ListItem key={company.id} label={company.name} onClick={onSwitchCompany(company)} color="black" />)}
-        </StyledPopup>
-      </div>
+      <StyledPopup
+        name="user-popup"
+        trigger={<Avatar name={me.fullName} size={24} avatar={me.avatar} color={me.color} />}
+      >
+        Something here !!
+      </StyledPopup>
     </StyledContainer>
   )
 }

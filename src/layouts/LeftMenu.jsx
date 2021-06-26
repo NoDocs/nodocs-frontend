@@ -1,28 +1,23 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useLocation } from 'react-router'
 
 import SearchIcon from 'assets/search.svg'
 import UpdatesIcon from 'assets/updates.svg'
 import AddIcon from 'assets/add.svg'
-import ExploreIcon from 'assets/explore.svg'
 import TeamsIcon from 'assets/teams.svg'
 import LikeIcon from 'assets/star.svg'
-import ArrowLeftIcon from 'assets/arrow-left.svg'
 import HomeIcon from 'assets/home.svg'
-
-import IconButton from 'atoms/IconButton'
 import UserCard from 'molecules/UserCard'
 import ListItem from 'molecules/ListItem'
-
-import TeamNavigation from './TeamNavigation'
 import LoadingTeams from 'loadings/LoadingTeams'
 import LoadingUserCard from 'loadings/LoadingUserCard'
 
+import TeamNavigation from './TeamNavigation'
+
 const StyledLeftMenuContainer = styled.div`
   grid-area: left;
-  width: 352px;
+  width: 336px;
   background-color: #1E1F23;
   display: flex;
   align-items: flex-start;
@@ -38,7 +33,7 @@ const StyledContainer = styled.div`
 const StyledLeftMenuHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 25px;
+  margin-bottom: 14px;
   align-items: center;
 `
 
@@ -49,16 +44,12 @@ const StyledGridContainer = styled.div`
 
 const StyledSeparator = styled.div`
   opacity: 0.3;
-  border: 1px solid #F2F2F2;
-  margin: 20px 0px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  opacity: 0.3;
+  margin: 12px 0px;
 `
 
-const StyledIconButton = styled(IconButton)`
-  position: relative;
-  right: -10px;
-`
-
-const LeftMenu = ({ toggleNavbar }) => {
+const LeftMenu = () => {
   const { pathname } = useLocation()
 
   return (
@@ -72,10 +63,6 @@ const LeftMenu = ({ toggleNavbar }) => {
           <React.Suspense fallback={<LoadingUserCard />}>
             <UserCard />
           </React.Suspense>
-
-          <StyledIconButton onClick={() => toggleNavbar(false)}>
-            <ArrowLeftIcon />
-          </StyledIconButton>
         </StyledLeftMenuHeader>
 
         <StyledGridContainer>
@@ -85,8 +72,7 @@ const LeftMenu = ({ toggleNavbar }) => {
 
           <StyledSeparator />
 
-          <ListItem icon={<ExploreIcon />} label="Explore" />
-          <ListItem active={pathname === '/me'} icon={<HomeIcon />} label="Private" />
+          <ListItem active={pathname === '/me'} icon={<HomeIcon />} label="Personal" />
           <ListItem active={pathname === '/'} icon={<TeamsIcon />} label="Team" />
 
           <StyledSeparator />
@@ -96,10 +82,6 @@ const LeftMenu = ({ toggleNavbar }) => {
       </StyledContainer>
     </StyledLeftMenuContainer>
   )
-}
-
-LeftMenu.propTypes = {
-  toggleNavbar: PropTypes.func,
 }
 
 export default LeftMenu

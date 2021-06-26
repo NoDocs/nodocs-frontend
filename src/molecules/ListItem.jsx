@@ -15,6 +15,8 @@ const StyledHoverableContainer = styled(HoverableContainer)`
   grid-column-gap: 10px;
   position: relative;
   z-index: 2;
+
+  svg { justify-self: center; }
 `
 
 const StyledUnderline = styled.span`
@@ -33,6 +35,7 @@ const StyledLabel = styled(Label)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: ${props => props.active ? 'white' : 'rgba(255, 255, 255, 0.4)'};
 `
 
 const ListItem = ({
@@ -56,7 +59,7 @@ const ListItem = ({
       ? <img src={icon} height={24} alt={label} />
       : icon}
 
-    <StyledLabel color={color}>{label}</StyledLabel>
+    <StyledLabel active={active} color={color}>{label}</StyledLabel>
 
     {active && showUnderline && <StyledUnderline />}
   </StyledHoverableContainer>

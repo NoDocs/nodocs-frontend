@@ -25,7 +25,8 @@ const StyledGridContainer = styled.div`
 const StyledTeam = styled.div`
   border: 2px solid rgba(255,255,255,0.2);
   box-sizing: border-box;
-  border-radius: 5px 15px 5px 5px;
+  border-radius: 10px 10px 10px 2px;
+  background-color: #000000;
   height: 40px;
   width: 40px;
   min-width: 40px;

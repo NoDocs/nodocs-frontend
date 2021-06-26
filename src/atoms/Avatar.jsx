@@ -18,6 +18,7 @@ const StyledTypography = styled(Typography)`
 `
 
 const StyledAvatar = styled.div`
+  cursor: pointer;
   height: ${props => props.size || 35}px;
   width: ${props => props.size || 35}px;
   border-radius: 50%;
@@ -40,13 +41,13 @@ const StyledAvatar = styled.div`
   `};
 `
 
-const Avatar = (props) => {
+const Avatar = React.forwardRef((props, ref) => {
   const { displayName, name } = props
   const [firstName] = name.split(' ')
 
   if (displayName) {
     return (
-      <StyledGridContainer>
+      <StyledGridContainer ref={ref}>
         <StyledAvatar {...props} />
         <StyledTypography color="rgba(0, 0, 0, 0.5)" variant="caption">
           {firstName}
@@ -55,9 +56,10 @@ const Avatar = (props) => {
     )
   }
 
-  return <StyledAvatar {...props} />
-}
+  return <StyledAvatar ref={ref} {...props} />
+})
 
+Avatar.displayName = 'Avatar'
 Avatar.propTypes = {
   displayName: PropTypes.bool,
   name: PropTypes.string,

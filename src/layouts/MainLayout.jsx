@@ -15,11 +15,12 @@ import CreateTeamShortcut from './components/CreateTeamShortcut'
 import OpenGraphShortcut from './components/OpenGraphShortcut'
 import OpenSpotlightShortcut from './components/OpenSpotlightShortcut'
 import { graphql, useLazyLoadQuery } from 'react-relay'
+import ToggleNavbarShortcut from './components/ToggleNavbarShortcut'
 
 const StyledContainer = styled.div`
   display: grid;
   width: 100%;
-  ${({ toggled }) => toggled && 'grid-template-columns: 352px 1fr;'}
+  ${({ toggled }) => toggled && 'grid-template-columns: 336px 1fr;'}
   grid-template-rows: 56px auto;
   grid-template-areas: ${({ toggled }) => toggled
     ? `
@@ -50,7 +51,7 @@ const meQuery = graphql`
 const MainLayout = ({ children }) => {
   const [toggled, toggle] = React.useState(false)
   const { openPortal } = React.useContext(PortalContext)
-  const { me } = useLazyLoadQuery(meQuery)
+  useLazyLoadQuery(meQuery)
   const { search } = useLocation()
 
   React.useEffect(
@@ -69,7 +70,7 @@ const MainLayout = ({ children }) => {
       <GlobalStyles />
 
       <StyledContainer toggled={toggled}>
-        {toggled && <LeftMenu toggleNavbar={toggle} />}
+        {toggled && <LeftMenu />}
 
         <NavBar toggleNavbar={toggle} navbarToggled={toggled} />
 
@@ -83,6 +84,7 @@ const MainLayout = ({ children }) => {
       <InviteTeamMembersModal />
 
       <OpenSpotlightShortcut />
+      <ToggleNavbarShortcut toggleNavbar={toggle} />
       <OpenGraphShortcut />
       <CreateNeuronShortcut />
       <CreateTeamShortcut />

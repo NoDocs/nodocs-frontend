@@ -15,9 +15,8 @@ const StyledContainer = styled.div`
   height: 56px;
   display: flex;
   align-items: center;
-  background-color: black;
   grid-area: nav;
-  padding-left: 30px;
+  margin: 0px 45px;
 `
 
 const NavBar = ({ navbarToggled, toggleNavbar }) => {
@@ -27,12 +26,12 @@ const NavBar = ({ navbarToggled, toggleNavbar }) => {
     <StyledContainer>
       {!navbarToggled && (
         <IconButton onClick={() => toggleNavbar(true)}>
-          <MenuIcon />
+          <MenuIcon color="black" />
         </IconButton>
       )}
 
       <IconButton onClick={() => history.push('/')}>
-        <NoDocsLogoIcon />
+        <NoDocsLogoIcon color="black" />
       </IconButton>
 
       {match.path === '/d/:documentId' && <OpenedDocuments />}
