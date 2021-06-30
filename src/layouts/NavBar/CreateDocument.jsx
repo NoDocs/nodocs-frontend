@@ -44,7 +44,7 @@ const CreateDocument = () => {
 
   return (
     <IconButton size={26} onClick={addDocument}>
-      <AddIcon size={14} color="white" />
+      <AddIcon size={14} color="black" />
     </IconButton>
   )
 }

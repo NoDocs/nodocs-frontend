@@ -5,6 +5,7 @@ import Heading from './Heading'
 import Caption from './Caption'
 import TypographyBody from './TypographyBody'
 import TypographySubtitle from './TypographySubTitle'
+import TypographyLink from './TypographyLink'
 
 const variants = [
   'h1',
@@ -18,6 +19,7 @@ const variants = [
   'body1',
   'body2',
   'caption',
+  'link',
 ]
 
 const Typography = ({ variant, children, ...rest }) => {
@@ -40,6 +42,9 @@ const Typography = ({ variant, children, ...rest }) => {
     case 'subtitle1':
     case 'subtitle2':
       return <TypographySubtitle variant={variant} {...rest}>{children}</TypographySubtitle>
+
+    case 'link':
+      return <TypographyLink>{children}</TypographyLink>
 
     default:
       return children

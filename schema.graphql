@@ -22,6 +22,7 @@ type Query {
   documentTags(documentId: String): [Tag]
   teamTags(teamId: String): [Tag]
   search(search: String): [SearchResult]
+  integrations(teamId: String!): [Integration]
 }
 
 # An object with an ID
@@ -136,6 +137,7 @@ type Neuron implements Node {
   id: ID!
   name: String
   type: String
+  live: Boolean
   shortDescription: String
   neuronId: String
   documents: [Document]
@@ -209,6 +211,16 @@ type NeuronEdge {
 
 union SearchResult = Document | Neuron
 
+type Integration implements Node {
+  # The ID of an object
+  id: ID!
+  type: String
+  key: String
+  data: integrationData
+}
+
+scalar integrationData
+
 type Mutation {
   # Sign in mutation
   signIn(input: SignInInput!): SignInPayload
@@ -266,6 +278,12 @@ type Mutation {
 
   # create tag
   createTag(input: CreateTagInput!): CreateTagPayload
+
+  # activate integration
+  activateIntegration(input: ActivateIntegrationInput!): ActivateIntegrationPayload
+
+  # create live component
+  createLiveComponent(input: CreateLiveComponentInput!): CreateLiveComponentPayload
 }
 
 type SignInPayload {
@@ -481,6 +499,28 @@ type CreateTagPayload {
 input CreateTagInput {
   name: String!
   documentId: String!
+  clientMutationId: String
+}
+
+type ActivateIntegrationPayload {
+  integration: Integration
+  clientMutationId: String
+}
+
+input ActivateIntegrationInput {
+  type: String!
+  key: String!
+  clientMutationId: String
+}
+
+type CreateLiveComponentPayload {
+  neuron: Neuron
+  clientMutationId: String
+}
+
+input CreateLiveComponentInput {
+  type: String!
+  query: String!
   clientMutationId: String
 }
 

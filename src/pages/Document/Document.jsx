@@ -45,14 +45,13 @@ const Document = () => {
   const { decorate } = useCursors(editor)
 
   const renderElement = React.useCallback(
-    ({ attributes: { ref, ...otherAttributes }, element, children }) => {
+    ({ attributes, element, children }) => {
       if (element.type === 'neuron') {
         return (
           <React.Suspense fallback={<div>Loading...</div>}>
             <Neuron
               id={element.id}
-              attributes={otherAttributes}
-              ref={ref}
+              attributes={attributes}
             />
           </React.Suspense>
         )
@@ -62,8 +61,7 @@ const Document = () => {
         <div
           data-node-id={element.id}
           style={{ position: 'relative', margin: 0 }}
-          ref={ref}
-          {...otherAttributes}
+          {...attributes}
         >
           {children}
         </div>

@@ -36,6 +36,13 @@ const StyledFileUploaderButton = styled(FileUploaderButton)`
   display: inline-block;
 `
 
+const StyledLiveComponent = styled(Editable)`
+  display: inline-block;
+  background-color: gray;
+  padding: 4px;
+  border-radius: 4px;
+`
+
 const Neuron = React.forwardRef(({ id: neuronId, attributes }, ref) => {
   const inputRef = React.useRef()
   const {
@@ -85,6 +92,16 @@ const Neuron = React.forwardRef(({ id: neuronId, attributes }, ref) => {
     (props) => <Leaf {...props} />,
     [decorate]
   )
+
+  if (neuron.live) {
+    return (
+      <span {...attributes} contentEditable={false}>
+        <Slate editor={editor} value={editorState} onChange={console.log}>
+          <StyledLiveComponent renderLeaf={renderLeaf} />
+        </Slate>
+      </span>
+    )
+  }
 
   return (
     <StyledPopup

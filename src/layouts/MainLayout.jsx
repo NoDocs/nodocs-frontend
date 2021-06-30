@@ -16,6 +16,7 @@ import OpenGraphShortcut from './components/OpenGraphShortcut'
 import OpenSpotlightShortcut from './components/OpenSpotlightShortcut'
 import { graphql, useLazyLoadQuery } from 'react-relay'
 import ToggleNavbarShortcut from './components/ToggleNavbarShortcut'
+import StripeIntegrationShortcut from './components/StripeIntegrationShortcut'
 
 const StyledContainer = styled.div`
   display: grid;
@@ -85,6 +86,7 @@ const MainLayout = ({ children }) => {
 
       <OpenSpotlightShortcut />
       <ToggleNavbarShortcut toggleNavbar={toggle} />
+      <StripeIntegrationShortcut />
       <OpenGraphShortcut />
       <CreateNeuronShortcut />
       <CreateTeamShortcut />

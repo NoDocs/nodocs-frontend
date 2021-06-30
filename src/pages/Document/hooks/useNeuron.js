@@ -18,6 +18,7 @@ const query = graphql`
       id
       type
       content
+      live
       neuronId
       name
       file {

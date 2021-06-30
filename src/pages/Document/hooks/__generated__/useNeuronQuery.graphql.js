@@ -16,6 +16,7 @@ export type useNeuronQueryResponse = {|
     +id: string,
     +type: ?string,
     +content: ?string,
+    +live: ?boolean,
     +neuronId: ?string,
     +name: ?string,
     +file: ?{|
@@ -43,6 +44,7 @@ query useNeuronQuery(
     id
     type
     content
+    live
     neuronId
     name
     file {
@@ -100,6 +102,13 @@ v2 = {
       "args": null,
       "kind": "ScalarField",
       "name": "content",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "live",
       "storageKey": null
     },
     {
@@ -201,16 +210,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "02e120210bbd3cfe71d488d989a56514",
+    "cacheID": "e4a93a9c55913df4e7cd4eed4470c648",
     "id": null,
     "metadata": {},
     "name": "useNeuronQuery",
     "operationKind": "query",
-    "text": "query useNeuronQuery(\n  $neuronId: String!\n) {\n  neuron(neuronId: $neuronId) {\n    id\n    type\n    content\n    neuronId\n    name\n    file {\n      id\n      url\n    }\n  }\n  me {\n    color\n    fullName\n    id\n  }\n}\n"
+    "text": "query useNeuronQuery(\n  $neuronId: String!\n) {\n  neuron(neuronId: $neuronId) {\n    id\n    type\n    content\n    live\n    neuronId\n    name\n    file {\n      id\n      url\n    }\n  }\n  me {\n    color\n    fullName\n    id\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '7d2cfdf888ee55ea7e9b6fd2c361dc48';
+(node/*: any*/).hash = '184a31baa030e0b0edeab99f6b26ce3d';
 
 module.exports = node;

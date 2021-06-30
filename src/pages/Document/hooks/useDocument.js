@@ -55,6 +55,8 @@ const useDocument = () => {
   const [activePageId, updateActivePageId] = React.useState(getFirstPageId(document))
   const [editorState, updateEditorState] = React.useState(getEditorContent({ document, activePageId }))
 
+  console.log(editorState)
+
   const [isOnline, toggleIsOnline] = React.useState(false)
   const dispatch = useDispatch()
 
@@ -81,8 +83,8 @@ const useDocument = () => {
 
   const editor = React.useMemo(
     () => {
-      const enhancedEditor = withDetectNeuronInsert(
-        withEditableNeuronVoid(
+      const enhancedEditor = withEditableNeuronVoid(
+        withDetectNeuronInsert(
           withInsertImage(
             withNodeId(
               withReact(
