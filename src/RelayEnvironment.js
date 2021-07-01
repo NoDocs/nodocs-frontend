@@ -88,10 +88,18 @@ const fetchQuery = async (operation, variables, cacheConfig = {}, uploadables) =
 
       return response
     })
-    .catch(error => reduxStore.dispatch(notificationActions.notify({
-      type: 'error',
-      message: error.toString()
-    })))
+    .catch(error => {
+      if (error.message === 'NOT_AUTHORIZED') {
+        localStorage.clear()
+        window.location = '/login'
+        return
+      }
+
+      reduxStore.dispatch(notificationActions.notify({
+        type: 'error',
+        message: error.toString()
+      }))
+    })
 }
 
 const subscriptionClient = new SubscriptionClient(process.env.SUBSCRIPTION_SERVER_WS, { reconnect: true })
